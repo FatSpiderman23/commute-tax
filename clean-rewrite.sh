@@ -1,3 +1,7 @@
+#!/bin/bash
+TARGET=~/Documents/Commute\ Tax
+
+cat > "$TARGET/static/js/main.js" << 'JSEOF'
 /* TRAVEL TAX — main.js */
 
 let selectedDays = 3;
@@ -505,3 +509,9 @@ function showToast(msg) {
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 3500);
 }
+JSEOF
+
+echo "Done"
+echo ""
+echo "Now push:"
+echo "  cd ~/Documents/Commute\ Tax && git add . && git commit -m 'Clean rewrite fix all issues' && git push"
