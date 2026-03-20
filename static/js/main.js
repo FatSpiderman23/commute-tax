@@ -157,7 +157,7 @@ function shareAllAR() {
     `• ${m.icon} ${m.shareText(window._arHours, window._arHourlyRate, window._arTransportCost)}`
   ).join('\n');
   const text = `My ${Math.round(window._arHours)} commute hours this year could have been:\n\n${lines}\n\nInstead I commuted.\n\ntraveltax.co.uk`;
-  shareText(text);
+  doShare(text);
 }
 
 // =============================================
@@ -386,7 +386,7 @@ function buildShareMessage(short) {
   return `My Travel Tax results:\n\n💸 Annual cost: ${cost}\n⏳ Hours lost: ${hrs}h/year\n🌅 Life stolen: ${pct}%\n\nInstead I could have:\n${arLines}\n\ntraveltax.co.uk`;
 }
 
-function shareText(text) {
+function doShare(text) {
   // Generic share — tries Web Share API first (mobile), falls back to clipboard
   if (navigator.share) {
     navigator.share({ text, url: "https://traveltax.co.uk" }).catch(() => {});
