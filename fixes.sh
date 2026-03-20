@@ -1,3 +1,14 @@
+#!/bin/bash
+
+TARGET=~/Documents/Commute\ Tax
+echo "🔧 Applying fixes..."
+
+# 1. Remove STEP 01
+sed -i '' 's|<span class="form-step">STEP 01</span>||g' "$TARGET/templates/index.html"
+echo "✅ Removed STEP 01"
+
+# 2. Replace entire index.html with calculator-first design
+cat > "$TARGET/templates/index.html" << 'EOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -269,3 +280,45 @@
   <script src="/static/js/main.js"></script>
 </body>
 </html>
+EOF
+echo "✅ Homepage updated — calculator first"
+
+# 3. Fix blog CTA button so it's always visible
+cat >> "$TARGET/static/css/style.css" << 'CSSEOF'
+
+/* Slim header replaces hero */
+.slim-header { background: var(--black); border-bottom: 1px solid var(--border); }
+.slim-header-inner { max-width: 1100px; margin: 0 auto; padding: 20px 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.slim-logo-main { font-family: var(--font-display); font-size: 32px; color: var(--accent); letter-spacing: 0.03em; display: block; line-height: 1; }
+.slim-logo-sub { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; color: var(--text-dimmer); text-transform: uppercase; }
+.slim-stats { display: flex; gap: 24px; font-family: var(--font-mono); font-size: 11px; color: var(--text-dimmer); flex-wrap: wrap; }
+.slim-stats strong { color: var(--text); }
+.form-desc { font-size: 13px; color: var(--text-dimmer); margin-top: 4px; }
+
+/* Fix blog CTA button */
+.blog-cta-block .cta-btn {
+  color: var(--black) !important;
+  background: var(--accent);
+  display: inline-block;
+  padding: 16px 32px;
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: none;
+  transition: background 0.2s;
+}
+.blog-cta-block .cta-btn:hover { background: var(--white); border-bottom: none; }
+
+@media (max-width: 700px) {
+  .slim-header-inner { padding: 16px 20px; }
+  .slim-stats { display: none; }
+}
+CSSEOF
+echo "✅ Fixed blog CTA button"
+
+echo ""
+echo "All done! Now push:"
+echo "  cd ~/Documents/Commute\ Tax && git add . && git commit -m 'Calculator first, fix button' && git push"
