@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Commute Tax — How Much Is Your Commute Really Costing You?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-noise"></div>
+    <div class="ticker-tape">
+      <span>THE COMMUTE TAX &nbsp;·&nbsp; HOW MUCH OF YOUR LIFE IS THE TRAIN STEALING? &nbsp;·&nbsp; THE COMMUTE TAX &nbsp;·&nbsp; YOUR TIME HAS A PRICE &nbsp;·&nbsp; THE COMMUTE TAX &nbsp;·&nbsp;</span>
+      <span aria-hidden="true">THE COMMUTE TAX &nbsp;·&nbsp; HOW MUCH OF YOUR LIFE IS THE TRAIN STEALING? &nbsp;·&nbsp; THE COMMUTE TAX &nbsp;·&nbsp; YOUR TIME HAS A PRICE &nbsp;·&nbsp; THE COMMUTE TAX &nbsp;·&nbsp;</span>
+    </div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">UK Financial Reality Check</p>
+      <h1 class="hero-title">The<br><em>Commute</em><br>Tax.</h1>
+      <p class="hero-sub">Enter your details. Find out how much of your salary, your time, and your <em>life</em> you're handing over to your commute every year.</p>
+      <a href="#calculator" class="cta-btn">Calculate My Commute Tax ↓</a>
+    </div>
+    <div class="hero-stat-strip">
+      <div class="stat-pill">Average UK commute: <strong>59 min/day</strong></div>
+      <div class="stat-pill">Average commute cost: <strong>£135/month</strong></div>
+      <div class="stat-pill">Hours lost per year: <strong>243 hrs</strong></div>
+    </div>
+  </header>
+
+  <!-- AD SLOT 1: Leaderboard — below hero, above calculator -->
+  <!-- Uncomment after AdSense approval and replace slot ID -->
+  <div class="ad-slot ad-leaderboard">
+    <span class="ad-label">Advertisement</span>
+    <!--
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="1111111111"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    -->
+  </div>
+
+  <!-- CALCULATOR -->
+  <main id="calculator" class="calc-section">
+    <div class="calc-wrapper">
+
+      <!-- LEFT: FORM -->
+      <div class="form-panel">
+        <div class="form-header">
+          <span class="form-step">STEP 01</span>
+          <h2>Your Details</h2>
+        </div>
+
+        <!-- SALARY -->
+        <div class="field-group">
+          <label for="salary">Annual Salary (£)</label>
+          <div class="input-wrap">
+            <span class="prefix">£</span>
+            <input type="number" id="salary" placeholder="35000" min="0" />
+          </div>
+          <p class="field-hint">Used to calculate the monetary value of your time.</p>
+        </div>
+
+        <!-- COMMUTE TIME -->
+        <div class="field-group">
+          <label for="commute_minutes">One-Way Commute Time</label>
+          <div class="slider-wrap">
+            <input type="range" id="commute_minutes" min="5" max="180" value="45" step="5" />
+            <span class="slider-val"><span id="commute_minutes_val">45</span> min</span>
+          </div>
+        </div>
+
+        <!-- DAYS PER WEEK -->
+        <div class="field-group">
+          <label>Days in Office Per Week</label>
+          <div class="day-toggle">
+            <button class="day-btn" data-val="1">1</button>
+            <button class="day-btn" data-val="2">2</button>
+            <button class="day-btn active" data-val="3">3</button>
+            <button class="day-btn" data-val="4">4</button>
+            <button class="day-btn" data-val="5">5</button>
+          </div>
+        </div>
+
+        <!-- TRANSPORT TYPE -->
+        <div class="field-group">
+          <label>How Do You Get There?</label>
+          <div class="transport-toggle">
+            <button class="transport-btn active" data-type="public">🚆 Train / Bus</button>
+            <button class="transport-btn" data-type="car">🚗 Car</button>
+          </div>
+        </div>
+
+        <!-- PUBLIC TRANSPORT FIELDS -->
+        <div id="public-fields">
+          <div class="field-group">
+            <label for="transport_cost_daily">Daily Transport Cost (£)</label>
+            <div class="input-wrap">
+              <span class="prefix">£</span>
+              <input type="number" id="transport_cost_daily" placeholder="12.50" min="0" step="0.50" />
+            </div>
+            <p class="field-hint">Return fare. Check your ticket price.</p>
+          </div>
+        </div>
+
+        <!-- CAR FIELDS -->
+        <div id="car-fields" class="hidden">
+          <div class="field-group">
+            <label for="miles_one_way">One-Way Distance (miles)</label>
+            <div class="input-wrap">
+              <input type="number" id="miles_one_way" placeholder="15" min="0" />
+            </div>
+          </div>
+          <div class="field-group">
+            <div class="ev-toggle-row">
+              <label>Petrol / Diesel or EV?</label>
+              <label class="toggle-switch">
+                <input type="checkbox" id="is_ev" />
+                <span class="toggle-slider"></span>
+                <span class="toggle-label">EV</span>
+              </label>
+            </div>
+          </div>
+          <div id="petrol-fields">
+            <div class="field-group">
+              <label for="mpg">Your Car's MPG</label>
+              <div class="input-wrap">
+                <input type="number" id="mpg" placeholder="40" min="1" />
+              </div>
+            </div>
+            <div class="field-group">
+              <label for="fuel_cost_per_litre">Fuel Cost (£/litre)</label>
+              <div class="input-wrap">
+                <span class="prefix">£</span>
+                <input type="number" id="fuel_cost_per_litre" placeholder="1.55" step="0.01" min="0" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="calculate-btn" id="calculateBtn">
+          <span>Calculate My Commute Tax</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+
+      <!-- RIGHT: RESULTS -->
+      <div class="results-panel" id="resultsPanel">
+        <div class="results-placeholder" id="resultsPlaceholder">
+          <div class="placeholder-icon">⏱</div>
+          <p>Your results will appear here once you calculate.</p>
+        </div>
+
+        <div class="results-content hidden" id="resultsContent">
+
+          <!-- VERDICT BANNER -->
+          <div class="verdict-banner">
+            <p class="verdict-label">YOUR ANNUAL COMMUTE TAX</p>
+            <div class="verdict-number" id="res-total-cost">£0</div>
+            <p class="verdict-sub" id="res-total-sub">Combined cost of transport + the value of your time</p>
+          </div>
+
+          <!-- STAT CARDS -->
+          <div class="stat-cards">
+            <div class="stat-card highlight">
+              <span class="stat-icon">💸</span>
+              <span class="stat-label">Transport Cost / Year</span>
+              <span class="stat-value" id="res-transport-yearly">£0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon">⏳</span>
+              <span class="stat-label">Hours Lost / Year</span>
+              <span class="stat-value" id="res-hours-yearly">0h</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon">💼</span>
+              <span class="stat-label">Time Worth (£)</span>
+              <span class="stat-value" id="res-time-cost">£0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon">🌅</span>
+              <span class="stat-label">% of Waking Life</span>
+              <span class="stat-value" id="res-pct-life">0%</span>
+            </div>
+          </div>
+
+          <!-- LIFE IMPACT -->
+          <div class="life-impact-block">
+            <h3 class="block-title">The Life Impact</h3>
+            <div class="impact-row">
+              <span class="impact-bar-wrap">
+                <span class="impact-bar" id="life-bar"></span>
+              </span>
+              <span class="impact-text" id="res-life-text"></span>
+            </div>
+            <p class="impact-career" id="res-career-text"></p>
+          </div>
+
+          <!-- REMOTE VS OFFICE -->
+          <div class="comparison-block">
+            <h3 class="block-title">Remote vs Office — The Real Gap</h3>
+            <div class="compare-row">
+              <div class="compare-col office">
+                <span class="compare-label">Office</span>
+                <span class="compare-amount negative" id="res-office-cost">−£0/yr</span>
+                <span class="compare-note">Transport + time value</span>
+              </div>
+              <div class="compare-divider">vs</div>
+              <div class="compare-col remote">
+                <span class="compare-label">Remote</span>
+                <span class="compare-amount positive">£0/yr</span>
+                <span class="compare-note">No commute cost</span>
+              </div>
+            </div>
+            <div class="savings-callout">
+              Going fully remote would give you back <strong id="res-remote-hours">0 hours</strong> and <strong id="res-remote-money">£0</strong> of real value per year.
+            </div>
+          </div>
+
+          <!-- MONTHLY BREAKDOWN -->
+          <div class="breakdown-block">
+            <h3 class="block-title">Monthly Breakdown</h3>
+            <div class="breakdown-row">
+              <span>Transport cost</span><span id="res-monthly-transport">£0</span>
+            </div>
+            <div class="breakdown-row">
+              <span>Time value lost</span><span id="res-monthly-time">£0</span>
+            </div>
+            <div class="breakdown-row total-row">
+              <span>Total monthly tax</span><span id="res-monthly-total">£0</span>
+            </div>
+          </div>
+
+          <!-- AD SLOT 2: Native mid-results — high intent, contextual -->
+          <div class="ad-slot ad-native">
+            <span class="ad-label">Advertisement</span>
+            <!--
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                 data-ad-slot="2222222222"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            -->
+          </div>
+
+          <!-- ALTERNATIVE REALITY BLOCK -->
+          <div class="ar-block" id="ar-block">
+            <!-- Populated by JS after calculation -->
+          </div>
+
+          <!-- SHARE CARD -->
+          <div class="share-block">
+            <p class="share-label">Share your result</p>
+            <div class="share-card" id="shareCard">
+              <div class="share-card-inner">
+                <p class="share-card-title">THE COMMUTE TAX</p>
+                <p class="share-card-big" id="share-pct">0%</p>
+                <p class="share-card-desc" id="share-desc">of my waking life goes on commuting.</p>
+                <p class="share-card-url">thecommutetax.co.uk</p>
+              </div>
+            </div>
+            <div class="share-btns">
+              <button class="share-btn twitter" onclick="shareToTwitter()">Share on X/Twitter</button>
+              <button class="share-btn copy" onclick="copyResult()">Copy Result</button>
+            </div>
+          </div>
+
+          <!-- AFFILIATE NUDGES -->
+          <div class="nudge-block" id="nudgeBlock"></div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FAQ -->
+  <section class="faq-section">
+    <div class="faq-inner">
+      <h2 class="faq-title">Frequently Asked Questions</h2>
+      <div class="faq-item">
+        <h3>How is the "time value" calculated?</h3>
+        <p>We divide your annual salary by your total working hours per year (days × 8hrs). This gives your hourly rate. We then multiply by hours spent commuting to show what that time is worth in monetary terms.</p>
+      </div>
+      <div class="faq-item">
+        <h3>How is car depreciation calculated?</h3>
+        <p>We use HMRC's approved mileage rates: 45p/mile for the first 10,000 miles, 25p/mile after. This is the standard UK rate that accounts for fuel, wear, insurance, and depreciation combined.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What does "% of waking life" mean?</h3>
+        <p>We assume 16 waking hours per day (8hrs sleep). We calculate what percentage of those waking hours are spent commuting each year. It's often a shock.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is this tool free?</h3>
+        <p>Yes. Completely free. No sign-up required. We may show relevant affiliate links (e.g. railcards, job boards) that help fund the site.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT 3: Mid-content — between FAQ and footer, high scroll-depth signal -->
+  <div class="ad-slot ad-mid-content">
+    <span class="ad-label">Advertisement</span>
+    <!--
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="3333333333"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    -->
+  </div>
+
+  <footer class="site-footer">
+    <p>© 2025 The Commute Tax · Built for UK commuters · <a href="#">Privacy</a></p>
+  </footer>
+
+  <script src="/static/js/main.js"></script>
+</body>
+</html>
