@@ -361,13 +361,13 @@ function renderNudges(r, data) {
   const block = document.getElementById("nudgeBlock");
   block.innerHTML = "";
   if (data.transport_type === "public" && data.days_per_week >= 3) {
-    block.innerHTML += nudgeCard("Save up to £200/year", "A Railcard could cut your train fares by a third.", "https://www.railcard.co.uk", "Get a Railcard →");
+    block.innerHTML += nudgeCard("Save up to £200/year", "A Railcard could cut your train fares by a third.", "https://www.trainline.com/railcards", "Get a Railcard →");
   }
   if (r.pct_waking_life > 8 || r.commute_hours_yearly > 200) {
-    block.innerHTML += nudgeCard("Find remote & hybrid roles", "Cut your commute to zero. Browse remote jobs in your field.", "https://www.workingnomads.com/jobs", "Browse Remote Jobs →");
+    block.innerHTML += nudgeCard("Find remote & hybrid roles", "Cut your commute to zero. Browse remote jobs in your field.", "https://www.reed.co.uk/jobs/remote-jobs", "Browse Remote Jobs on Reed →");
   }
   if (data.transport_type === "car" && selectedCarType !== "electric" && r.transport_cost_yearly > 2000) {
-    block.innerHTML += nudgeCard("Could an electric car save you money?", `Your car costs ~${fmt(r.transport_cost_yearly)}/yr. Electric cars typically cost 70% less to run.`, "https://www.zap-map.com", "Compare EVs →");
+    block.innerHTML += nudgeCard("Could an electric car save you money?", `Your car costs ~${fmt(r.transport_cost_yearly)}/yr. Electric cars typically cost 70% less to run.`, "https://www.autotrader.co.uk/electric-cars", "Compare EVs →");
   }
 }
 
@@ -409,4 +409,48 @@ function showToast(msg) {
   toast.style.cssText = "position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#f0e040;color:#0a0a0a;padding:12px 24px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.08em;z-index:9999;max-width:400px;text-align:center;";
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 3500);
+}
+
+// =============================================
+// UPDATED SHARE FUNCTIONS
+// =============================================
+
+function getShareText(short) {
+  if (!lastResult) return "";
+  const pct = lastResult.pct_waking_life;
+  const cost = fmt(lastResult.total_yearly_cost);
+  const hrs = lastResult.commute_hours_yearly;
+  if (short) {
+    return `I spend ${pct}% of my waking life commuting — ${cost}/year I'll never get back. What's your Travel Tax?`;
+  }
+  const arLines = (window._arMetrics || []).slice(0, 3).map(m =>
+    `• ${m.icon} ${m.shareText(window._arHours, window._arHourlyRate, window._arTransportCost)}`
+  ).join('\n');
+  return `My Travel Tax results:\n\n💸 Annual cost: ${cost}\n⏳ Hours lost: ${hrs}h/year\n🌅 Waking life: ${pct}%\n\nInstead I could have:\n${arLines}\n\ntraveltax.co.uk`;
+}
+
+function shareToTwitter() {
+  if (!lastResult) return;
+  const text = getShareText(true) + " 👇\ntraveltax.co.uk";
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, "_blank");
+}
+
+function shareToWhatsApp() {
+  if (!lastResult) return;
+  const text = getShareText(false);
+  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
+}
+
+function shareToLinkedIn() {
+  if (!lastResult) return;
+  // LinkedIn sharing via share URL
+  const url = "https://traveltax.co.uk";
+  const title = `I just calculated my Travel Tax — ${fmt(lastResult.total_yearly_cost)}/year`;
+  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, "_blank");
+}
+
+function copyResult() {
+  if (!lastResult) return;
+  const text = getShareText(false);
+  navigator.clipboard.writeText(text).then(() => showToast("Copied! Paste into Instagram, email, anywhere 📋"));
 }
