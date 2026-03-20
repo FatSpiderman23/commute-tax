@@ -95,7 +95,7 @@ function buildAlternativeReality(hours, hourlyRate, transportCost) {
     const ratio = metric.benchmark ? hours / metric.benchmark : 1;
     const message = metric.getMessage(hours, ratio, hourlyRate, transportCost);
     const shareText = metric.shareText(hours, hourlyRate, transportCost);
-    return { ...metric, ratio, message, shareText };
+    return { ...metric, ratio, message, shareResult: shareText };
   });
   results.sort((a, b) => {
     const sA = a.ratio >= 0.5 && a.ratio <= 3 ? 1 : 0;
@@ -147,14 +147,14 @@ function renderAlternativeReality(hours, hourlyRate, transportCost) {
 function shareARMetric(index) {
   const metric = window._arMetrics[index];
   if (!metric) return;
-  const text = metric.shareText(window._arHours, window._arHourlyRate, window._arTransportCost) + "\n\ntraveltax.co.uk";
+  const text = metric.shareResult + "\n\ntraveltax.co.uk";
   window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, "_blank");
 }
 
 function shareAllAR() {
   if (!window._arMetrics) { showToast("Calculate first to see your results!"); return; }
   const lines = window._arMetrics.slice(0, 3).map(m => {
-    const txt = m.shareText(window._arHours, window._arHourlyRate, window._arTransportCost);
+    const txt = m.shareResult;
     return "• " + m.icon + " " + txt;
   }).join("\n");
   const text = "My " + Math.round(window._arHours) + " commute hours this year could have been:\n\n" + lines + "\n\nInstead I commuted.\n\ntraveltax.co.uk";
@@ -383,7 +383,7 @@ function buildShareMessage(short) {
   }
 
   const arLines = (window._arMetrics || []).slice(0, 3).map(m => {
-    const txt = m.shareText(window._arHours, window._arHourlyRate, window._arTransportCost);
+    const txt = m.shareResult;
     return "• " + m.icon + " " + txt;
   }).join("\n");
 
