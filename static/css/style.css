@@ -333,3 +333,4 @@ input:checked + .toggle-slider::after { transform: translateX(18px); }
 }
 .blog-cta-block .cta-btn:hover { background: var(--white); }
 .stat-tip { font-size: 11px; color: var(--text-dimmer); font-family: var(--font-mono); line-height: 1.4; margin-top: 2px; }
+.form-panel { position: sticky; top: 0; max-height: 100vh; overflow-y: auto; align-self: flex-start; }
