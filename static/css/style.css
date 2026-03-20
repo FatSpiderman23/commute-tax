@@ -332,3 +332,4 @@ input:checked + .toggle-slider::after { transform: translateX(18px); }
   transition: background 0.2s;
 }
 .blog-cta-block .cta-btn:hover { background: var(--white); }
+.stat-tip { font-size: 11px; color: var(--text-dimmer); font-family: var(--font-mono); line-height: 1.4; margin-top: 2px; }
