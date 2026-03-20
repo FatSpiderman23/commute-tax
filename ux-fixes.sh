@@ -1,3 +1,15 @@
+#!/bin/bash
+
+TARGET=~/Documents/Commute\ Tax
+echo "🔧 Applying fixes..."
+
+# 1. Fix ticker tape position — move to bottom of header not top
+# 2. Fix EV → Electric
+# 3. Add manual commute time input
+# 4. Replace MPG with simpler car type selector
+# 5. Replace boring placeholder with fun facts
+
+cat > "$TARGET/templates/index.html" << 'EOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -271,3 +283,275 @@
   <script src="/static/js/main.js"></script>
 </body>
 </html>
+EOF
+echo "✅ index.html updated"
+
+# Update app.py to handle new car types
+cat > "$TARGET/app.py" << 'PYEOF'
+import os
+from flask import Flask, render_template, request, jsonify
+
+app = Flask(__name__)
+
+# Real-world UK MPG averages by car type
+CAR_MPG = {
+    "petrol_avg":   40,
+    "petrol_large": 28,
+    "diesel":       50,
+    "electric":     None,  # handled separately
+}
+
+def calculate_commute(data):
+    salary = float(data.get("salary", 0))
+    days_per_week = float(data.get("days_per_week", 5))
+    weeks_per_year = float(data.get("weeks_per_year", 48))
+    commute_minutes_one_way = float(data.get("commute_minutes", 0))
+    transport_cost_daily = float(data.get("transport_cost_daily", 0))
+    transport_type = data.get("transport_type", "public")
+    miles_one_way = float(data.get("miles_one_way", 0))
+    fuel_cost_per_litre = float(data.get("fuel_cost_per_litre", 1.55))
+    car_type = data.get("car_type", "petrol_avg")
+
+    working_days = days_per_week * weeks_per_year
+    commute_minutes_daily = commute_minutes_one_way * 2
+    commute_hours_yearly = (commute_minutes_daily * working_days) / 60
+    commute_days_yearly = commute_hours_yearly / 24
+    waking_hours_per_year = 16 * 365
+    pct_waking_life = (commute_hours_yearly / waking_hours_per_year) * 100
+    hourly_rate = salary / (weeks_per_year * days_per_week * 8) if salary > 0 else 0
+    time_cost_yearly = commute_hours_yearly * hourly_rate
+
+    if transport_type == "car":
+        is_ev = car_type == "electric"
+        if is_ev:
+            # EV: ~0.25 kWh/mile, ~28p/kWh avg UK home charging
+            fuel_cost_daily = miles_one_way * 2 * 0.25 * 0.28
+        else:
+            mpg = CAR_MPG.get(car_type, 40)
+            litres_per_mile = 1 / (mpg * 4.546)
+            fuel_cost_daily = miles_one_way * 2 * litres_per_mile * fuel_cost_per_litre
+
+        miles_yearly = miles_one_way * 2 * working_days
+        if miles_yearly <= 10000:
+            depreciation_yearly = miles_yearly * 0.45
+        else:
+            depreciation_yearly = (10000 * 0.45) + ((miles_yearly - 10000) * 0.25)
+
+        transport_cost_yearly = (fuel_cost_daily * working_days) + depreciation_yearly
+        transport_cost_daily_val = transport_cost_yearly / working_days if working_days > 0 else 0
+    else:
+        transport_cost_yearly = transport_cost_daily * working_days
+        depreciation_yearly = 0
+        miles_yearly = 0
+        transport_cost_daily_val = transport_cost_daily
+
+    total_yearly_cost = transport_cost_yearly + time_cost_yearly
+    career_commute_years = ((commute_hours_yearly * 37) / 24) / 365
+
+    return {
+        "commute_minutes_daily": round(commute_minutes_daily),
+        "commute_hours_yearly": round(commute_hours_yearly, 1),
+        "commute_days_yearly": round(commute_days_yearly, 1),
+        "pct_waking_life": round(pct_waking_life, 1),
+        "hourly_rate": round(hourly_rate, 2),
+        "time_cost_yearly": round(time_cost_yearly),
+        "transport_cost_yearly": round(transport_cost_yearly),
+        "transport_cost_monthly": round(transport_cost_yearly / 12),
+        "transport_cost_daily": round(transport_cost_daily_val, 2),
+        "total_yearly_cost": round(total_yearly_cost),
+        "total_monthly_cost": round(total_yearly_cost / 12),
+        "remote_savings_transport": round(transport_cost_yearly),
+        "remote_savings_time_hours": round(commute_hours_yearly, 1),
+        "remote_savings_time_value": round(time_cost_yearly),
+        "remote_total_value": round(transport_cost_yearly + time_cost_yearly),
+        "career_commute_years": round(career_commute_years, 1),
+        "working_days": round(working_days),
+        "miles_yearly": round(miles_yearly) if transport_type == "car" else 0,
+    }
+
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+
+@app.route("/guide")
+def guide():
+    return render_template("guide.html")
+
+
+@app.route("/privacy")
+def privacy():
+    return render_template("privacy.html")
+
+
+@app.route("/calculate", methods=["POST"])
+def calculate():
+    data = request.get_json()
+    result = calculate_commute(data)
+    return jsonify(result)
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
+PYEOF
+echo "✅ app.py updated with car types"
+
+# Add new CSS
+cat >> "$TARGET/static/css/style.css" << 'CSSEOF'
+
+/* === TICKER BELOW HEADER === */
+.slim-header .ticker-tape { position: static; }
+
+/* === COMMUTE MANUAL INPUT === */
+.slider-input-wrap { display: flex; align-items: center; gap: 4px; }
+.slider-input-wrap input[type="number"] {
+  width: 64px; background: var(--off-black); border: 1px solid var(--border-light);
+  color: var(--accent); font-family: var(--font-display); font-size: 22px;
+  padding: 4px 8px; outline: none; text-align: center;
+}
+.slider-input-wrap input[type="number"]:focus { border-color: var(--accent); }
+.slider-unit { font-family: var(--font-display); font-size: 22px; color: var(--accent); }
+
+/* === CAR TYPE TOGGLE === */
+.car-type-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.car-type-btn {
+  padding: 10px 8px; background: var(--off-black); border: 1px solid var(--border-light);
+  color: var(--text-dim); font-family: var(--font-body); font-size: 13px;
+  cursor: pointer; transition: all 0.15s; text-align: center;
+}
+.car-type-btn.active { background: #1a1a0a; border-color: var(--accent); color: var(--accent); }
+.car-type-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+/* === FUN FACTS PLACEHOLDER === */
+.fun-facts-wrap {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  height: 100%; min-height: 400px; padding: 40px 32px; text-align: center;
+  border: 1px dashed var(--border);
+}
+.fun-facts-label {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.25em;
+  color: var(--accent); margin-bottom: 24px;
+}
+.fun-fact-display {
+  font-family: var(--font-display); font-size: clamp(18px, 3vw, 26px);
+  color: var(--white); line-height: 1.3; margin-bottom: 20px; min-height: 80px;
+  transition: opacity 0.4s ease;
+}
+.fun-fact-display em { color: var(--accent); font-style: normal; }
+.fun-fact-dots { display: flex; gap: 6px; margin-bottom: 28px; }
+.fun-fact-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--border-light); transition: background 0.3s;
+}
+.fun-fact-dot.active { background: var(--accent); }
+.fun-facts-cta { font-size: 13px; color: var(--text-dimmer); font-family: var(--font-mono); letter-spacing: 0.05em; }
+
+/* Fix blog CTA button */
+.blog-cta-block .cta-btn {
+  color: var(--black) !important; background: var(--accent);
+  display: inline-block; padding: 16px 32px; text-decoration: none;
+  font-family: var(--font-mono); font-size: 13px; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase; border-bottom: none !important;
+  transition: background 0.2s;
+}
+.blog-cta-block .cta-btn:hover { background: var(--white); }
+CSSEOF
+echo "✅ CSS updated"
+
+# Update main.js to handle new inputs
+cat >> "$TARGET/static/js/main.js" << 'JSEOF'
+
+// ---- Overrides for new features ----
+
+// Car type toggle
+let selectedCarType = "petrol_avg";
+document.addEventListener("DOMContentLoaded", () => {
+  // Car type buttons
+  document.querySelectorAll(".car-type-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".car-type-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      selectedCarType = btn.dataset.car;
+      // Hide fuel cost for electric
+      const fuelField = document.getElementById("fuel-cost-field");
+      if (fuelField) fuelField.classList.toggle("hidden", selectedCarType === "electric");
+    });
+  });
+
+  // Sync slider and manual input
+  const slider = document.getElementById("commute_minutes");
+  const manual = document.getElementById("commute_minutes_manual");
+  if (slider && manual) {
+    slider.addEventListener("input", () => { manual.value = slider.value; });
+    manual.addEventListener("input", () => {
+      let v = parseInt(manual.value) || 1;
+      v = Math.max(1, Math.min(300, v));
+      slider.value = Math.min(v, 180);
+      manual.value = v;
+    });
+  }
+
+  // Fun facts rotator
+  initFunFacts();
+});
+
+// Override getFormData to include car_type
+const _origGetFormData = getFormData;
+getFormData = function() {
+  const data = _origGetFormData();
+  data.car_type = selectedCarType;
+  // Use manual input value for commute minutes
+  const manual = document.getElementById("commute_minutes_manual");
+  if (manual && manual.value) data.commute_minutes = parseFloat(manual.value) || data.commute_minutes;
+  return data;
+};
+
+// Fun facts
+const FUN_FACTS = [
+  { text: 'The average UK worker spends <em>3 years</em> of their career just getting to work.' },
+  { text: 'London commuters spend an average of <em>£5,000/year</em> on train fares alone.' },
+  { text: 'A 60-minute daily commute is worth <em>£4,200/year</em> of your time if you earn £35k.' },
+  { text: 'Switching to fully remote work gives back the equivalent of <em>6 weeks of holidays</em> per year.' },
+  { text: 'UK rail fares have risen <em>40% since 2010</em> — more than double the rate of wage growth.' },
+  { text: 'The UK has the <em>longest average commute</em> in Europe at 59 minutes per day.' },
+  { text: 'A 90-minute commute 5 days a week = <em>360 hours</em> lost per year. That\'s 15 full days.' },
+  { text: 'Every extra 20 minutes of commuting has the same effect on job satisfaction as a <em>19% pay cut</em>.' },
+];
+
+function initFunFacts() {
+  const display = document.getElementById("funFactDisplay");
+  const dotsWrap = document.getElementById("funFactDots");
+  if (!display || !dotsWrap) return;
+
+  // Create dots
+  FUN_FACTS.forEach((_, i) => {
+    const dot = document.createElement("div");
+    dot.className = "fun-fact-dot" + (i === 0 ? " active" : "");
+    dotsWrap.appendChild(dot);
+  });
+
+  let current = 0;
+  function showFact(index) {
+    display.style.opacity = "0";
+    setTimeout(() => {
+      display.innerHTML = FUN_FACTS[index].text;
+      display.style.opacity = "1";
+      dotsWrap.querySelectorAll(".fun-fact-dot").forEach((d, i) => {
+        d.classList.toggle("active", i === index);
+      });
+    }, 400);
+  }
+
+  showFact(0);
+  setInterval(() => {
+    current = (current + 1) % FUN_FACTS.length;
+    showFact(current);
+  }, 4000);
+}
+JSEOF
+echo "✅ main.js updated"
+
+echo ""
+echo "✅ All done! Now push:"
+echo "  cd ~/Documents/Commute\ Tax && git add . && git commit -m 'UX improvements' && git push"

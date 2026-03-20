@@ -315,3 +315,91 @@ function showToast(msg) {
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 3500);
 }
+
+// ---- Overrides for new features ----
+
+// Car type toggle
+let selectedCarType = "petrol_avg";
+document.addEventListener("DOMContentLoaded", () => {
+  // Car type buttons
+  document.querySelectorAll(".car-type-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".car-type-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      selectedCarType = btn.dataset.car;
+      // Hide fuel cost for electric
+      const fuelField = document.getElementById("fuel-cost-field");
+      if (fuelField) fuelField.classList.toggle("hidden", selectedCarType === "electric");
+    });
+  });
+
+  // Sync slider and manual input
+  const slider = document.getElementById("commute_minutes");
+  const manual = document.getElementById("commute_minutes_manual");
+  if (slider && manual) {
+    slider.addEventListener("input", () => { manual.value = slider.value; });
+    manual.addEventListener("input", () => {
+      let v = parseInt(manual.value) || 1;
+      v = Math.max(1, Math.min(300, v));
+      slider.value = Math.min(v, 180);
+      manual.value = v;
+    });
+  }
+
+  // Fun facts rotator
+  initFunFacts();
+});
+
+// Override getFormData to include car_type
+const _origGetFormData = getFormData;
+getFormData = function() {
+  const data = _origGetFormData();
+  data.car_type = selectedCarType;
+  // Use manual input value for commute minutes
+  const manual = document.getElementById("commute_minutes_manual");
+  if (manual && manual.value) data.commute_minutes = parseFloat(manual.value) || data.commute_minutes;
+  return data;
+};
+
+// Fun facts
+const FUN_FACTS = [
+  { text: 'The average UK worker spends <em>3 years</em> of their career just getting to work.' },
+  { text: 'London commuters spend an average of <em>£5,000/year</em> on train fares alone.' },
+  { text: 'A 60-minute daily commute is worth <em>£4,200/year</em> of your time if you earn £35k.' },
+  { text: 'Switching to fully remote work gives back the equivalent of <em>6 weeks of holidays</em> per year.' },
+  { text: 'UK rail fares have risen <em>40% since 2010</em> — more than double the rate of wage growth.' },
+  { text: 'The UK has the <em>longest average commute</em> in Europe at 59 minutes per day.' },
+  { text: 'A 90-minute commute 5 days a week = <em>360 hours</em> lost per year. That\'s 15 full days.' },
+  { text: 'Every extra 20 minutes of commuting has the same effect on job satisfaction as a <em>19% pay cut</em>.' },
+];
+
+function initFunFacts() {
+  const display = document.getElementById("funFactDisplay");
+  const dotsWrap = document.getElementById("funFactDots");
+  if (!display || !dotsWrap) return;
+
+  // Create dots
+  FUN_FACTS.forEach((_, i) => {
+    const dot = document.createElement("div");
+    dot.className = "fun-fact-dot" + (i === 0 ? " active" : "");
+    dotsWrap.appendChild(dot);
+  });
+
+  let current = 0;
+  function showFact(index) {
+    display.style.opacity = "0";
+    setTimeout(() => {
+      display.innerHTML = FUN_FACTS[index].text;
+      display.style.opacity = "1";
+      dotsWrap.querySelectorAll(".fun-fact-dot").forEach((d, i) => {
+        d.classList.toggle("active", i === index);
+      });
+    }, 400);
+  }
+
+  showFact(0);
+  setInterval(() => {
+    current = (current + 1) % FUN_FACTS.length;
+    showFact(current);
+  }, 4000);
+}

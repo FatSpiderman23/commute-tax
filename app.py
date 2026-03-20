@@ -3,6 +3,13 @@ from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
+# Real-world UK MPG averages by car type
+CAR_MPG = {
+    "petrol_avg":   40,
+    "petrol_large": 28,
+    "diesel":       50,
+    "electric":     None,  # handled separately
+}
 
 def calculate_commute(data):
     salary = float(data.get("salary", 0))
@@ -12,9 +19,8 @@ def calculate_commute(data):
     transport_cost_daily = float(data.get("transport_cost_daily", 0))
     transport_type = data.get("transport_type", "public")
     miles_one_way = float(data.get("miles_one_way", 0))
-    fuel_cost_per_litre = float(data.get("fuel_cost_per_litre", 1.50))
-    mpg = float(data.get("mpg", 40))
-    is_ev = data.get("is_ev", False)
+    fuel_cost_per_litre = float(data.get("fuel_cost_per_litre", 1.55))
+    car_type = data.get("car_type", "petrol_avg")
 
     working_days = days_per_week * weeks_per_year
     commute_minutes_daily = commute_minutes_one_way * 2
@@ -26,22 +32,28 @@ def calculate_commute(data):
     time_cost_yearly = commute_hours_yearly * hourly_rate
 
     if transport_type == "car":
+        is_ev = car_type == "electric"
         if is_ev:
+            # EV: ~0.25 kWh/mile, ~28p/kWh avg UK home charging
             fuel_cost_daily = miles_one_way * 2 * 0.25 * 0.28
         else:
+            mpg = CAR_MPG.get(car_type, 40)
             litres_per_mile = 1 / (mpg * 4.546)
             fuel_cost_daily = miles_one_way * 2 * litres_per_mile * fuel_cost_per_litre
+
         miles_yearly = miles_one_way * 2 * working_days
         if miles_yearly <= 10000:
             depreciation_yearly = miles_yearly * 0.45
         else:
             depreciation_yearly = (10000 * 0.45) + ((miles_yearly - 10000) * 0.25)
+
         transport_cost_yearly = (fuel_cost_daily * working_days) + depreciation_yearly
-        transport_cost_daily = transport_cost_yearly / working_days
+        transport_cost_daily_val = transport_cost_yearly / working_days if working_days > 0 else 0
     else:
         transport_cost_yearly = transport_cost_daily * working_days
         depreciation_yearly = 0
         miles_yearly = 0
+        transport_cost_daily_val = transport_cost_daily
 
     total_yearly_cost = transport_cost_yearly + time_cost_yearly
     career_commute_years = ((commute_hours_yearly * 37) / 24) / 365
@@ -55,8 +67,7 @@ def calculate_commute(data):
         "time_cost_yearly": round(time_cost_yearly),
         "transport_cost_yearly": round(transport_cost_yearly),
         "transport_cost_monthly": round(transport_cost_yearly / 12),
-        "transport_cost_daily": round(transport_cost_daily, 2),
-        "depreciation_yearly": round(depreciation_yearly) if transport_type == "car" else 0,
+        "transport_cost_daily": round(transport_cost_daily_val, 2),
         "total_yearly_cost": round(total_yearly_cost),
         "total_monthly_cost": round(total_yearly_cost / 12),
         "remote_savings_transport": round(transport_cost_yearly),
@@ -74,13 +85,14 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/privacy")
-def privacy():
-    return render_template("privacy.html")
-
 @app.route("/guide")
 def guide():
     return render_template("guide.html")
+
+
+@app.route("/privacy")
+def privacy():
+    return render_template("privacy.html")
 
 
 @app.route("/calculate", methods=["POST"])
