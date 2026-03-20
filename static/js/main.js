@@ -152,12 +152,15 @@ function shareARMetric(index) {
 }
 
 function shareAllAR() {
-  if (!window._arMetrics) return;
-  const lines = window._arMetrics.slice(0, 3).map(m =>
-    `• ${m.icon} ${m.shareText(window._arHours, window._arHourlyRate, window._arTransportCost)}`
-  ).join('\n');
-  const text = `My ${Math.round(window._arHours)} commute hours this year could have been:\n\n${lines}\n\nInstead I commuted.\n\ntraveltax.co.uk`;
-  doShare(text);
+  if (!window._arMetrics) { showToast("Calculate first to see your results!"); return; }
+  const lines = window._arMetrics.slice(0, 3).map(m => {
+    const txt = m.shareText(window._arHours, window._arHourlyRate, window._arTransportCost);
+    return "• " + m.icon + " " + txt;
+  }).join("\n");
+  const text = "My " + Math.round(window._arHours) + " commute hours this year could have been:\n\n" + lines + "\n\nInstead I commuted.\n\ntraveltax.co.uk";
+  navigator.clipboard.writeText(text).then(() => showToast("Copied! Share anywhere 📤")).catch(() => {
+    window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(text), "_blank");
+  });
 }
 
 // =============================================
@@ -379,9 +382,10 @@ function buildShareMessage(short) {
     return `I spend ${pct}% of my waking life commuting — that's ${cost}/year I'll never get back. What's your Travel Tax? traveltax.co.uk`;
   }
 
-  const arLines = (window._arMetrics || []).slice(0, 3).map(m =>
-    `• ${m.icon} ${m.shareText(window._arHours, window._arHourlyRate, window._arTransportCost)}`
-  ).join('\n');
+  const arLines = (window._arMetrics || []).slice(0, 3).map(m => {
+    const txt = m.shareText(window._arHours, window._arHourlyRate, window._arTransportCost);
+    return "• " + m.icon + " " + txt;
+  }).join("\n");
 
   return `My Travel Tax results:\n\n💸 Annual cost: ${cost}\n⏳ Hours lost: ${hrs}h/year\n🌅 Life stolen: ${pct}%\n\nInstead I could have:\n${arLines}\n\ntraveltax.co.uk`;
 }
