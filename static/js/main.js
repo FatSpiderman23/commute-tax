@@ -454,3 +454,47 @@ function copyResult() {
   const text = getShareText(false);
   navigator.clipboard.writeText(text).then(() => showToast("Copied! Paste into Instagram, email, anywhere 📋"));
 }
+
+// =============================================
+// UPDATED SHARE FUNCTIONS
+// =============================================
+
+function getShareText(short) {
+  if (!lastResult) return "";
+  const pct = lastResult.pct_waking_life;
+  const cost = fmt(lastResult.total_yearly_cost);
+  const hrs = lastResult.commute_hours_yearly;
+  if (short) {
+    return `I spend ${pct}% of my waking life commuting — ${cost}/year I'll never get back. What's your Travel Tax?`;
+  }
+  const arLines = (window._arMetrics || []).slice(0, 3).map(m =>
+    `• ${m.icon} ${m.shareText(window._arHours, window._arHourlyRate, window._arTransportCost)}`
+  ).join('\n');
+  return `My Travel Tax results:\n\n💸 Annual cost: ${cost}\n⏳ Hours lost: ${hrs}h/year\n🌅 Waking life: ${pct}%\n\nInstead I could have:\n${arLines}\n\ntraveltax.co.uk`;
+}
+
+function shareToTwitter() {
+  if (!lastResult) return;
+  const text = getShareText(true) + " 👇\ntraveltax.co.uk";
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, "_blank");
+}
+
+function shareToWhatsApp() {
+  if (!lastResult) return;
+  const text = getShareText(false);
+  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
+}
+
+function shareToLinkedIn() {
+  if (!lastResult) return;
+  // LinkedIn sharing via share URL
+  const url = "https://traveltax.co.uk";
+  const title = `I just calculated my Travel Tax — ${fmt(lastResult.total_yearly_cost)}/year`;
+  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, "_blank");
+}
+
+function copyResult() {
+  if (!lastResult) return;
+  const text = getShareText(false);
+  navigator.clipboard.writeText(text).then(() => showToast("Copied! Paste into Instagram, email, anywhere 📋"));
+}
