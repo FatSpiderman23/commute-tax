@@ -1,5 +1,5 @@
 /* =============================================
-   THE COMMUTE TAX — main.js
+   THE TRAVEL TAX — main.js
    ============================================= */
 
 let selectedDays = 3;
@@ -158,7 +158,7 @@ function shareARMetric(index) {
   const metric = window._arMetrics[index];
   if (!metric) return;
   const text = metric.shareText(window._arHours, window._arHourlyRate, window._arTransportCost);
-  const fullText = `${text}\n\nCalculate your own Commute Tax 👇\nhttps://thecommutetax.co.uk`;
+  const fullText = `${text}\n\nCalculate your own Travel Tax 👇\nhttps://traveltax.co.uk`;
   window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(fullText)}`, "_blank");
 }
 
@@ -168,7 +168,7 @@ function shareAllAR() {
   const lines = window._arMetrics.slice(0, 3).map(m =>
     `• ${m.icon} ${m.shareText(window._arHours, window._arHourlyRate, window._arTransportCost)}`
   ).join('\n');
-  const text = `My ${hours} commute hours this year could have been used to:\n\n${lines}\n\nInstead I commuted. Calculate yours 👇\nhttps://thecommutetax.co.uk`;
+  const text = `My ${hours} commute hours this year could have been used to:\n\n${lines}\n\nInstead I commuted. Calculate yours 👇\nhttps://traveltax.co.uk`;
   window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, "_blank");
 }
 
@@ -238,7 +238,7 @@ async function runCalculation() {
   } catch (err) {
     showToast("Something went wrong. Please try again.");
   } finally {
-    btn.querySelector("span").textContent = "Calculate My Commute Tax";
+    btn.querySelector("span").textContent = "Calculate My Travel Tax";
     btn.disabled = false;
   }
 }
@@ -290,8 +290,8 @@ function nudgeCard(title, desc, link, cta) {
 
 function shareToTwitter() {
   if (!lastResult) return;
-  const text = `I spend ${lastResult.pct_waking_life}% of my waking life commuting — that's ${fmt(lastResult.total_yearly_cost)} a year I'll never get back. Find out your Commute Tax 👇`;
-  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent("https://thecommutetax.co.uk")}`, "_blank");
+  const text = `I spend ${lastResult.pct_waking_life}% of my waking life commuting — that's ${fmt(lastResult.total_yearly_cost)} a year I'll never get back. Find out your Travel Tax 👇`;
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent("https://traveltax.co.uk")}`, "_blank");
 }
 
 function copyResult() {
@@ -299,7 +299,7 @@ function copyResult() {
   const arLines = (window._arMetrics || []).slice(0, 3).map(m =>
     `  ${m.icon} ${m.shareText(window._arHours, window._arHourlyRate, window._arTransportCost)}`
   ).join('\n');
-  const text = `My Commute Tax:\n• Annual cost: ${fmt(lastResult.total_yearly_cost)}\n• Hours lost/year: ${lastResult.commute_hours_yearly}h\n• % of waking life: ${lastResult.pct_waking_life}%\n• Career total: ${lastResult.career_commute_years} years\n\nInstead I could have:\n${arLines}\n\nCalculate yours: thecommutetax.co.uk`;
+  const text = `My Travel Tax:\n• Annual cost: ${fmt(lastResult.total_yearly_cost)}\n• Hours lost/year: ${lastResult.commute_hours_yearly}h\n• % of waking life: ${lastResult.pct_waking_life}%\n• Career total: ${lastResult.career_commute_years} years\n\nInstead I could have:\n${arLines}\n\nCalculate yours: traveltax.co.uk`;
   navigator.clipboard.writeText(text).then(() => showToast("Copied to clipboard!"));
 }
 
