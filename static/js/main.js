@@ -403,3 +403,22 @@ function initFunFacts() {
     showFact(current);
   }, 4000);
 }
+
+// Fix manual input — allow full clear and retype
+document.addEventListener("DOMContentLoaded", () => {
+  const manual = document.getElementById("commute_minutes_manual");
+  const slider = document.getElementById("commute_minutes");
+  if (manual && slider) {
+    manual.addEventListener("focus", () => manual.select());
+    manual.addEventListener("input", () => {
+      const v = parseInt(manual.value);
+      if (!isNaN(v) && v > 0) {
+        slider.value = Math.min(v, 180);
+      }
+    });
+    manual.addEventListener("blur", () => {
+      if (!manual.value || parseInt(manual.value) < 1) manual.value = 5;
+    });
+    slider.addEventListener("input", () => { manual.value = slider.value; });
+  }
+});
