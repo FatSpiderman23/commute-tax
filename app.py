@@ -22,25 +22,20 @@ def calculate_commute(data):
     commute_days_yearly = commute_hours_yearly / 24
     waking_hours_per_year = 16 * 365
     pct_waking_life = (commute_hours_yearly / waking_hours_per_year) * 100
-
     hourly_rate = salary / (weeks_per_year * days_per_week * 8) if salary > 0 else 0
     time_cost_yearly = commute_hours_yearly * hourly_rate
 
     if transport_type == "car":
         if is_ev:
-            kwh_per_mile = 0.25
-            cost_per_kwh = 0.28
-            fuel_cost_daily = miles_one_way * 2 * kwh_per_mile * cost_per_kwh
+            fuel_cost_daily = miles_one_way * 2 * 0.25 * 0.28
         else:
             litres_per_mile = 1 / (mpg * 4.546)
             fuel_cost_daily = miles_one_way * 2 * litres_per_mile * fuel_cost_per_litre
-
         miles_yearly = miles_one_way * 2 * working_days
         if miles_yearly <= 10000:
             depreciation_yearly = miles_yearly * 0.45
         else:
             depreciation_yearly = (10000 * 0.45) + ((miles_yearly - 10000) * 0.25)
-
         transport_cost_yearly = (fuel_cost_daily * working_days) + depreciation_yearly
         transport_cost_daily = transport_cost_yearly / working_days
     else:
@@ -49,9 +44,7 @@ def calculate_commute(data):
         miles_yearly = 0
 
     total_yearly_cost = transport_cost_yearly + time_cost_yearly
-    working_years_left = 37
-    career_commute_hours = commute_hours_yearly * working_years_left
-    career_commute_years = (career_commute_hours / 24) / 365
+    career_commute_years = ((commute_hours_yearly * 37) / 24) / 365
 
     return {
         "commute_minutes_daily": round(commute_minutes_daily),
@@ -79,6 +72,11 @@ def calculate_commute(data):
 @app.route("/")
 def index():
     return render_template("index.html")
+
+
+@app.route("/guide")
+def guide():
+    return render_template("guide.html")
 
 
 @app.route("/calculate", methods=["POST"])
