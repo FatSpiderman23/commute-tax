@@ -1,3 +1,8 @@
+#!/bin/bash
+
+TARGET=~/Documents/Commute\ Tax
+
+cat > "$TARGET/static/js/main.js" << 'JSEOF'
 /* =============================================
    TRAVEL TAX — main.js (clean rewrite)
    ============================================= */
@@ -410,3 +415,15 @@ function showToast(msg) {
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 3500);
 }
+JSEOF
+
+# Remove the broken patch.js reference from index.html if it exists
+sed -i '' 's|<script src="/static/js/patch.js"></script>||g' "$TARGET/templates/index.html"
+
+# Remove patch.js if it exists
+rm -f "$TARGET/static/js/patch.js"
+
+echo "✅ main.js fully rewritten"
+echo ""
+echo "Now push:"
+echo "  cd ~/Documents/Commute\ Tax && git add . && git commit -m 'Fix calculate button and inputs' && git push"
