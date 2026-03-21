@@ -1,1 +1,8 @@
 subscribers.txt
+press_emailer.py
+press_emailer_v2.py
+press_outreach_log.txt
+PRESS_PITCH.md
+mega-build.sh
+__pycache__/
+*.pyc
