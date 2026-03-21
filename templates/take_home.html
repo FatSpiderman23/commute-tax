@@ -208,7 +208,69 @@
       </div>
 
     </div>
-  </main>
+  
+  <!-- MOBILE TABS -->
+  <div class="calc-mobile-tabs">
+    <div class="calc-tab-btns">
+      <button class="calc-tab-btn active" id="th_tab_calc" onclick="thTab('calc')">Calculator</button>
+      <button class="calc-tab-btn" id="th_tab_results" onclick="thTab('results')">My Results</button>
+    </div>
+    <div class="calc-tab-panel active" id="th_panel_calc">
+      <div class="field-group">
+        <label for="th_salary_m">Annual Salary (£)</label>
+        <div class="input-wrap"><span class="prefix">£</span><input type="number" id="th_salary_m" placeholder="35000" min="0" inputmode="numeric" /></div>
+      </div>
+      <div class="field-group">
+        <label>Student Loan</label>
+        <div class="transport-toggle" style="grid-template-columns:1fr 1fr 1fr;">
+          <button class="transport-btn active" data-plan="none" onclick="setMPlan(this,'none')">None</button>
+          <button class="transport-btn" data-plan="plan1" onclick="setMPlan(this,'plan1')">Plan 1</button>
+          <button class="transport-btn" data-plan="plan2" onclick="setMPlan(this,'plan2')">Plan 2</button>
+          <button class="transport-btn" data-plan="plan4" onclick="setMPlan(this,'plan4')">Plan 4</button>
+          <button class="transport-btn" data-plan="plan5" onclick="setMPlan(this,'plan5')">Plan 5</button>
+          <button class="transport-btn" data-plan="postgrad" onclick="setMPlan(this,'postgrad')">Postgrad</button>
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Pension (%)</label>
+        <div class="slider-wrap">
+          <input type="range" id="th_pension_m" min="0" max="20" value="5" step="1" oninput="document.getElementById('th_pension_val_m').textContent=this.value+'%'" />
+          <span id="th_pension_val_m" style="font-family:var(--font-display);font-size:22px;color:var(--accent);min-width:52px;">5%</span>
+        </div>
+      </div>
+      <button class="calculate-btn" onclick="runTakeHomeMobile()"><span>Calculate My Take Home</span></button>
+    </div>
+    <div class="calc-tab-panel" id="th_panel_results">
+      <div id="th_m_placeholder" style="text-align:center;padding:40px 0;color:var(--text-dimmer);font-family:var(--font-mono);font-size:12px;">Calculate first to see results</div>
+      <div id="th_m_results" class="hidden">
+        <div class="verdict-banner">
+          <p class="verdict-label">MONTHLY TAKE HOME</p>
+          <div class="verdict-number" id="th_m_monthly">£0</div>
+          <p class="verdict-sub" id="th_m_yearly">per year</p>
+        </div>
+        <div class="stat-cards">
+          <div class="stat-card"><span class="stat-label">Weekly</span><span class="stat-value" id="th_m_weekly">£0</span></div>
+          <div class="stat-card highlight"><span class="stat-label">Deductions</span><span class="stat-value" id="th_m_deductions">£0</span></div>
+          <div class="stat-card"><span class="stat-label">Effective Rate</span><span class="stat-value" id="th_m_rate">0%</span></div>
+          <div class="stat-card"><span class="stat-label">Daily</span><span class="stat-value" id="th_m_daily">£0</span></div>
+        </div>
+        <div class="breakdown-block">
+          <h3 class="block-title">Full Breakdown</h3>
+          <div class="breakdown-row"><span>Gross salary</span><span id="th_m_gross">£0</span></div>
+          <div class="breakdown-row"><span>Income tax</span><span id="th_m_tax" style="color:var(--red)">-£0</span></div>
+          <div class="breakdown-row"><span>National Insurance</span><span id="th_m_ni" style="color:var(--red)">-£0</span></div>
+          <div class="breakdown-row" id="th_m_sl_row" style="display:none"><span>Student loan</span><span id="th_m_sl" style="color:var(--red)">-£0</span></div>
+          <div class="breakdown-row" id="th_m_pen_row" style="display:none"><span>Pension</span><span id="th_m_pen" style="color:var(--red)">-£0</span></div>
+          <div class="breakdown-row total-row"><span>Take home (yearly)</span><span id="th_m_takehome">£0</span></div>
+        </div>
+        <div class="comparison-block" style="margin-top:16px;">
+          <a href="/" style="display:block;padding:14px;border:1px solid var(--border);color:var(--text-dim);text-decoration:none;font-size:13px;text-align:center;">Calculate Commute Cost →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
 
   <!-- FAQ -->
   <section class="faq-section">

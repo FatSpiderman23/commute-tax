@@ -51,3 +51,46 @@ function pToast(msg) {
   document.body.appendChild(t);
   setTimeout(() => t.remove(), 3000);
 }
+
+// ── Mobile pension tab ────────────────────────────────────────────────────────
+function penTab(tab) {
+  document.getElementById("pen_panel_calc").classList.toggle("active", tab === "calc");
+  document.getElementById("pen_panel_results").classList.toggle("active", tab === "results");
+  document.querySelectorAll(".calc-mobile-tabs .calc-tab-btn").forEach((b, i) => b.classList.toggle("active", (i === 0) === (tab === "calc")));
+}
+
+async function calcPensionMobile() {
+  const salary = parseFloat(document.getElementById("p_salary_m").value) || 0;
+  if (salary <= 0) { pToast("Please enter your salary."); return; }
+  const data = {
+    salary,
+    current_age: parseInt(document.getElementById("p_age_m").value) || 30,
+    retirement_age: parseInt(document.getElementById("p_retire_m").value) || 67,
+    contribution_pct: parseFloat(document.getElementById("p_contrib_m").value) || 5,
+    employer_pct: parseFloat(document.getElementById("p_employer_m").value) || 3,
+    current_pot: parseFloat(document.getElementById("p_pot_m").value) || 0,
+    growth_rate: 5,
+  };
+  try {
+    const res = await fetch("/calculate-pension", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+    const r = await res.json();
+    const fmt = n => "£" + Math.round(n).toLocaleString("en-GB");
+    document.getElementById("pen_m_placeholder").classList.add("hidden");
+    document.getElementById("pen_m_results").classList.remove("hidden");
+    document.getElementById("pen_m_pot").textContent = fmt(r.projected_pot);
+    document.getElementById("pen_m_track").textContent = r.on_track ? "You are on track ✓" : "You may have a shortfall";
+    document.getElementById("pen_m_monthly").textContent = fmt(r.monthly_income);
+    document.getElementById("pen_m_state").textContent = fmt(r.state_pension_monthly) + "/mo";
+    document.getElementById("pen_m_total").textContent = fmt(r.total_monthly_with_state);
+    document.getElementById("pen_m_saving").textContent = fmt(r.monthly_contribution) + "/mo";
+    document.getElementById("pen_m_years").textContent = r.years_to_retirement + " years";
+    document.getElementById("pen_m_pot2").textContent = fmt(r.projected_pot);
+    document.getElementById("pen_m_rec").textContent = fmt(r.recommended_pot);
+    document.getElementById("pen_m_status").textContent = r.on_track ? "On track ✓" : "Below target";
+    document.getElementById("pen_m_status").style.color = r.on_track ? "var(--green)" : "var(--red)";
+    document.getElementById("pen_m_insight").textContent = r.shortfall > 0
+      ? "You have a projected shortfall of " + fmt(r.shortfall) + ". An extra " + fmt(Math.round(r.shortfall / (r.years_to_retirement * 12))) + "/month would close the gap."
+      : "You are on track for a comfortable retirement with " + fmt(r.projected_pot) + " projected.";
+    penTab("results");
+  } catch(err) { pToast("Something went wrong."); }
+}

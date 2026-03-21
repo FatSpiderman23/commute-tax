@@ -194,7 +194,79 @@
       </div>
 
     </div>
-  </main>
+  
+  <!-- MOBILE TABS -->
+  <div class="calc-mobile-tabs">
+    <div class="calc-tab-btns">
+      <button class="calc-tab-btn active" onclick="penTab('calc')">Calculator</button>
+      <button class="calc-tab-btn" onclick="penTab('results')">My Results</button>
+    </div>
+    <div class="calc-tab-panel active" id="pen_panel_calc">
+      <div class="field-group">
+        <label>Annual Salary (£)</label>
+        <div class="input-wrap"><span class="prefix">£</span><input type="number" id="p_salary_m" placeholder="35000" min="0" inputmode="numeric" /></div>
+      </div>
+      <div class="field-group">
+        <label>Current Age</label>
+        <div class="slider-wrap">
+          <input type="range" id="p_age_m" min="18" max="65" value="30" step="1" oninput="document.getElementById('p_age_mv').textContent=this.value+' yrs'" />
+          <span id="p_age_mv" style="font-family:var(--font-display);font-size:22px;color:var(--accent);min-width:60px;">30 yrs</span>
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Retirement Age</label>
+        <div class="slider-wrap">
+          <input type="range" id="p_retire_m" min="55" max="75" value="67" step="1" oninput="document.getElementById('p_retire_mv').textContent=this.value+' yrs'" />
+          <span id="p_retire_mv" style="font-family:var(--font-display);font-size:22px;color:var(--accent);min-width:60px;">67 yrs</span>
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Your Contribution (%)</label>
+        <div class="slider-wrap">
+          <input type="range" id="p_contrib_m" min="0" max="30" value="5" step="1" oninput="document.getElementById('p_contrib_mv').textContent=this.value+'%'" />
+          <span id="p_contrib_mv" style="font-family:var(--font-display);font-size:22px;color:var(--accent);min-width:52px;">5%</span>
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Employer Contribution (%)</label>
+        <div class="slider-wrap">
+          <input type="range" id="p_employer_m" min="0" max="20" value="3" step="1" oninput="document.getElementById('p_employer_mv').textContent=this.value+'%'" />
+          <span id="p_employer_mv" style="font-family:var(--font-display);font-size:22px;color:var(--accent);min-width:52px;">3%</span>
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Current Pension Pot (£) — optional</label>
+        <div class="input-wrap"><span class="prefix">£</span><input type="number" id="p_pot_m" placeholder="0" min="0" inputmode="numeric" /></div>
+      </div>
+      <button class="calculate-btn" onclick="calcPensionMobile()"><span>Calculate My Pension</span></button>
+    </div>
+    <div class="calc-tab-panel" id="pen_panel_results">
+      <div id="pen_m_placeholder" style="text-align:center;padding:40px 0;color:var(--text-dimmer);font-family:var(--font-mono);font-size:12px;">Calculate first to see results</div>
+      <div id="pen_m_results" class="hidden">
+        <div class="verdict-banner">
+          <p class="verdict-label">PROJECTED PENSION POT</p>
+          <div class="verdict-number" id="pen_m_pot">£0</div>
+          <p class="verdict-sub" id="pen_m_track">at retirement</p>
+        </div>
+        <div class="stat-cards">
+          <div class="stat-card"><span class="stat-label">Monthly Income</span><span class="stat-value" id="pen_m_monthly">£0</span></div>
+          <div class="stat-card"><span class="stat-label">+ State Pension</span><span class="stat-value" id="pen_m_state">£958</span></div>
+          <div class="stat-card highlight"><span class="stat-label">Total Monthly</span><span class="stat-value" id="pen_m_total">£0</span></div>
+          <div class="stat-card"><span class="stat-label">You Save/Month</span><span class="stat-value" id="pen_m_saving">£0</span></div>
+        </div>
+        <div class="breakdown-block">
+          <h3 class="block-title">Breakdown</h3>
+          <div class="breakdown-row"><span>Years to retirement</span><span id="pen_m_years">0</span></div>
+          <div class="breakdown-row"><span>Projected pot</span><span id="pen_m_pot2">£0</span></div>
+          <div class="breakdown-row"><span>Recommended pot</span><span id="pen_m_rec">£0</span></div>
+          <div class="breakdown-row total-row"><span>Status</span><span id="pen_m_status">—</span></div>
+        </div>
+        <div class="savings-callout" id="pen_m_insight"></div>
+      </div>
+    </div>
+  </div>
+
+</main>
 
   <section class="faq-section">
     <div class="faq-inner">

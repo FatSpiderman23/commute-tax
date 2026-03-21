@@ -163,3 +163,44 @@ function showTHToast(msg) {
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 3500);
 }
+
+// ── Mobile take home tab ──────────────────────────────────────────────────────
+let thMPlan = "none";
+
+function thTab(tab) {
+  document.getElementById("th_panel_calc").classList.toggle("active", tab === "calc");
+  document.getElementById("th_panel_results").classList.toggle("active", tab === "results");
+  document.querySelectorAll(".calc-tab-btn").forEach((b, i) => b.classList.toggle("active", (i === 0) === (tab === "calc")));
+}
+
+function setMPlan(btn, plan) {
+  btn.closest(".transport-toggle").querySelectorAll(".transport-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  thMPlan = plan;
+}
+
+async function runTakeHomeMobile() {
+  const salary = parseFloat(document.getElementById("th_salary_m").value) || 0;
+  const pension = parseFloat(document.getElementById("th_pension_m").value) || 0;
+  if (salary <= 0) { showTHToast("Please enter your salary."); return; }
+  try {
+    const res = await fetch("/calculate-take-home", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ salary, student_loan: thMPlan, pension_pct: pension }) });
+    const r = await res.json();
+    const fmt = n => "£" + Math.round(n).toLocaleString("en-GB");
+    document.getElementById("th_m_placeholder").classList.add("hidden");
+    document.getElementById("th_m_results").classList.remove("hidden");
+    document.getElementById("th_m_monthly").textContent = fmt(r.take_home_monthly);
+    document.getElementById("th_m_yearly").textContent = fmt(r.take_home_yearly) + " per year";
+    document.getElementById("th_m_weekly").textContent = fmt(r.take_home_weekly);
+    document.getElementById("th_m_deductions").textContent = fmt(r.total_deductions);
+    document.getElementById("th_m_rate").textContent = r.effective_rate + "%";
+    document.getElementById("th_m_daily").textContent = fmt(r.take_home_daily);
+    document.getElementById("th_m_gross").textContent = fmt(r.gross_yearly);
+    document.getElementById("th_m_tax").textContent = "-" + fmt(r.income_tax);
+    document.getElementById("th_m_ni").textContent = "-" + fmt(r.national_insurance);
+    document.getElementById("th_m_takehome").textContent = fmt(r.take_home_yearly);
+    if (r.student_loan > 0) { document.getElementById("th_m_sl_row").style.display = "flex"; document.getElementById("th_m_sl").textContent = "-" + fmt(r.student_loan); }
+    if (r.pension > 0) { document.getElementById("th_m_pen_row").style.display = "flex"; document.getElementById("th_m_pen").textContent = "-" + fmt(r.pension); }
+    thTab("results");
+  } catch(err) { showTHToast("Something went wrong."); }
+}

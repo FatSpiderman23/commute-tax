@@ -56,3 +56,40 @@ function slToast(msg) {
   document.body.appendChild(t);
   setTimeout(() => t.remove(), 3000);
 }
+
+// ── Mobile student loan tab ───────────────────────────────────────────────────
+let slPlanM = "plan2";
+
+function slTab(tab) {
+  document.getElementById("sl_panel_calc").classList.toggle("active", tab === "calc");
+  document.getElementById("sl_panel_results").classList.toggle("active", tab === "results");
+  document.querySelectorAll(".calc-mobile-tabs .calc-tab-btn").forEach((b, i) => b.classList.toggle("active", (i === 0) === (tab === "calc")));
+}
+
+function setSlPlanM(btn, plan) {
+  btn.closest(".transport-toggle").querySelectorAll(".transport-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  slPlanM = plan;
+}
+
+async function calcSLMobile() {
+  const salary = parseFloat(document.getElementById("sl_salary_m").value) || 0;
+  const balance = parseFloat(document.getElementById("sl_balance_m").value) || 0;
+  if (salary <= 0) { slToast("Please enter your salary."); return; }
+  try {
+    const res = await fetch("/calculate-student-loan", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ salary, plan: slPlanM, balance }) });
+    const r = await res.json();
+    document.getElementById("sl_m_placeholder").classList.add("hidden");
+    document.getElementById("sl_m_results").classList.remove("hidden");
+    document.getElementById("sl_m_monthly").textContent = "£" + r.monthly_repayment.toLocaleString("en-GB");
+    document.getElementById("sl_m_yearly").textContent = "£" + r.yearly_repayment.toLocaleString("en-GB") + " per year";
+    document.getElementById("sl_m_monthly2").textContent = "£" + r.monthly_repayment.toLocaleString("en-GB");
+    document.getElementById("sl_m_yearly2").textContent = "£" + r.yearly_repayment.toLocaleString("en-GB");
+    document.getElementById("sl_m_interest").textContent = balance > 0 ? "£" + r.interest_yearly.toLocaleString("en-GB") : "N/A";
+    document.getElementById("sl_m_writeoff").textContent = r.write_off_years + " yrs";
+    document.getElementById("sl_m_insight").textContent = r.monthly_repayment === 0
+      ? "Your salary is below the repayment threshold of £" + r.threshold.toLocaleString("en-GB") + ". No repayments currently."
+      : (r.will_repay_before_writeoff ? "You are on track to repay in full in " + r.years_to_repay + " years." : "Your loan will likely be written off after " + r.write_off_years + " years.");
+    slTab("results");
+  } catch(err) { slToast("Something went wrong."); }
+}

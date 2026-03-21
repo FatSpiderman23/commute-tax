@@ -105,7 +105,54 @@
         </div>
       </div>
     </div>
-  </main>
+  
+  <!-- MOBILE TABS -->
+  <div class="calc-mobile-tabs">
+    <div class="calc-tab-btns">
+      <button class="calc-tab-btn active" onclick="slTab('calc')">Calculator</button>
+      <button class="calc-tab-btn" onclick="slTab('results')">My Results</button>
+    </div>
+    <div class="calc-tab-panel active" id="sl_panel_calc">
+      <div class="field-group">
+        <label>Annual Salary (£)</label>
+        <div class="input-wrap"><span class="prefix">£</span><input type="number" id="sl_salary_m" placeholder="35000" min="0" inputmode="numeric" /></div>
+      </div>
+      <div class="field-group">
+        <label>Loan Plan</label>
+        <div class="transport-toggle" style="grid-template-columns:1fr 1fr 1fr;">
+          <button class="transport-btn active" onclick="setSlPlanM(this,'plan2')">Plan 2</button>
+          <button class="transport-btn" onclick="setSlPlanM(this,'plan1')">Plan 1</button>
+          <button class="transport-btn" onclick="setSlPlanM(this,'plan4')">Plan 4</button>
+          <button class="transport-btn" onclick="setSlPlanM(this,'plan5')">Plan 5</button>
+          <button class="transport-btn" onclick="setSlPlanM(this,'postgrad')">Postgrad</button>
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Current Balance (£) — optional</label>
+        <div class="input-wrap"><span class="prefix">£</span><input type="number" id="sl_balance_m" placeholder="45000" min="0" inputmode="numeric" /></div>
+      </div>
+      <button class="calculate-btn" onclick="calcSLMobile()"><span>Calculate My Repayments</span></button>
+    </div>
+    <div class="calc-tab-panel" id="sl_panel_results">
+      <div id="sl_m_placeholder" style="text-align:center;padding:40px 0;color:var(--text-dimmer);font-family:var(--font-mono);font-size:12px;">Calculate first to see results</div>
+      <div id="sl_m_results" class="hidden">
+        <div class="verdict-banner">
+          <p class="verdict-label">MONTHLY REPAYMENT</p>
+          <div class="verdict-number" id="sl_m_monthly">£0</div>
+          <p class="verdict-sub" id="sl_m_yearly">per year</p>
+        </div>
+        <div class="stat-cards">
+          <div class="stat-card"><span class="stat-label">Monthly</span><span class="stat-value" id="sl_m_monthly2">£0</span></div>
+          <div class="stat-card highlight"><span class="stat-label">Yearly</span><span class="stat-value" id="sl_m_yearly2">£0</span></div>
+          <div class="stat-card"><span class="stat-label">Interest/Year</span><span class="stat-value" id="sl_m_interest">£0</span></div>
+          <div class="stat-card"><span class="stat-label">Written Off</span><span class="stat-value" id="sl_m_writeoff">0 yrs</span></div>
+        </div>
+        <div class="savings-callout" id="sl_m_insight"></div>
+      </div>
+    </div>
+  </div>
+
+</main>
 
   <section class="faq-section">
     <div class="faq-inner">
