@@ -77,13 +77,12 @@ def calculate_commute(data):
         "career_commute_years": round(career_commute_years, 1),
         "working_days": round(working_days),
         "miles_yearly": 0,
-        "distance_facts": _distance_fact(commute_hours_yearly, days_per_week, weeks_per_year) if float(data.get("miles_one_way", 0)) > 0 else [],
+        "distance_facts": _distance_fact(float(data.get("miles_one_way", 0)), days_per_week, weeks_per_year) if float(data.get("miles_one_way", 0)) > 0 else [],
     }
 
 
-def _distance_fact(hours, days_per_week, weeks_per_year):
-    avg_speed_mph = 30
-    total_miles = round(hours * avg_speed_mph)
+def _distance_fact(miles_one_way, days_per_week, weeks_per_year):
+    total_miles = round(miles_one_way * 2 * days_per_week * weeks_per_year)
     moon_miles = 238855
     earth_circumference = 24901
     london_sydney = 10573
