@@ -240,7 +240,7 @@
     </div>
     <div class="calc-tab-panel active" id="th_panel_calc">
       <div class="field-group">
-        <label for="th_salary_m">Annual Salary (£)</label>
+        <label for="th_salary_m">Annual Gross Salary (£)</label>
         <div class="input-wrap"><span class="prefix">£</span><input type="number" id="th_salary_m" placeholder="35000" min="0" inputmode="numeric" /></div>
       </div>
       <div class="field-group">
@@ -253,15 +253,33 @@
           <button class="transport-btn" data-plan="plan5" onclick="setMPlan(this,'plan5')">Plan 5</button>
           <button class="transport-btn" data-plan="postgrad" onclick="setMPlan(this,'postgrad')">Postgrad</button>
         </div>
+        <p class="field-hint">Plan 1 = before 2012. Plan 2 = 2012 or after. Plan 4 = Scotland. Plan 5 = 2023+.</p>
       </div>
       <div class="field-group">
-        <label>Pension (%)</label>
+        <label>Pension Contribution (%)</label>
         <div class="slider-wrap">
           <input type="range" id="th_pension_m" min="0" max="20" value="5" step="1" oninput="document.getElementById('th_pension_val_m').textContent=this.value+'%'" />
           <span id="th_pension_val_m" style="font-family:var(--font-display);font-size:22px;color:var(--accent);min-width:52px;">5%</span>
         </div>
+        <p class="field-hint">Typical employer minimum is 5%. Enter 0 if no pension.</p>
       </div>
-      <button class="calculate-btn" onclick="runTakeHomeMobile()"><span>Calculate My Take Home</span></button>
+      <div style="padding:14px;border:1px solid var(--accent);background:#0f0f00;margin-bottom:12px;">
+        <p style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;color:var(--accent);margin-bottom:6px;">🗓 APRIL 2026 TAX YEAR</p>
+        <p class="field-hint" style="margin-bottom:10px;">See how your take home changes from April 2026.</p>
+        <button onclick="calcTaxComparisonMobile()" style="width:100%;padding:10px;background:var(--accent);color:#000;border:none;font-family:var(--font-mono);font-size:11px;letter-spacing:0.1em;cursor:pointer;">Compare 2025/26 vs 2026/27 →</button>
+        <div id="tax_compare_result_m" class="hidden" style="margin-top:10px;">
+          <div class="breakdown-row"><span>2025/26 monthly</span><span id="tc_current_m">£0</span></div>
+          <div class="breakdown-row"><span>2026/27 monthly</span><span id="tc_future_m">£0</span></div>
+          <div class="breakdown-row total-row"><span>Monthly difference</span><span id="tc_diff_m">£0</span></div>
+        </div>
+      </div>
+      <button class="calculate-btn" onclick="runTakeHomeMobile()"><span>Calculate My Take Home Pay</span></button>
+      <div style="margin-top:16px;padding:14px;border:1px solid var(--border);background:var(--off-black);">
+        <p style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;color:var(--accent);margin-bottom:8px;">ALSO TRY</p>
+        <a href="/" style="display:block;color:var(--text-dim);text-decoration:none;font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);">Commute Cost Calculator →</a>
+        <a href="/student-loan" style="display:block;color:var(--text-dim);text-decoration:none;font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);">Student Loan Calculator →</a>
+        <a href="/pension-calculator" style="display:block;color:var(--text-dim);text-decoration:none;font-size:13px;padding:8px 0;">Pension Calculator →</a>
+      </div>
     </div>
     <div class="calc-tab-panel" id="th_panel_results">
       <div id="th_m_placeholder" style="text-align:center;padding:40px 0;color:var(--text-dimmer);font-family:var(--font-mono);font-size:12px;">Calculate first to see results</div>
