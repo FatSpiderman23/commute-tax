@@ -700,3 +700,12 @@ input:checked + .toggle-slider::after { transform: translateX(18px); }
     display: none !important;
   }
 }
+
+/* Fix take home mobile */
+@media (max-width: 900px) {
+  #take-home-wrapper { flex-direction: column !important; }
+  #take-home-wrapper .form-panel { order: 1 !important; }
+  #take-home-wrapper .results-panel { order: 2 !important; min-height: 0 !important; }
+  #thResultsPlaceholder { display: none !important; }
+  #thResultsContent.hidden + * { display: none; }
+}
