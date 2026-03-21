@@ -1082,3 +1082,31 @@ label { color: var(--white) !important; font-size: 12px !important; }
     display: block !important;
   }
 }
+
+/* =============================================
+   MOBILE NAV — HIDE LESS IMPORTANT LINKS
+   ============================================= */
+@media (max-width: 768px) {
+  /* Hide these on mobile — they're in the dropdown */
+  .top-nav-inner a[href="/city-comparison"],
+  .top-nav-inner a[href="/buy-vs-rent"],
+  .top-nav-inner a[href="/cost-of-living"],
+  .top-nav-inner a[href="/blog"] {
+    display: none !important;
+  }
+  /* Keep: Commute Tax, Take Home Pay, Compare Jobs, More Tools */
+}
+
+/* =============================================
+   MOBILE NAV — HIDE LESS IMPORTANT LINKS
+   ============================================= */
+@media (max-width: 768px) {
+  /* Hide these on mobile — they're in the dropdown */
+  .top-nav-inner a[href="/city-comparison"],
+  .top-nav-inner a[href="/buy-vs-rent"],
+  .top-nav-inner a[href="/cost-of-living"],
+  .top-nav-inner a[href="/blog"] {
+    display: none !important;
+  }
+  /* Keep: Commute Tax, Take Home Pay, Compare Jobs, More Tools */
+}
