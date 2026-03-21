@@ -407,9 +407,8 @@ function renderResults(r, data) {
   document.getElementById("res-total-sub").textContent = "Your annual transport cost";
   document.getElementById("res-transport-yearly").textContent = fmt(r.transport_cost_yearly);
   document.getElementById("res-hours-yearly").textContent = r.commute_hours_yearly + "h";
-  const daysLost = Math.round(r.commute_hours_yearly / 8);
   const daysEl = document.getElementById("res-days-lost");
-  if (daysEl) daysEl.textContent = daysLost;
+  if (daysEl) daysEl.textContent = Math.round(r.commute_hours_yearly / 8);
   document.getElementById("res-pct-life").textContent = r.pct_waking_life + "%";
   setTimeout(() => { document.getElementById("life-bar").style.width = Math.min(r.pct_waking_life * 2, 100) + "%"; }, 100);
   document.getElementById("res-life-text").textContent = r.pct_waking_life + "%";
@@ -451,7 +450,8 @@ function renderMobileResults(r, data) {
   document.getElementById("m_res_sub").textContent = fmt(r.transport_cost_yearly) + " transport + " + fmt(r.time_cost_yearly) + " of your time";
   document.getElementById("m_res_transport").textContent = fmt(r.transport_cost_yearly);
   document.getElementById("m_res_hours").textContent = r.commute_hours_yearly + "h";
-  document.getElementById("m_res_time").textContent = fmt(r.time_cost_yearly);
+  const mDaysEl = document.getElementById("m_res_days");
+  if (mDaysEl) mDaysEl.textContent = Math.round(r.commute_hours_yearly / 8);
   document.getElementById("m_res_pct").textContent = r.pct_waking_life + "%";
   setTimeout(() => { document.getElementById("m_life_bar").style.width = Math.min(r.pct_waking_life * 2, 100) + "%"; }, 100);
   document.getElementById("m_career_text").textContent = "That is " + r.commute_days_yearly + " days/year — " + r.career_commute_years + " years of your career.";
