@@ -791,3 +791,30 @@ function showToast(msg) {
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 3500);
 }
+
+// Email capture for commute calculator
+async function submitCommEmail() {
+  const emailEl = document.getElementById("commEmail");
+  const email = emailEl ? emailEl.value.trim() : "";
+  if (!email || !email.includes("@")) {
+    showToast("Please enter a valid email address.");
+    return;
+  }
+  const summary = lastResult
+    ? "Annual cost: " + fmt(lastResult.total_yearly_cost) + ", Hours lost: " + lastResult.commute_hours_yearly + "h, Life stolen: " + lastResult.pct_waking_life + "%"
+    : "";
+  try {
+    const res = await fetch("/subscribe", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, results_summary: summary }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast("Done! Check your inbox shortly.");
+      emailEl.value = "";
+    }
+  } catch (err) {
+    showToast("Something went wrong. Please try again.");
+  }
+}

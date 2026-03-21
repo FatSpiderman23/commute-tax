@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UK Take Home Pay Calculator 2025 — After Tax, NI & Student Loan</title>
+  <meta name="description" content="Calculate your exact UK take home pay after income tax, National Insurance, student loan, and pension. Free 2024/25 salary calculator." />
+  <meta name="keywords" content="UK take home pay calculator, salary after tax UK, net pay calculator, take home pay 2025" />
+  <meta property="og:title" content="UK Take Home Pay Calculator 2025 — Travel Tax" />
+  <meta property="og:description" content="Find out exactly what you take home after tax, NI, student loan and pension. Free UK salary calculator." />
+  <link rel="canonical" href="https://www.traveltax.co.uk/take-home" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "UK Take Home Pay Calculator",
+    "description": "Calculate your exact UK take home pay after all deductions.",
+    "url": "https://www.traveltax.co.uk/take-home",
+    "applicationCategory": "FinanceApplication",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "GBP"}
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8725854592183933" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <header class="slim-header">
+    <div class="slim-header-inner">
+      <div class="slim-logo">
+        <a href="/" style="text-decoration:none">
+          <span class="slim-logo-main">Travel Tax.</span>
+          <span class="slim-logo-sub">UK Financial Reality Check</span>
+        </a>
+      </div>
+      <div class="slim-stats">
+        <span>Basic rate: <strong>20%</strong></span>
+        <span>Higher rate: <strong>40%</strong></span>
+        <span>Personal allowance: <strong>£12,570</strong></span>
+      </div>
+    </div>
+    <div class="ticker-tape">
+      <span>TAKE HOME PAY CALCULATOR &nbsp;·&nbsp; 2024/25 TAX YEAR &nbsp;·&nbsp; INCOME TAX &nbsp;·&nbsp; NATIONAL INSURANCE &nbsp;·&nbsp; STUDENT LOAN &nbsp;·&nbsp; PENSION &nbsp;·&nbsp;</span>
+      <span aria-hidden="true">TAKE HOME PAY CALCULATOR &nbsp;·&nbsp; 2024/25 TAX YEAR &nbsp;·&nbsp; INCOME TAX &nbsp;·&nbsp; NATIONAL INSURANCE &nbsp;·&nbsp; STUDENT LOAN &nbsp;·&nbsp; PENSION &nbsp;·&nbsp;</span>
+    </div>
+  </header>
+
+  <main class="calc-section">
+    <div class="calc-wrapper">
+
+      <!-- FORM -->
+      <div class="form-panel">
+        <div class="form-header">
+          <h2>Your Salary</h2>
+          <p class="form-desc">Find out exactly what lands in your bank account.</p>
+        </div>
+
+        <div class="field-group">
+          <label for="th_salary">Annual Gross Salary (£)</label>
+          <div class="input-wrap">
+            <span class="prefix">£</span>
+            <input type="number" id="th_salary" placeholder="35000" min="0" />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Student Loan</label>
+          <div class="transport-toggle" style="grid-template-columns:1fr 1fr 1fr;">
+            <button class="transport-btn active" data-plan="none">None</button>
+            <button class="transport-btn" data-plan="plan1">Plan 1</button>
+            <button class="transport-btn" data-plan="plan2">Plan 2</button>
+            <button class="transport-btn" data-plan="plan4">Plan 4</button>
+            <button class="transport-btn" data-plan="plan5">Plan 5</button>
+            <button class="transport-btn" data-plan="postgrad">Postgrad</button>
+          </div>
+          <p class="field-hint">Plan 1 = started before 2012. Plan 2 = started 2012 or after. Plan 4 = Scotland. Plan 5 = started 2023+.</p>
+        </div>
+
+        <div class="field-group">
+          <label for="th_pension">Pension Contribution (%)</label>
+          <div class="slider-wrap">
+            <input type="range" id="th_pension_slider" min="0" max="20" value="5" step="1" />
+            <div class="slider-input-wrap">
+              <input type="number" id="th_pension" value="5" min="0" max="100" />
+              <span class="slider-unit">%</span>
+            </div>
+          </div>
+          <p class="field-hint">Typical employer minimum is 5%. Enter 0 if no pension.</p>
+        </div>
+
+        <button class="calculate-btn" id="thCalculateBtn">
+          <span>Calculate My Take Home Pay</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+
+        <div style="margin-top:24px;padding:16px;border:1px solid var(--border);background:var(--off-black);">
+          <p style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;color:var(--accent);margin-bottom:8px;">ALSO TRY</p>
+          <a href="/" style="display:block;color:var(--text-dim);text-decoration:none;font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);">Commute Cost Calculator — what is your commute really costing you? →</a>
+          <a href="/blog" style="display:block;color:var(--text-dim);text-decoration:none;font-size:13px;padding:8px 0;">UK Commute & Work Guides →</a>
+        </div>
+      </div>
+
+      <!-- RESULTS -->
+      <div class="results-panel" id="thResultsPanel">
+        <div class="results-placeholder" id="thResultsPlaceholder">
+          <div class="fun-facts-wrap">
+            <p class="fun-facts-label">⚡ DID YOU KNOW?</p>
+            <div class="fun-fact-display" id="thFactDisplay"></div>
+            <div class="fun-fact-dots" id="thFactDots"></div>
+            <p class="fun-facts-cta">Enter your salary and hit Calculate →</p>
+          </div>
+        </div>
+
+        <div class="results-content hidden" id="thResultsContent">
+
+          <!-- Take home verdict -->
+          <div class="verdict-banner">
+            <p class="verdict-label">YOUR MONTHLY TAKE HOME</p>
+            <div class="verdict-number" id="th_monthly">£0</div>
+            <p class="verdict-sub" id="th_yearly_sub">per year take home</p>
+          </div>
+
+          <!-- Stat cards -->
+          <div class="stat-cards">
+            <div class="stat-card">
+              <span class="stat-icon">📅</span>
+              <span class="stat-label">Weekly Take Home</span>
+              <span class="stat-value" id="th_weekly">£0</span>
+            </div>
+            <div class="stat-card highlight">
+              <span class="stat-icon">💸</span>
+              <span class="stat-label">Total Deductions</span>
+              <span class="stat-value" id="th_deductions">£0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon">📊</span>
+              <span class="stat-label">Effective Tax Rate</span>
+              <span class="stat-value" id="th_effective_rate">0%</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon">☀️</span>
+              <span class="stat-label">Daily Take Home</span>
+              <span class="stat-value" id="th_daily">£0</span>
+            </div>
+          </div>
+
+          <!-- Breakdown -->
+          <div class="breakdown-block">
+            <h3 class="block-title">Full Breakdown</h3>
+            <div class="breakdown-row"><span>Gross salary</span><span id="th_gross">£0</span></div>
+            <div class="breakdown-row"><span>Income tax</span><span id="th_tax" style="color:var(--red)">-£0</span></div>
+            <div class="breakdown-row"><span>National Insurance</span><span id="th_ni" style="color:var(--red)">-£0</span></div>
+            <div class="breakdown-row" id="th_sl_row" style="display:none"><span>Student loan</span><span id="th_sl" style="color:var(--red)">-£0</span></div>
+            <div class="breakdown-row" id="th_pension_row" style="display:none"><span>Pension</span><span id="th_pension_val" style="color:var(--red)">-£0</span></div>
+            <div class="breakdown-row total-row"><span>Take home (yearly)</span><span id="th_takehome_yearly">£0</span></div>
+          </div>
+
+          <!-- Reality check -->
+          <div class="life-impact-block">
+            <h3 class="block-title">The Reality Check</h3>
+            <p class="impact-career" id="th_reality"></p>
+          </div>
+
+          <!-- Cross-sell to commute calculator -->
+          <div class="comparison-block">
+            <h3 class="block-title">Now Calculate Your Commute Cost</h3>
+            <p style="font-size:13px;color:var(--text-dim);margin-bottom:16px;">You know what you take home. Now find out how much your commute is eating into it — including the value of your time.</p>
+            <a href="/" style="display:block;text-align:center;background:var(--accent);color:var(--black);font-family:var(--font-mono);font-size:12px;padding:14px;text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;">Calculate My Commute Cost →</a>
+          </div>
+
+          <!-- Email capture -->
+          <div class="share-block" id="thEmailCapture">
+            <p class="share-label">Get your results by email</p>
+            <p style="font-size:13px;color:var(--text-dim);margin-bottom:12px;">We will send you a breakdown of your take home pay plus tips on how to keep more of your salary.</p>
+            <div class="input-wrap" style="margin-bottom:8px;">
+              <input type="email" id="thEmail" placeholder="your@email.com" style="flex:1;background:transparent;border:none;outline:none;padding:14px 16px;color:var(--text);font-family:var(--font-mono);font-size:14px;" />
+            </div>
+            <button onclick="submitEmail('takehome')" style="width:100%;padding:14px;background:var(--accent);color:var(--black);border:none;font-family:var(--font-mono);font-size:12px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;">Send Me My Results</button>
+            <p style="font-size:11px;color:var(--text-dimmer);margin-top:8px;text-align:center;">No spam. Unsubscribe anytime.</p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FAQ -->
+  <section class="faq-section">
+    <div class="faq-inner">
+      <h2 class="faq-title">Frequently Asked Questions</h2>
+      <div class="faq-item">
+        <h3>How is income tax calculated?</h3>
+        <p>We use the 2024/25 UK tax bands. The first £12,570 is tax-free (personal allowance). You pay 20% on earnings between £12,571 and £50,270, 40% between £50,271 and £125,140, and 45% above £125,140.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Which student loan plan am I on?</h3>
+        <p>Plan 1 if you started university before 2012. Plan 2 if you started in England or Wales from 2012. Plan 4 if you studied in Scotland. Plan 5 if you started from August 2023. Postgraduate loan if you have a master's or doctoral loan.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is pension deducted before or after tax?</h3>
+        <p>Most workplace pensions use salary sacrifice, meaning your pension contribution is deducted before tax and NI. This calculator assumes salary sacrifice which reduces both your tax and NI bill.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is this accurate for 2025?</h3>
+        <p>Yes — this calculator uses the 2024/25 tax year rates which apply from April 2024 to April 2025. We update it every April when new rates are announced.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>© 2025 Travel Tax · <a href="/">Commute Calculator</a> · <a href="/take-home">Take Home Pay</a> · <a href="/guide">Guide</a> · <a href="/blog">Blog</a> · <a href="/privacy">Privacy</a></p>
+  </footer>
+
+  <script src="/static/js/take_home.js"></script>
+</body>
+</html>

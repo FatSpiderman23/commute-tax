@@ -316,6 +316,7 @@ def sitemap():
         {"loc": "https://www.traveltax.co.uk/", "priority": "1.0", "changefreq": "weekly"},
         {"loc": "https://www.traveltax.co.uk/guide", "priority": "0.9", "changefreq": "monthly"},
         {"loc": "https://www.traveltax.co.uk/blog", "priority": "0.8", "changefreq": "weekly"},
+        {"loc": "https://www.traveltax.co.uk/take-home", "priority": "0.9", "changefreq": "monthly"},
     ]
     for slug in CITIES:
         urls.append({"loc": f"https://www.traveltax.co.uk/commute-cost/{slug}", "priority": "0.8", "changefreq": "monthly"})
@@ -359,6 +360,162 @@ def bing_verify():
     <user>33E58A74CBE9401602924B227FAFAC98</user>
 </users>'''
     return Response(xml, mimetype="application/xml")
+
+
+# =============================================
+# TOOL 2: TAKE HOME PAY CALCULATOR
+# =============================================
+
+def calculate_take_home(data):
+    salary = float(data.get("salary", 0))
+    student_loan = data.get("student_loan", "none")
+    pension_pct = float(data.get("pension_pct", 0))
+    blind = data.get("blind", False)
+
+    # Personal allowance 2024/25
+    personal_allowance = 12570
+    if salary > 100000:
+        taper = (salary - 100000) / 2
+        personal_allowance = max(0, personal_allowance - taper)
+
+    # Taxable income
+    taxable = max(0, salary - personal_allowance)
+
+    # Income tax bands 2024/25
+    tax = 0
+    basic_band = 37700
+    higher_band = 125140 - 12570
+
+    if taxable <= basic_band:
+        tax = taxable * 0.20
+    elif taxable <= higher_band:
+        tax = basic_band * 0.20 + (taxable - basic_band) * 0.40
+    else:
+        tax = basic_band * 0.20 + (higher_band - basic_band) * 0.40 + (taxable - higher_band) * 0.45
+
+    # National Insurance 2024/25
+    ni = 0
+    ni_threshold = 12570
+    ni_upper = 50270
+    if salary > ni_threshold:
+        if salary <= ni_upper:
+            ni = (salary - ni_threshold) * 0.08
+        else:
+            ni = (ni_upper - ni_threshold) * 0.08 + (salary - ni_upper) * 0.02
+
+    # Student loan
+    sl = 0
+    if student_loan == "plan1":
+        threshold = 22015
+        if salary > threshold:
+            sl = (salary - threshold) * 0.09
+    elif student_loan == "plan2":
+        threshold = 27295
+        if salary > threshold:
+            sl = (salary - threshold) * 0.09
+    elif student_loan == "plan4":
+        threshold = 27660
+        if salary > threshold:
+            sl = (salary - threshold) * 0.09
+    elif student_loan == "plan5":
+        threshold = 25000
+        if salary > threshold:
+            sl = (salary - threshold) * 0.06
+    elif student_loan == "postgrad":
+        threshold = 21000
+        if salary > threshold:
+            sl = (salary - threshold) * 0.06
+
+    # Pension
+    pension = salary * (pension_pct / 100)
+
+    # Take home
+    take_home_yearly = salary - tax - ni - sl - pension
+    take_home_monthly = take_home_yearly / 12
+    take_home_weekly = take_home_yearly / 52
+    take_home_daily = take_home_yearly / 260
+
+    # Effective tax rate
+    total_deductions = tax + ni + sl + pension
+    effective_rate = (total_deductions / salary * 100) if salary > 0 else 0
+
+    return {
+        "gross_yearly": round(salary),
+        "gross_monthly": round(salary / 12),
+        "take_home_yearly": round(take_home_yearly),
+        "take_home_monthly": round(take_home_monthly),
+        "take_home_weekly": round(take_home_weekly),
+        "take_home_daily": round(take_home_daily),
+        "income_tax": round(tax),
+        "national_insurance": round(ni),
+        "student_loan": round(sl),
+        "pension": round(pension),
+        "total_deductions": round(total_deductions),
+        "effective_rate": round(effective_rate, 1),
+        "personal_allowance": round(personal_allowance),
+    }
+
+
+@app.route("/take-home")
+def take_home_page():
+    return render_template("take_home.html")
+
+
+@app.route("/calculate-take-home", methods=["POST"])
+def calculate_take_home_route():
+    data = request.get_json()
+    result = calculate_take_home(data)
+    return jsonify(result)
+
+
+# =============================================
+# EMAIL CAPTURE
+# =============================================
+
+@app.route("/subscribe", methods=["POST"])
+def subscribe():
+    import json
+    import urllib.request
+    import urllib.parse
+
+    data = request.get_json()
+    email = data.get("email", "").strip()
+    results_summary = data.get("results_summary", "")
+
+    if not email or "@" not in email:
+        return jsonify({"success": False, "error": "Invalid email"})
+
+    # Save to local file as backup
+    import os
+    subscribers_file = os.path.join(os.path.dirname(__file__), "subscribers.txt")
+    with open(subscribers_file, "a") as f:
+        f.write(f"{email},{results_summary}\n")
+
+    # Mailchimp API integration
+    # Replace these with your actual Mailchimp details
+    MAILCHIMP_API_KEY = "YOUR_MAILCHIMP_API_KEY"
+    MAILCHIMP_LIST_ID = "YOUR_MAILCHIMP_LIST_ID"
+    MAILCHIMP_DC = "us1"  # datacenter from your API key e.g. us1, us2 etc
+
+    if MAILCHIMP_API_KEY != "YOUR_MAILCHIMP_API_KEY":
+        try:
+            url = f"https://{MAILCHIMP_DC}.api.mailchimp.com/3.0/lists/{MAILCHIMP_LIST_ID}/members"
+            payload = json.dumps({
+                "email_address": email,
+                "status": "subscribed",
+                "merge_fields": {"RESULTS": results_summary}
+            }).encode("utf-8")
+            req = urllib.request.Request(url, data=payload, method="POST")
+            req.add_header("Content-Type", "application/json")
+            import base64
+            credentials = base64.b64encode(f"anystring:{MAILCHIMP_API_KEY}".encode()).decode()
+            req.add_header("Authorization", f"Basic {credentials}")
+            urllib.request.urlopen(req)
+        except Exception as e:
+            pass  # Still saved locally
+
+    return jsonify({"success": True})
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
