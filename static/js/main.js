@@ -433,23 +433,24 @@ function generateShareCard() {
   ctx.fillText("INSTEAD YOU COULD HAVE...", W / 2, 614);
 
   // Pick most relevant AR metric dynamically based on hours
-  let bestMetric = arMetric;
+  let bestMetric = null;
   if (window._arMetrics && window._arMetrics.length > 0) {
-    const hrs = r.commute_hours_yearly;
+    const hrs = lastResult.commute_hours_yearly;
     if (hrs >= 600) {
-      bestMetric = window._arMetrics.find(m => m.id === "spanish") || arMetric;
+      bestMetric = window._arMetrics.find(m => m.id === "spanish") || window._arMetrics[0];
     } else if (hrs >= 300) {
-      bestMetric = window._arMetrics.find(m => m.id === "coding") || arMetric;
+      bestMetric = window._arMetrics.find(m => m.id === "coding") || window._arMetrics[0];
     } else if (hrs >= 200) {
-      bestMetric = window._arMetrics.find(m => m.id === "books") || arMetric;
+      bestMetric = window._arMetrics.find(m => m.id === "books") || window._arMetrics[0];
     } else if (hrs >= 120) {
-      bestMetric = window._arMetrics.find(m => m.id === "marathon") || arMetric;
+      bestMetric = window._arMetrics.find(m => m.id === "marathon") || window._arMetrics[0];
     } else {
-      bestMetric = window._arMetrics.find(m => m.id === "gym") || arMetric;
+      bestMetric = window._arMetrics.find(m => m.id === "gym") || window._arMetrics[0];
     }
   }
 
   // AR message
+  if (!bestMetric && window._arMetrics) bestMetric = window._arMetrics[0];
   if (bestMetric) {
     const cleanMsg = bestMetric.message.replace(/<[^>]*>/g, "");
     ctx.fillStyle = "#f0f0e8";
@@ -481,7 +482,7 @@ function generateShareCard() {
   ctx.font = "400 20px monospace";
   ctx.textAlign = "center";
   ctx.textBaseline = "alphabetic";
-  ctx.fillText(r.career_commute_years + " years of your career lost to commuting", W / 2, 958);
+  ctx.fillText(lastResult.career_commute_years + " years of your career lost to commuting", W / 2, 958);
 
   // Bottom accent bar
   ctx.fillStyle = "#f0e040";
@@ -574,6 +575,11 @@ let mSelectedTransport = "public";
 let mSelectedCarType = "petrol";
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Wire mobile calculate button
+  const mCalcBtn = document.getElementById("mCalculateBtn");
+  if (mCalcBtn) {
+    mCalcBtn.addEventListener("click", runMobileCalculation);
+  }
   // Mobile slider sync
   const mSlider = document.getElementById("m_commute_minutes");
   const mManual = document.getElementById("m_commute_manual");
