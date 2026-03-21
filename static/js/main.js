@@ -337,13 +337,10 @@ function copyResult() {
 function generateShareCard() {
   if (!lastResult) return;
   const canvas = document.createElement("canvas");
-  const scale = 2; // retina quality — sharper text
-  canvas.width = 1080 * scale;
-  canvas.height = 1080 * scale;
-  canvas.style.width = "1080px";
-  canvas.style.height = "1080px";
+  canvas.width = 1080;
+  canvas.height = 1080;
   const ctx = canvas.getContext("2d");
-  ctx.scale(scale, scale);
+  ctx.imageSmoothingEnabled = false;
   const r = lastResult;
   const arMetric = window._arMetrics ? window._arMetrics[0] : null;
   const W = 1080;
@@ -435,9 +432,26 @@ function generateShareCard() {
   ctx.textBaseline = "alphabetic";
   ctx.fillText("INSTEAD YOU COULD HAVE...", W / 2, 614);
 
+  // Pick most relevant AR metric dynamically based on hours
+  let bestMetric = arMetric;
+  if (window._arMetrics && window._arMetrics.length > 0) {
+    const hrs = r.commute_hours_yearly;
+    if (hrs >= 600) {
+      bestMetric = window._arMetrics.find(m => m.id === "spanish") || arMetric;
+    } else if (hrs >= 300) {
+      bestMetric = window._arMetrics.find(m => m.id === "coding") || arMetric;
+    } else if (hrs >= 200) {
+      bestMetric = window._arMetrics.find(m => m.id === "books") || arMetric;
+    } else if (hrs >= 120) {
+      bestMetric = window._arMetrics.find(m => m.id === "marathon") || arMetric;
+    } else {
+      bestMetric = window._arMetrics.find(m => m.id === "gym") || arMetric;
+    }
+  }
+
   // AR message
-  if (arMetric) {
-    const cleanMsg = arMetric.message.replace(/<[^>]*>/g, "");
+  if (bestMetric) {
+    const cleanMsg = bestMetric.message.replace(/<[^>]*>/g, "");
     ctx.fillStyle = "#f0f0e8";
     ctx.font = "400 36px Arial";
     ctx.textAlign = "center";
