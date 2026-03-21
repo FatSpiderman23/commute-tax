@@ -5,10 +5,9 @@ app = Flask(__name__)
 
 # Real-world UK MPG averages by car type
 CAR_MPG = {
-    "petrol_avg":   40,
-    "petrol_large": 28,
-    "diesel":       50,
-    "electric":     None,  # handled separately
+    "petrol":  40,
+    "diesel":  50,
+    "electric": None,
 }
 
 def calculate_commute(data):
@@ -18,7 +17,6 @@ def calculate_commute(data):
     commute_minutes_one_way = float(data.get("commute_minutes", 0))
     transport_cost_daily = float(data.get("transport_cost_daily", 0))
     transport_type = data.get("transport_type", "public")
-    miles_one_way = float(data.get("miles_one_way", 0))
     fuel_cost_per_litre = float(data.get("fuel_cost_per_litre", 1.55))
     car_type = data.get("car_type", "petrol_avg")
 
@@ -35,27 +33,21 @@ def calculate_commute(data):
         is_ev = car_type == "electric"
         fuel_spend = float(data.get("fuel_spend", 0))
         fuel_period = data.get("fuel_period", "weekly")
+
         if is_ev:
-            fuel_cost_daily = miles_one_way * 2 * 0.25 * 0.28
+            # EV flat rate: average UK EV costs ~£3/day to charge for typical commute
+            fuel_cost_daily = 3.00
         elif fuel_spend > 0:
-            # User told us their weekly or monthly spend
             if fuel_period == "weekly":
-                fuel_cost_daily = fuel_spend / 5
+                fuel_cost_daily = fuel_spend / days_per_week if days_per_week > 0 else fuel_spend / 5
             else:
-                fuel_cost_daily = (fuel_spend * 12) / (weeks_per_year * days_per_week) if days_per_week > 0 else 0
+                fuel_cost_daily = (fuel_spend / 4.33) / days_per_week if days_per_week > 0 else fuel_spend / 21
         else:
-            mpg = CAR_MPG.get(car_type, 40)
-            litres_per_mile = 1 / (mpg * 4.546)
-            fuel_cost_daily = miles_one_way * 2 * litres_per_mile * 1.55
+            fuel_cost_daily = 10.0  # sensible default if nothing entered
 
-        miles_yearly = miles_one_way * 2 * working_days
-        if miles_yearly <= 10000:
-            depreciation_yearly = miles_yearly * 0.45
-        else:
-            depreciation_yearly = (10000 * 0.45) + ((miles_yearly - 10000) * 0.25)
-
-        transport_cost_yearly = (fuel_cost_daily * working_days) + depreciation_yearly
-        transport_cost_daily_val = transport_cost_yearly / working_days if working_days > 0 else 0
+        transport_cost_yearly = fuel_cost_daily * working_days
+        transport_cost_daily_val = fuel_cost_daily
+        depreciation_yearly = 0
     else:
         transport_cost_yearly = transport_cost_daily * working_days
         depreciation_yearly = 0
@@ -83,7 +75,7 @@ def calculate_commute(data):
         "remote_total_value": round(transport_cost_yearly + time_cost_yearly),
         "career_commute_years": round(career_commute_years, 1),
         "working_days": round(working_days),
-        "miles_yearly": round(miles_yearly) if transport_type == "car" else 0,
+        "miles_yearly": 0,
     }
 
 

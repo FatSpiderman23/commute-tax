@@ -2,7 +2,7 @@
 
 let selectedDays = 3;
 let selectedTransport = "public";
-let selectedCarType = "petrol_avg";
+let selectedCarType = "petrol";
 let selectedFuelPeriod = "weekly";
 let lastResult = null;
 
@@ -369,8 +369,8 @@ function generateShareCard() {
   ctx.fillStyle = "#f0e040";
   ctx.font = "700 42px monospace";
   ctx.fillText("TRAVEL TAX", 80, 86);
-  ctx.fillStyle = "#3a3a3a";
-  ctx.font = "400 20px monospace";
+  ctx.fillStyle = "#888888";
+  ctx.font = "400 24px monospace";
   ctx.fillText("traveltax.co.uk", 80, 116);
 
   // Divider below logo
@@ -418,9 +418,9 @@ function generateShareCard() {
     ctx.textAlign = "center";
     ctx.textBaseline = "alphabetic";
     ctx.fillText(stat.value, x, statsY);
-    ctx.fillStyle = "#444444";
-    ctx.font = "400 16px monospace";
-    ctx.fillText(stat.label, x, statsY + 32);
+    ctx.fillStyle = "#888888";
+    ctx.font = "400 20px monospace";
+    ctx.fillText(stat.label, x, statsY + 36);
   });
 
   // Divider
@@ -557,7 +557,7 @@ function showToast(msg) {
 
 let mSelectedDays = 3;
 let mSelectedTransport = "public";
-let mSelectedCarType = "petrol_avg";
+let mSelectedCarType = "petrol";
 
 document.addEventListener("DOMContentLoaded", () => {
   // Mobile slider sync
