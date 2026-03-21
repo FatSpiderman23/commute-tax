@@ -16,14 +16,24 @@
     <div class="slim-header-inner"><div class="slim-logo"><a href="/" style="text-decoration:none"><span class="slim-logo-main">Travel Tax.</span></a></div></div>
     <div class="ticker-tape"><span>REDUNDANCY CALCULATOR &nbsp;·&nbsp; STATUTORY REDUNDANCY PAY 2026 &nbsp;·&nbsp; KNOW YOUR RIGHTS &nbsp;·&nbsp;</span><span aria-hidden="true">REDUNDANCY CALCULATOR &nbsp;·&nbsp; STATUTORY REDUNDANCY PAY 2026 &nbsp;·&nbsp; KNOW YOUR RIGHTS &nbsp;·&nbsp;</span></div>
   </header>
-    <nav class="top-nav">
+      <nav class="top-nav">
     <div class="top-nav-inner">
       <a href="/" class="nav-link">Commute Tax</a>
       <a href="/take-home" class="nav-link">Take Home Pay</a>
       <a href="/compare-jobs" class="nav-link">Compare Jobs</a>
-      <a href="/student-loan" class="nav-link">Student Loan</a>
-      <a href="/pension-calculator" class="nav-link">Pension</a>
-      <a href="/tools" class="nav-link">All Tools</a>
+      <a href="/city-comparison" class="nav-link">City Comparison</a>
+      <a href="/buy-vs-rent" class="nav-link">Buy vs Rent</a>
+      <div class="nav-dropdown">
+        <button class="nav-link nav-dropdown-btn">More Tools ▾</button>
+        <div class="nav-dropdown-menu">
+          <a href="/student-loan" class="nav-dropdown-item">Student Loan</a>
+          <a href="/pension-calculator" class="nav-dropdown-item">Pension Calculator</a>
+          <a href="/redundancy-calculator" class="nav-dropdown-item active">Redundancy Pay</a>
+          <a href="/maternity-calculator" class="nav-dropdown-item">Maternity Pay</a>
+          <a href="/self-employed-vs-paye" class="nav-dropdown-item">Self-Employed vs PAYE</a>
+          <a href="/tools" class="nav-dropdown-item">All Tools →</a>
+        </div>
+      </div>
       <a href="/cost-of-living" class="nav-link">Cost of Living</a>
       <a href="/blog" class="nav-link">Blog</a>
     </div>
@@ -60,7 +70,61 @@
         </div>
       </div>
     </div>
-  </main>
+  
+  <!-- MOBILE TABS -->
+  <div class="calc-mobile-tabs">
+    <div class="calc-tab-btns">
+      <button class="calc-tab-btn active" onclick="redTab('calc')">Calculator</button>
+      <button class="calc-tab-btn" onclick="redTab('results')">My Results</button>
+    </div>
+    <div class="calc-tab-panel active" id="red_panel_calc">
+      <div class="field-group"><label>Your Age</label><div class="input-wrap"><input type="number" id="r_age_m" placeholder="35" min="18" inputmode="numeric" /></div></div>
+      <div class="field-group"><label>Years of Service</label><div class="input-wrap"><input type="number" id="r_years_m" placeholder="5" min="0" step="0.5" inputmode="numeric" /></div><p class="field-hint">Minimum 2 years to qualify.</p></div>
+      <div class="field-group"><label>Weekly Gross Pay (£)</label><div class="input-wrap"><span class="prefix">£</span><input type="number" id="r_weekly_m" placeholder="650" min="0" inputmode="numeric" /></div></div>
+      <button class="calculate-btn" onclick="calcRedMobile()"><span>Calculate Redundancy Pay</span></button>
+    </div>
+    <div class="calc-tab-panel" id="red_panel_results">
+      <div id="red_m_placeholder" style="text-align:center;padding:40px 0;color:var(--text-dimmer);font-family:var(--font-mono);font-size:12px;">Calculate first to see results</div>
+      <div id="red_m_results" class="hidden">
+        <div class="verdict-banner"><p class="verdict-label">YOUR REDUNDANCY PAY</p><div class="verdict-number" id="red_m_total">£0</div></div>
+        <div class="breakdown-block">
+          <div class="breakdown-row"><span>Tax-free amount</span><span id="red_m_taxfree" style="color:var(--green)">£0</span></div>
+          <div class="breakdown-row"><span>Taxable above £30k</span><span id="red_m_taxable">£0</span></div>
+          <div class="breakdown-row total-row"><span>Total entitlement</span><span id="red_m_total2">£0</span></div>
+        </div>
+        <div class="savings-callout" id="red_m_insight"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  function redTab(tab) {
+    document.getElementById("red_panel_calc").classList.toggle("active", tab === "calc");
+    document.getElementById("red_panel_results").classList.toggle("active", tab === "results");
+    document.querySelectorAll(".calc-mobile-tabs .calc-tab-btn").forEach((b, i) => b.classList.toggle("active", (i===0)===(tab==="calc")));
+  }
+    async function calcRedMobile() {
+    const age = parseInt(document.getElementById("r_age_m").value)||0;
+    const years = parseFloat(document.getElementById("r_years_m").value)||0;
+    const weekly = parseFloat(document.getElementById("r_weekly_m").value)||0;
+    if (!age||years<2||!weekly){alert("Please enter age, at least 2 years service, and weekly pay.");return;}
+    try {
+      const res = await fetch("/calculate-redundancy",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({age,years_service:years,weekly_pay:weekly})});
+      const r = await res.json();
+      const fmt=n=>"£"+Math.round(n).toLocaleString("en-GB");
+      document.getElementById("red_m_placeholder").classList.add("hidden");
+      document.getElementById("red_m_results").classList.remove("hidden");
+      document.getElementById("red_m_total").textContent=fmt(r.statutory_pay);
+      document.getElementById("red_m_taxfree").textContent=fmt(r.tax_free);
+      document.getElementById("red_m_taxable").textContent=r.taxable_above>0?fmt(r.taxable_above):"None";
+      document.getElementById("red_m_total2").textContent=fmt(r.statutory_pay);
+      document.getElementById("red_m_insight").textContent=r.taxable_above>0?"£"+r.taxable_above.toLocaleString()+" is taxable above the £30,000 tax-free threshold.":"Your full redundancy payment is tax-free.";
+      redTab("results");
+    } catch(e){alert("Something went wrong.");}
+  }
+  </script>
+
+</main>
   <section class="faq-section">
     <div class="faq-inner">
       <h2 class="faq-title">Redundancy FAQs</h2>
@@ -100,5 +164,22 @@
       });
     });
   </script>
+
+<script>
+// Mobile nav dropdown toggle
+document.addEventListener("DOMContentLoaded", function() {
+  var btn = document.querySelector(".nav-dropdown-btn");
+  if (btn) {
+    btn.addEventListener("click", function(e) {
+      e.stopPropagation();
+      btn.closest(".nav-dropdown").classList.toggle("open");
+    });
+    document.addEventListener("click", function() {
+      btn.closest(".nav-dropdown").classList.remove("open");
+    });
+  }
+});
+</script>
+
 </body>
 </html>

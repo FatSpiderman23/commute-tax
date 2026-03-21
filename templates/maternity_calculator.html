@@ -16,14 +16,24 @@
     <div class="slim-header-inner"><div class="slim-logo"><a href="/" style="text-decoration:none"><span class="slim-logo-main">Travel Tax.</span></a></div></div>
     <div class="ticker-tape"><span>MATERNITY PAY CALCULATOR &nbsp;·&nbsp; SMP 2026 &nbsp;·&nbsp; STATUTORY MATERNITY PAY &nbsp;·&nbsp;</span><span aria-hidden="true">MATERNITY PAY CALCULATOR &nbsp;·&nbsp; SMP 2026 &nbsp;·&nbsp; STATUTORY MATERNITY PAY &nbsp;·&nbsp;</span></div>
   </header>
-    <nav class="top-nav">
+      <nav class="top-nav">
     <div class="top-nav-inner">
       <a href="/" class="nav-link">Commute Tax</a>
       <a href="/take-home" class="nav-link">Take Home Pay</a>
       <a href="/compare-jobs" class="nav-link">Compare Jobs</a>
-      <a href="/student-loan" class="nav-link">Student Loan</a>
-      <a href="/pension-calculator" class="nav-link">Pension</a>
-      <a href="/tools" class="nav-link">All Tools</a>
+      <a href="/city-comparison" class="nav-link">City Comparison</a>
+      <a href="/buy-vs-rent" class="nav-link">Buy vs Rent</a>
+      <div class="nav-dropdown">
+        <button class="nav-link nav-dropdown-btn">More Tools ▾</button>
+        <div class="nav-dropdown-menu">
+          <a href="/student-loan" class="nav-dropdown-item">Student Loan</a>
+          <a href="/pension-calculator" class="nav-dropdown-item">Pension Calculator</a>
+          <a href="/redundancy-calculator" class="nav-dropdown-item">Redundancy Pay</a>
+          <a href="/maternity-calculator" class="nav-dropdown-item active">Maternity Pay</a>
+          <a href="/self-employed-vs-paye" class="nav-dropdown-item">Self-Employed vs PAYE</a>
+          <a href="/tools" class="nav-dropdown-item">All Tools →</a>
+        </div>
+      </div>
       <a href="/cost-of-living" class="nav-link">Cost of Living</a>
       <a href="/blog" class="nav-link">Blog</a>
     </div>
@@ -72,7 +82,71 @@
         </div>
       </div>
     </div>
-  </main>
+  
+  <!-- MOBILE TABS -->
+  <div class="calc-mobile-tabs">
+    <div class="calc-tab-btns">
+      <button class="calc-tab-btn active" onclick="matTab('calc')">Calculator</button>
+      <button class="calc-tab-btn" onclick="matTab('results')">My Results</button>
+    </div>
+    <div class="calc-tab-panel active" id="mat_panel_calc">
+      <div class="field-group"><label>Annual Salary (£)</label><div class="input-wrap"><span class="prefix">£</span><input type="number" id="m_salary_mat" placeholder="35000" min="0" inputmode="numeric" /></div></div>
+      <div class="field-group"><label>Leave Length</label>
+        <div class="day-toggle" id="mat_weeks_toggle">
+          <button class="day-btn active" data-val="39" onclick="setMatWeeks(this,39)">39 wks</button>
+          <button class="day-btn" data-val="26" onclick="setMatWeeks(this,26)">26 wks</button>
+          <button class="day-btn" data-val="52" onclick="setMatWeeks(this,52)">52 wks</button>
+        </div>
+      </div>
+      <button class="calculate-btn" onclick="calcMatMobile()"><span>Calculate Maternity Pay</span></button>
+    </div>
+    <div class="calc-tab-panel" id="mat_panel_results">
+      <div id="mat_m_placeholder" style="text-align:center;padding:40px 0;color:var(--text-dimmer);font-family:var(--font-mono);font-size:12px;">Calculate first to see results</div>
+      <div id="mat_m_results" class="hidden">
+        <div class="verdict-banner"><p class="verdict-label">TOTAL MATERNITY PAY</p><div class="verdict-number" id="mat_m_total">£0</div></div>
+        <div class="stat-cards">
+          <div class="stat-card"><span class="stat-label">First 6 Weeks</span><span class="stat-value" id="mat_m_first6">£0/wk</span></div>
+          <div class="stat-card highlight"><span class="stat-label">After 6 Weeks</span><span class="stat-value" id="mat_m_after6">£0/wk</span></div>
+          <div class="stat-card"><span class="stat-label">Monthly During Leave</span><span class="stat-value" id="mat_m_monthly">£0</span></div>
+          <div class="stat-card"><span class="stat-label">Income Lost</span><span class="stat-value" id="mat_m_lost">£0</span></div>
+        </div>
+        <div class="savings-callout" id="mat_m_insight"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  function matTab(tab) {
+    document.getElementById("mat_panel_calc").classList.toggle("active", tab === "calc");
+    document.getElementById("mat_panel_results").classList.toggle("active", tab === "results");
+    document.querySelectorAll(".calc-mobile-tabs .calc-tab-btn").forEach((b, i) => b.classList.toggle("active", (i===0)===(tab==="calc")));
+  }
+    let matWeeksM = 39;
+  function setMatWeeks(btn, w) {
+    document.querySelectorAll("#mat_weeks_toggle .day-btn").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active"); matWeeksM=w;
+  }
+  async function calcMatMobile() {
+    const salary = parseFloat(document.getElementById("m_salary_mat").value)||0;
+    if (!salary){alert("Please enter your salary.");return;}
+    try {
+      const res = await fetch("/calculate-maternity",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({salary,weeks:matWeeksM})});
+      const r = await res.json();
+      const fmt=n=>"£"+Math.round(n).toLocaleString("en-GB");
+      document.getElementById("mat_m_placeholder").classList.add("hidden");
+      document.getElementById("mat_m_results").classList.remove("hidden");
+      document.getElementById("mat_m_total").textContent=fmt(r.total_smp);
+      document.getElementById("mat_m_first6").textContent=fmt(r.weekly_first_6)+"/wk";
+      document.getElementById("mat_m_after6").textContent=fmt(r.weekly_after_6)+"/wk";
+      document.getElementById("mat_m_monthly").textContent=fmt(r.monthly_during_leave);
+      document.getElementById("mat_m_lost").textContent=fmt(r.total_income_lost);
+      document.getElementById("mat_m_insight").textContent="You will receive "+fmt(r.total_smp)+" over "+r.smp_weeks+" weeks — "+fmt(r.total_income_lost)+" less than your normal salary.";
+      matTab("results");
+    } catch(e){alert("Something went wrong.");}
+  }
+  </script>
+
+</main>
   <section class="faq-section">
     <div class="faq-inner">
       <h2 class="faq-title">Maternity Pay FAQs</h2>
@@ -116,5 +190,22 @@
       });
     });
   </script>
+
+<script>
+// Mobile nav dropdown toggle
+document.addEventListener("DOMContentLoaded", function() {
+  var btn = document.querySelector(".nav-dropdown-btn");
+  if (btn) {
+    btn.addEventListener("click", function(e) {
+      e.stopPropagation();
+      btn.closest(".nav-dropdown").classList.toggle("open");
+    });
+    document.addEventListener("click", function() {
+      btn.closest(".nav-dropdown").classList.remove("open");
+    });
+  }
+});
+</script>
+
 </body>
 </html>

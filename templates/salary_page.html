@@ -30,14 +30,24 @@
       <a href="/take-home" class="blog-cta">Take Home Calculator →</a>
     </div>
   </header>
-    <nav class="top-nav">
+      <nav class="top-nav">
     <div class="top-nav-inner">
       <a href="/" class="nav-link">Commute Tax</a>
       <a href="/take-home" class="nav-link">Take Home Pay</a>
       <a href="/compare-jobs" class="nav-link">Compare Jobs</a>
-      <a href="/student-loan" class="nav-link">Student Loan</a>
-      <a href="/pension-calculator" class="nav-link">Pension</a>
-      <a href="/tools" class="nav-link active">All Tools</a>
+      <a href="/city-comparison" class="nav-link">City Comparison</a>
+      <a href="/buy-vs-rent" class="nav-link">Buy vs Rent</a>
+      <div class="nav-dropdown">
+        <button class="nav-link nav-dropdown-btn">More Tools ▾</button>
+        <div class="nav-dropdown-menu">
+          <a href="/student-loan" class="nav-dropdown-item">Student Loan</a>
+          <a href="/pension-calculator" class="nav-dropdown-item">Pension Calculator</a>
+          <a href="/redundancy-calculator" class="nav-dropdown-item">Redundancy Pay</a>
+          <a href="/maternity-calculator" class="nav-dropdown-item">Maternity Pay</a>
+          <a href="/self-employed-vs-paye" class="nav-dropdown-item">Self-Employed vs PAYE</a>
+          <a href="/tools" class="nav-dropdown-item">All Tools →</a>
+        </div>
+      </div>
       <a href="/cost-of-living" class="nav-link">Cost of Living</a>
       <a href="/blog" class="nav-link">Blog</a>
     </div>
@@ -115,5 +125,22 @@
   <footer class="site-footer">
     <p>© 2026 Travel Tax · <a href="/">Commute</a> · <a href="/take-home">Take Home</a> · <a href="/salary">Salary Guides</a> · <a href="/blog">Blog</a> · <a href="/privacy">Privacy</a></p>
   </footer>
+
+<script>
+// Mobile nav dropdown toggle
+document.addEventListener("DOMContentLoaded", function() {
+  var btn = document.querySelector(".nav-dropdown-btn");
+  if (btn) {
+    btn.addEventListener("click", function(e) {
+      e.stopPropagation();
+      btn.closest(".nav-dropdown").classList.toggle("open");
+    });
+    document.addEventListener("click", function() {
+      btn.closest(".nav-dropdown").classList.remove("open");
+    });
+  }
+});
+</script>
+
 </body>
 </html>

@@ -21,13 +21,26 @@
       <span aria-hidden="true">SELF-EMPLOYED VS PAYE &nbsp;·&nbsp; CONTRACTOR CALCULATOR UK &nbsp;·&nbsp; LIMITED COMPANY VS SALARY &nbsp;·&nbsp; IR35 2026 &nbsp;·&nbsp;</span>
     </div>
   </header>
-  <nav class="top-nav">
+    <nav class="top-nav">
     <div class="top-nav-inner">
       <a href="/" class="nav-link">Commute Tax</a>
       <a href="/take-home" class="nav-link">Take Home Pay</a>
-      <a href="/self-employed-vs-paye" class="nav-link active">Self-Employed</a>
+      <a href="/compare-jobs" class="nav-link">Compare Jobs</a>
+      <a href="/city-comparison" class="nav-link">City Comparison</a>
       <a href="/buy-vs-rent" class="nav-link">Buy vs Rent</a>
-      <a href="/tools" class="nav-link">All Tools</a>
+      <div class="nav-dropdown">
+        <button class="nav-link nav-dropdown-btn">More Tools ▾</button>
+        <div class="nav-dropdown-menu">
+          <a href="/student-loan" class="nav-dropdown-item">Student Loan</a>
+          <a href="/pension-calculator" class="nav-dropdown-item">Pension Calculator</a>
+          <a href="/redundancy-calculator" class="nav-dropdown-item">Redundancy Pay</a>
+          <a href="/maternity-calculator" class="nav-dropdown-item">Maternity Pay</a>
+          <a href="/self-employed-vs-paye" class="nav-dropdown-item active">Self-Employed vs PAYE</a>
+          <a href="/tools" class="nav-dropdown-item">All Tools →</a>
+        </div>
+      </div>
+      <a href="/cost-of-living" class="nav-link">Cost of Living</a>
+      <a href="/blog" class="nav-link">Blog</a>
     </div>
   </nav>
   <div class="ad-slot ad-leaderboard"><span class="ad-label">Advertisement</span></div>
@@ -103,7 +116,87 @@
         </div>
       </div>
     </div>
-  </main>
+  
+  <!-- MOBILE TABS -->
+  <div class="calc-mobile-tabs">
+    <div class="calc-tab-btns">
+      <button class="calc-tab-btn active" onclick="se_mTab('calc')">Calculator</button>
+      <button class="calc-tab-btn" onclick="se_mTab('results')">My Results</button>
+    </div>
+    <div class="calc-tab-panel active" id="se_m_panel_calc">
+      <div class="field-group"><label>PAYE Salary (£)</label><div class="input-wrap"><span class="prefix">£</span><input type="number" id="se_paye_m" placeholder="50000" min="0" inputmode="numeric" /></div></div>
+      <div class="field-group"><label>Contract Day Rate (£)</label><div class="input-wrap"><span class="prefix">£</span><input type="number" id="se_rate_m" placeholder="350" min="0" inputmode="numeric" /></div></div>
+      <div class="field-group"><label>Billable Days / Year</label><div class="slider-wrap"><input type="range" id="se_days_m" min="100" max="250" value="220" step="5" oninput="document.getElementById('se_days_mv').textContent=this.value+' days'" /><span id="se_days_mv" style="font-family:var(--font-display);font-size:22px;color:var(--accent);min-width:70px;">220 days</span></div></div>
+      <div class="field-group"><label>Structure</label>
+        <div class="transport-toggle" style="grid-template-columns:1fr 1fr;">
+          <button class="transport-btn active" onclick="setSEMStructure(this,true)">Ltd Company</button>
+          <button class="transport-btn" onclick="setSEMStructure(this,false)">Sole Trader</button>
+        </div>
+      </div>
+      <button class="calculate-btn" onclick="calcSEMobile()"><span>Compare Self-Employed vs PAYE</span></button>
+    </div>
+    <div class="calc-tab-panel" id="se_m_panel_results">
+      <div id="se_m_m_placeholder" style="text-align:center;padding:40px 0;color:var(--text-dimmer);font-family:var(--font-mono);font-size:12px;">Calculate first to see results</div>
+      <div id="se_m_m_results" class="hidden">
+        <div class="verdict-banner"><p class="verdict-label" id="se_m_verdict">SELF-EMPLOYED WINS</p><div class="verdict-number" id="se_m_diff">£0</div><p class="verdict-sub" id="se_m_sub">more per year</p></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+          <div style="background:var(--panel);border:1px solid var(--border);padding:16px;">
+            <p style="font-family:var(--font-mono);font-size:9px;color:var(--text-dimmer);">PAYE</p>
+            <div style="font-family:var(--font-display);font-size:28px;color:var(--white);" id="se_m_paye">£0</div>
+            <p style="font-size:11px;color:var(--text-dimmer);" id="se_m_paye_mo">£0/mo</p>
+          </div>
+          <div style="background:var(--panel);border:1px solid var(--border);padding:16px;">
+            <p style="font-family:var(--font-mono);font-size:9px;color:var(--text-dimmer);" id="se_m_struct_label">LTD CO</p>
+            <div style="font-family:var(--font-display);font-size:28px;color:var(--accent);" id="se_m_se">£0</div>
+            <p style="font-size:11px;color:var(--text-dimmer);" id="se_m_se_mo">£0/mo</p>
+          </div>
+        </div>
+        <div class="savings-callout" id="se_m_insight"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  function se_mTab(tab) {
+    document.getElementById("se_m_panel_calc").classList.toggle("active", tab === "calc");
+    document.getElementById("se_m_panel_results").classList.toggle("active", tab === "results");
+    document.querySelectorAll(".calc-mobile-tabs .calc-tab-btn").forEach((b, i) => b.classList.toggle("active", (i===0)===(tab==="calc")));
+  }
+    let seLtdM = true;
+  function setSEMStructure(btn, ltd) {
+    btn.closest(".transport-toggle").querySelectorAll(".transport-btn").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active"); seLtdM=ltd;
+  }
+  async function calcSEMobile() {
+    const paye=parseFloat(document.getElementById("se_paye_m").value)||0;
+    const rate=parseFloat(document.getElementById("se_rate_m").value)||0;
+    if (!paye||!rate){alert("Please enter salary and day rate.");return;}
+    try {
+      const res=await fetch("/calculate-self-employed",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+        paye_salary:paye,day_rate:rate,
+        days_per_year:parseInt(document.getElementById("se_days_m").value)||220,
+        limited_company:seLtdM,expenses:0
+      })});
+      const r=await res.json();
+      const fmt=n=>"£"+Math.round(Math.abs(n)).toLocaleString("en-GB");
+      document.getElementById("se_m_placeholder").classList.add("hidden");
+      document.getElementById("se_m_results").classList.remove("hidden");
+      document.getElementById("se_m_verdict").textContent=r.se_wins?"SELF-EMPLOYED WINS":"PAYE WINS";
+      document.getElementById("se_m_diff").textContent=fmt(r.difference);
+      document.getElementById("se_m_sub").textContent=(r.se_wins?"more as "+r.structure:"more as PAYE employee");
+      document.getElementById("se_m_paye").textContent=fmt(r.paye_take_home);
+      document.getElementById("se_m_paye_mo").textContent=fmt(r.paye_monthly)+"/mo";
+      document.getElementById("se_m_struct_label").textContent=r.structure.toUpperCase();
+      document.getElementById("se_m_se").textContent=fmt(r.se_take_home);
+      document.getElementById("se_m_se").style.color=r.se_wins?"var(--accent)":"var(--white)";
+      document.getElementById("se_m_se_mo").textContent=fmt(r.se_monthly)+"/mo";
+      document.getElementById("se_m_insight").textContent=r.se_wins?"As a "+r.structure+" you keep "+fmt(r.difference)+" more per year. Effective tax rate: "+r.effective_rate+"%.":"PAYE wins by "+fmt(Math.abs(r.difference))+" — you would need around "+fmt(r.day_rate_needed)+"/day to match your PAYE take-home.";
+      se_mTab("results");
+    } catch(e){alert("Something went wrong.");}
+  }
+  </script>
+
+</main>
 
   <section class="faq-section">
     <div class="faq-inner">
@@ -160,5 +253,22 @@
       finally { btn.querySelector("span").textContent = "Compare Self-Employed vs PAYE"; btn.disabled = false; }
     }
   </script>
+
+<script>
+// Mobile nav dropdown toggle
+document.addEventListener("DOMContentLoaded", function() {
+  var btn = document.querySelector(".nav-dropdown-btn");
+  if (btn) {
+    btn.addEventListener("click", function(e) {
+      e.stopPropagation();
+      btn.closest(".nav-dropdown").classList.toggle("open");
+    });
+    document.addEventListener("click", function() {
+      btn.closest(".nav-dropdown").classList.remove("open");
+    });
+  }
+});
+</script>
+
 </body>
 </html>
