@@ -199,7 +199,58 @@
       </div>
     </div>
 
-    <button class="calculate-btn" id="compareBtn" onclick="runComparison()" style="border-radius:0;margin-top:0;">
+    <div id="jobC_container" class="hidden" style="margin-top:0;">
+    <div style="background:var(--panel);border:1px solid var(--border);border-top:none;padding:28px 24px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+        <span style="font-family:var(--font-display);font-size:28px;color:var(--text-dim);">C</span>
+        <input type="text" id="job_c_name" placeholder="e.g. Third option" style="flex:1;background:var(--off-black);border:1px solid var(--border-light);color:var(--text);font-family:var(--font-mono);font-size:13px;padding:8px 12px;outline:none;" />
+      </div>
+      <div class="field-group">
+        <label for="c_salary">Annual Salary (£)</label>
+        <div class="input-wrap"><span class="prefix">£</span><input type="number" id="c_salary" placeholder="38000" min="0" /></div>
+      </div>
+      <div class="field-group">
+        <label>Remote Days Per Week</label>
+        <div class="day-toggle" id="c_remote_toggle">
+          <button class="day-btn active" data-val="0">0</button>
+          <button class="day-btn" data-val="1">1</button>
+          <button class="day-btn" data-val="2">2</button>
+          <button class="day-btn" data-val="3">3</button>
+          <button class="day-btn" data-val="4">4</button>
+          <button class="day-btn" data-val="5">5</button>
+        </div>
+      </div>
+      <div class="field-group">
+        <label for="c_commute_mins">One-Way Commute (mins)</label>
+        <div class="input-wrap"><input type="number" id="c_commute_mins" placeholder="20" min="0" /></div>
+      </div>
+      <div class="field-group">
+        <label for="c_commute_cost">Daily Transport Cost (£)</label>
+        <div class="input-wrap"><span class="prefix">£</span><input type="number" id="c_commute_cost" placeholder="5.00" min="0" step="0.50" /></div>
+      </div>
+      <button class="advanced-toggle" onclick="toggleAdvanced('c')">+ Advanced options</button>
+      <div class="advanced-fields" id="c_advanced">
+        <div class="field-group" style="margin-top:16px;">
+          <label for="c_bonus">Annual Bonus (£)</label>
+          <div class="input-wrap"><span class="prefix">£</span><input type="number" id="c_bonus" placeholder="0" min="0" /></div>
+        </div>
+        <div class="field-group">
+          <label for="c_pension">Pension (%)</label>
+          <div class="input-wrap"><input type="number" id="c_pension" placeholder="5" min="0" max="100" /></div>
+        </div>
+        <div class="field-group">
+          <label for="c_holiday">Holiday Days</label>
+          <div class="input-wrap"><input type="number" id="c_holiday" placeholder="25" min="0" /></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:0;">
+    <button onclick="toggleJobC()" id="addJobCBtn" style="flex:1;padding:14px;background:var(--off-black);border:1px solid var(--border);border-top:none;color:var(--text-dimmer);font-family:var(--font-mono);font-size:11px;letter-spacing:0.1em;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-dimmer)'">+ Add a third job to compare</button>
+  </div>
+
+  <button class="calculate-btn" id="compareBtn" onclick="runComparison()" style="border-radius:0;margin-top:0;">
       <span>Compare Job Offers</span>
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </button>

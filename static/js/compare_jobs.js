@@ -22,16 +22,21 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+function safeVal(id, fallback) {
+  const el = document.getElementById(id);
+  return el ? (parseFloat(el.value) || fallback) : fallback;
+}
+
 function getJobData(prefix, remoteDays) {
   return {
-    salary: parseFloat(document.getElementById(prefix + "_salary").value) || 0,
-    bonus: parseFloat(document.getElementById(prefix + "_bonus").value) || 0,
-    pension_pct: parseFloat(document.getElementById(prefix + "_pension").value) || 0,
-    holiday_days: parseFloat(document.getElementById(prefix + "_holiday").value) || 25,
+    salary: safeVal(prefix + "_salary", 0),
+    bonus: safeVal(prefix + "_bonus", 0),
+    pension_pct: safeVal(prefix + "_pension", 0),
+    holiday_days: safeVal(prefix + "_holiday", 25),
     remote_days: remoteDays,
-    commute_mins: parseFloat(document.getElementById(prefix + "_commute_mins").value) || 0,
-    commute_cost_daily: parseFloat(document.getElementById(prefix + "_commute_cost").value) || 0,
-    culture_score: parseFloat(document.getElementById(prefix + "_culture").value) || 5,
+    commute_mins: safeVal(prefix + "_commute_mins", 0),
+    commute_cost_daily: safeVal(prefix + "_commute_cost", 0),
+    culture_score: safeVal(prefix + "_culture", 5),
   };
 }
 
@@ -39,8 +44,8 @@ async function runComparison() {
   const btn = document.getElementById("compareBtn");
   const jobA = getJobData("a", aRemoteDays);
   const jobB = getJobData("b", bRemoteDays);
-  const nameA = document.getElementById("job_a_name").value || "Job A";
-  const nameB = document.getElementById("job_b_name").value || "Job B";
+  const nameA = document.getElementById("job_a_name").value.trim() || "A";
+  const nameB = document.getElementById("job_b_name").value.trim() || "B";
 
   if (jobA.salary <= 0 || jobB.salary <= 0) {
     alert("Please enter a salary for both jobs.");
@@ -96,22 +101,22 @@ function renderComparison(r, nameA, nameB) {
   const b = r.job_b;
 
   document.getElementById("ra_gross").textContent = fmt(a.salary);
-  document.getElementById("ra_bonus").textContent = "+" + fmt(a.bonus);
-  document.getElementById("ra_pension").textContent = "+" + fmt(a.pension);
-  document.getElementById("ra_takehome").textContent = fmt(a.take_home);
-  document.getElementById("ra_commute").textContent = "-" + fmt(a.commute_cost_yearly);
-  document.getElementById("ra_time").textContent = "-" + fmt(a.commute_time_value);
-  document.getElementById("ra_holiday").textContent = "+" + fmt(a.holiday_value);
-  document.getElementById("ra_real").textContent = fmt(a.real_value);
-
-  document.getElementById("rb_gross").textContent = fmt(b.salary);
-  document.getElementById("rb_bonus").textContent = "+" + fmt(b.bonus);
-  document.getElementById("rb_pension").textContent = "+" + fmt(b.pension);
-  document.getElementById("rb_takehome").textContent = fmt(b.take_home);
-  document.getElementById("rb_commute").textContent = "-" + fmt(b.commute_cost_yearly);
-  document.getElementById("rb_time").textContent = "-" + fmt(b.commute_time_value);
-  document.getElementById("rb_holiday").textContent = "+" + fmt(b.holiday_value);
-  document.getElementById("rb_real").textContent = fmt(b.real_value);
+  function safeSet(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
+  safeSet("ra_bonus", "+" + fmt(a.bonus));
+  safeSet("ra_pension", "+" + fmt(a.pension));
+  safeSet("ra_takehome", fmt(a.take_home));
+  safeSet("ra_commute", "-" + fmt(a.commute_cost_yearly));
+  safeSet("ra_time", "-" + fmt(a.commute_time_value));
+  safeSet("ra_holiday", "+" + fmt(a.holiday_value));
+  safeSet("ra_real", fmt(a.real_value));
+  safeSet("rb_gross", fmt(b.salary));
+  safeSet("rb_bonus", "+" + fmt(b.bonus));
+  safeSet("rb_pension", "+" + fmt(b.pension));
+  safeSet("rb_takehome", fmt(b.take_home));
+  safeSet("rb_commute", "-" + fmt(b.commute_cost_yearly));
+  safeSet("rb_time", "-" + fmt(b.commute_time_value));
+  safeSet("rb_holiday", "+" + fmt(b.holiday_value));
+  safeSet("rb_real", fmt(b.real_value));
 
   const salaryDiff = a.salary - b.salary;
   const takehomeDiff = a.take_home - b.take_home;
@@ -175,3 +180,80 @@ function toggleAdvanced(job) {
     btn.textContent = "- Hide advanced options";
   }
 }
+
+// Job C
+let cRemoteDays = 0;
+let jobCVisible = false;
+
+function toggleJobC() {
+  jobCVisible = !jobCVisible;
+  const container = document.getElementById("jobC_container");
+  const btn = document.getElementById("addJobCBtn");
+  container.classList.toggle("hidden", !jobCVisible);
+  btn.textContent = jobCVisible ? "- Remove third job" : "+ Add a third job to compare";
+
+  if (jobCVisible) {
+    document.querySelectorAll("#c_remote_toggle .day-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("#c_remote_toggle .day-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        cRemoteDays = parseInt(btn.dataset.val);
+      });
+    });
+  }
+}
+
+// Override runComparison to handle Job C
+const _origRunComparison = window.runComparison;
+window.runComparison = async function() {
+  if (!jobCVisible) { _origRunComparison(); return; }
+
+  const btn = document.getElementById("compareBtn");
+  const jobA = getJobData("a", aRemoteDays);
+  const jobB = getJobData("b", bRemoteDays);
+  const jobC = getJobData("c", cRemoteDays);
+  const nameA = document.getElementById("job_a_name").value.trim() || "A";
+  const nameB = document.getElementById("job_b_name").value.trim() || "B";
+  const nameC = document.getElementById("job_c_name").value.trim() || "C";
+
+  if (jobA.salary <= 0 || jobB.salary <= 0) { showCJToast("Please enter a salary for both jobs."); return; }
+
+  btn.querySelector("span").textContent = "Comparing...";
+  btn.disabled = true;
+
+  try {
+    // Run A vs B first
+    const res1 = await fetch("/calculate-comparison", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ job_a: jobA, job_b: jobB })
+    });
+    const r1 = await res1.json();
+
+    // Run winner vs C
+    const winner1 = r1.winner === "A" ? jobA : jobB;
+    const winnerName1 = r1.winner === "A" ? nameA : nameB;
+    const res2 = await fetch("/calculate-comparison", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ job_a: winner1, job_b: jobC })
+    });
+    const r2 = await res2.json();
+
+    const finalWinner = r2.winner === "A" ? winnerName1 : nameC;
+    lastComparison = { result: r1, nameA, nameB };
+
+    renderComparison(r1, nameA, nameB);
+
+    // Add C result note
+    const insight = document.getElementById("res_insight");
+    if (insight) {
+      const cNote = jobC.salary > 0
+        ? ` When also comparing ${nameC} (£${jobC.salary.toLocaleString()}), the overall winner is ${finalWinner}.`
+        : "";
+      insight.textContent += cNote;
+    }
+
+    document.getElementById("compResults").classList.remove("hidden");
+    document.getElementById("compResults").scrollIntoView({ behavior: "smooth", block: "start" });
+  } catch(err) { showCJToast("Something went wrong. Please try again."); }
+  finally { btn.querySelector("span").textContent = "Compare Job Offers"; btn.disabled = false; }
+};
