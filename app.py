@@ -345,10 +345,6 @@ Sitemap: https://www.traveltax.co.uk/sitemap.xml"""
 
 
 
-@app.route("/google4897a903300840f0.html")
-def google_verify():
-    return "google-site-verification: google4897a903300840f0.html"
-
 
 @app.route("/google4897a903300840f0.html")
 def google_verify():
