@@ -27,7 +27,7 @@ def calculate_commute(data):
     commute_days_yearly = commute_hours_yearly / 24
     waking_hours_per_year = 16 * 365
     pct_waking_life = (commute_hours_yearly / waking_hours_per_year) * 100
-    hourly_rate = salary / (weeks_per_year * days_per_week * 8) if salary > 0 else 0
+    hourly_rate = salary / (weeks_per_year * 5 * 8) if salary > 0 else 0
     time_cost_yearly = commute_hours_yearly * hourly_rate
 
     if transport_type == "car":
