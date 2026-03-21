@@ -46,8 +46,8 @@
   <div class="ad-slot ad-leaderboard"><span class="ad-label">Advertisement</span></div>
 
   <main class="calc-section">
-    <div class="calc-wrapper" style="display:flex;flex-direction:row;">
-      <div class="form-panel">
+    <div class="calc-wrapper" id="se-wrapper" style="display:flex;flex-direction:row;">
+      <div class="form-panel" style="flex:1;">
         <div class="form-header"><h2>Self-Employed vs PAYE</h2><p class="form-desc">Compare your take-home as a contractor vs employee.</p></div>
 
         <div class="field-group"><label>Equivalent PAYE Salary (£)</label><div class="input-wrap"><span class="prefix">£</span><input type="number" id="se_paye" placeholder="50000" min="0" /></div><p class="field-hint">The salary you would earn as a permanent employee.</p></div>
@@ -70,7 +70,7 @@
         <button class="calculate-btn" id="seBtn" onclick="calcSE()"><span>Compare Self-Employed vs PAYE</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
       </div>
 
-      <div class="results-panel" id="seResultsPanel">
+      <div class="results-panel" id="seResultsPanel" style="flex:1;">
         <div class="results-placeholder" id="sePlaceholder">
           <div class="fun-facts-wrap">
             <p class="fun-facts-label">⚡ DID YOU KNOW?</p>

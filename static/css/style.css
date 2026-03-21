@@ -688,20 +688,7 @@ input:checked + .toggle-slider::after { transform: translateX(18px); }
 
 
 
-/* Ticker tape mobile fix */
-@media (max-width: 768px) {
-  .ticker-tape span {
-    font-size: 9px !important;
-  }
-}
 
-/* Compare jobs simplified */
-.compare-grid-simple {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
-  border: 1px solid var(--border);
-}
 
 .compare-grid-simple .job-col {
   padding: 28px 24px;
@@ -758,42 +745,7 @@ input:checked + .toggle-slider::after { transform: translateX(18px); }
 
 
 
-/* =============================================
-   MOBILE — SINGLE CLEAN RULE SET
-   ============================================= */
-@media (max-width: 900px) {
-  /* All calc wrappers stack vertically */
-  .calc-wrapper {
-    display: flex !important;
-    flex-direction: column !important;
-  }
-  .calc-wrapper .form-panel {
-    order: 1 !important;
-    flex: none !important;
-    width: 100% !important;
-    border-right: none !important;
-    border-bottom: 1px solid var(--border) !important;
-    padding: 24px 20px !important;
-  }
-  .calc-wrapper .results-panel {
-    order: 2 !important;
-    flex: none !important;
-    width: 100% !important;
-    min-height: 0 !important;
-    padding: 24px 20px !important;
-  }
-  /* Hide placeholders on mobile */
-  .results-placeholder {
-    display: none !important;
-  }
-  /* Ticker tape smaller */
-  .ticker-tape span {
-    font-size: 9px !important;
-  }
-}
 
-/* Show/hide desktop vs mobile calculator */
-.mobile-calc { display: none; }
 
 @media (max-width: 768px) {
   #calculator { display: none !important; }
@@ -958,24 +910,6 @@ label { color: var(--white) !important; font-size: 12px !important; }
 .slim-logo-sub { color: var(--white) !important; }
 .slim-stats span { color: var(--white) !important; }
 
-/* Buy vs Rent mobile */
-@media (max-width: 900px) {
-  #bvr-wrapper {
-    flex-direction: column !important;
-  }
-  #bvr-wrapper .form-panel {
-    order: 1 !important;
-    flex: none !important;
-    border-right: none !important;
-    border-bottom: 1px solid var(--border) !important;
-  }
-  #bvr-wrapper .results-panel {
-    order: 2 !important;
-    flex: none !important;
-    min-height: 0 !important;
-  }
-  #bvrPlaceholder { display: none !important; }
-}
 
 
 /* =============================================
@@ -1109,4 +1043,82 @@ label { color: var(--white) !important; font-size: 12px !important; }
     display: none !important;
   }
   /* Keep: Commute Tax, Take Home Pay, Compare Jobs, More Tools */
+}
+
+/* =============================================
+   MOBILE — MASTER RULES (DO NOT EDIT ABOVE)
+   ============================================= */
+
+/* Show/hide desktop vs mobile calculator */
+.mobile-calc { display: none; }
+
+@media (max-width: 768px) {
+
+  /* Hide desktop calculator, show mobile version */
+  #calculator { display: none !important; }
+  .mobile-calc { display: block !important; }
+
+  /* NAV — show only 3 links + dropdown */
+  .top-nav { overflow: visible !important; z-index: 9998 !important; }
+  .top-nav-inner {
+    padding: 0 4px !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    flex-wrap: nowrap !important;
+  }
+  .top-nav-inner a[href="/city-comparison"],
+  .top-nav-inner a[href="/buy-vs-rent"],
+  .top-nav-inner a[href="/cost-of-living"],
+  .top-nav-inner a[href="/blog"] { display: none !important; }
+  .nav-link { padding: 12px 8px !important; font-size: 9px !important; white-space: nowrap !important; }
+  .nav-dropdown-btn { padding: 12px 8px !important; font-size: 9px !important; white-space: nowrap !important; }
+  .nav-dropdown { position: relative !important; }
+  .nav-dropdown-menu {
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    width: 180px !important;
+    min-width: 180px !important;
+    z-index: 9999 !important;
+    display: none !important;
+  }
+  .nav-dropdown.open .nav-dropdown-menu { display: block !important; }
+
+  /* ALL CALC WRAPPERS — form first, results below */
+  .calc-wrapper { display: none !important; }
+  .calc-mobile-tabs { display: block !important; }
+
+  /* Ticker tape smaller */
+  .ticker-tape span { font-size: 9px !important; }
+
+  /* Blog/content pages */
+  .blog-inner { padding: 0 16px !important; }
+  .blog-hero { padding: 24px 0 !important; }
+  .blog-title { font-size: 32px !important; }
+}
+
+@media (max-width: 900px) {
+  /* Pension, buy vs rent, self-employed — stack vertically */
+  #pension-wrapper,
+  #bvr-wrapper,
+  #se-wrapper { flex-direction: column !important; }
+
+  #pension-wrapper .form-panel,
+  #bvr-wrapper .form-panel,
+  #se-wrapper .form-panel {
+    order: 1 !important;
+    flex: none !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border) !important;
+  }
+  #pension-wrapper .results-panel,
+  #bvr-wrapper .results-panel,
+  #se-wrapper .results-panel {
+    order: 2 !important;
+    flex: none !important;
+    min-height: 0 !important;
+  }
+  #pPlaceholder,
+  #bvrPlaceholder,
+  #sePlaceholder { display: none !important; }
 }
