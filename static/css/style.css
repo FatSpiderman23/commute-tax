@@ -891,7 +891,8 @@ input:checked + .toggle-slider::after { transform: translateX(18px); }
   border: 1px solid var(--border);
   border-top: 2px solid var(--accent);
   min-width: 200px;
-  z-index: 200;
+  z-index: 9999;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
 }
 
 .nav-dropdown:hover .nav-dropdown-menu,
@@ -924,15 +925,53 @@ input:checked + .toggle-slider::after { transform: translateX(18px); }
 
 @media (max-width: 768px) {
   .nav-dropdown-menu {
-    position: static;
-    border: none;
-    border-top: 1px solid var(--border);
-    display: none;
+    position: static !important;
+    border: none !important;
+    border-top: 1px solid var(--border) !important;
+    min-width: 100% !important;
+    display: none !important;
   }
   .nav-dropdown.open .nav-dropdown-menu {
-    display: block;
+    display: block !important;
   }
-  .nav-dropdown-btn::after {
-    content: '';
+}
+
+
+/* =============================================
+   WHITE TEXT FIXES — ALL CALCULATORS
+   ============================================= */
+label { color: var(--white) !important; font-size: 12px !important; }
+.field-hint { color: rgba(255,255,255,0.6) !important; font-size: 11px !important; }
+.form-desc { color: rgba(255,255,255,0.7) !important; font-size: 13px !important; }
+.slider-unit { color: var(--accent) !important; }
+.prefix { color: rgba(255,255,255,0.5) !important; }
+.block-title { color: var(--white) !important; }
+.breakdown-row span:first-child { color: rgba(255,255,255,0.8) !important; }
+.stat-label { color: rgba(255,255,255,0.7) !important; font-size: 11px !important; }
+.verdict-label { color: var(--accent) !important; }
+.verdict-sub { color: rgba(255,255,255,0.8) !important; }
+.fun-facts-cta { color: rgba(255,255,255,0.6) !important; }
+.nav-link { color: var(--white) !important; }
+.nav-dropdown-btn { color: var(--white) !important; }
+.nav-dropdown-item { color: var(--white) !important; }
+.slim-logo-sub { color: var(--white) !important; }
+.slim-stats span { color: var(--white) !important; }
+
+/* Buy vs Rent mobile */
+@media (max-width: 900px) {
+  #bvr-wrapper {
+    flex-direction: column !important;
   }
+  #bvr-wrapper .form-panel {
+    order: 1 !important;
+    flex: none !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border) !important;
+  }
+  #bvr-wrapper .results-panel {
+    order: 2 !important;
+    flex: none !important;
+    min-height: 0 !important;
+  }
+  #bvrPlaceholder { display: none !important; }
 }
