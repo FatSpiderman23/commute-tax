@@ -206,7 +206,6 @@ function toggleJobC() {
 
 // Job C version of runComparison
 async function runComparisonWithC() {
-
   const btn = document.getElementById("compareBtn");
   const jobA = getJobData("a", aRemoteDays);
   const jobB = getJobData("b", bRemoteDays);
@@ -215,45 +214,78 @@ async function runComparisonWithC() {
   const nameB = document.getElementById("job_b_name").value.trim() || "B";
   const nameC = document.getElementById("job_c_name").value.trim() || "C";
 
-  if (jobA.salary <= 0 || jobB.salary <= 0) { showCJToast("Please enter a salary for both jobs."); return; }
+  if (jobA.salary <= 0 || jobB.salary <= 0) { showCJToast("Please enter salaries for both jobs."); return; }
 
   const btnSpan = btn.querySelector("span") || btn;
   btnSpan.textContent = "Comparing...";
   btn.disabled = true;
 
   try {
-    // Run A vs B first
-    const res1 = await fetch("/calculate-comparison", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ job_a: jobA, job_b: jobB })
-    });
-    const r1 = await res1.json();
+    // Get all 3 results by running A vs B, then A vs C
+    const [res1, res2] = await Promise.all([
+      fetch("/calculate-comparison", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ job_a: jobA, job_b: jobB }) }).then(r => r.json()),
+      fetch("/calculate-comparison", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ job_a: jobA, job_b: jobC }) }).then(r => r.json()),
+    ]);
 
-    // Run winner vs C
-    const winner1 = r1.winner === "A" ? jobA : jobB;
-    const winnerName1 = r1.winner === "A" ? nameA : nameB;
-    const res2 = await fetch("/calculate-comparison", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ job_a: winner1, job_b: jobC })
-    });
-    const r2 = await res2.json();
+    // Find overall winner by real value
+    const values = [
+      { name: nameA, value: res1.job_a.real_value },
+      { name: nameB, value: res1.job_b.real_value },
+      { name: nameC, value: res2.job_b.real_value },
+    ];
+    values.sort((a, b) => b.value - a.value);
+    const winner = values[0];
+    const second = values[1];
+    const margin = winner.value - second.value;
 
-    const finalWinner = r2.winner === "A" ? winnerName1 : nameC;
-    lastComparison = { result: r1, nameA, nameB };
+    // Update verdict
+    document.getElementById("res_winner").textContent = winner.name;
+    document.getElementById("res_margin").textContent = fmt(margin);
+    document.getElementById("res_desc").textContent = "better real value than the next best option";
 
-    renderComparison(r1, nameA, nameB);
+    // Update results columns — show all 3
+    const allJobs = [
+      { name: nameA, data: res1.job_a },
+      { name: nameB, data: res1.job_b },
+      { name: nameC, data: res2.job_b },
+    ];
 
-    // Add C result note
-    const insight = document.getElementById("res_insight");
-    if (insight) {
-      const cNote = jobC.salary > 0
-        ? ` When also comparing ${nameC} (£${jobC.salary.toLocaleString()}), the overall winner is ${finalWinner}.`
-        : "";
-      insight.textContent += cNote;
-    }
+    // Rebuild results grid with 3 columns
+    const grid = document.querySelector(".results-grid");
+    grid.style.gridTemplateColumns = "1fr 1fr 1fr";
+    grid.innerHTML = allJobs.map((job, i) => {
+      const isWinner = job.name === winner.name;
+      return `<div class="result-col ${isWinner ? "winner" : ""}">
+        <p class="result-col-label">${job.name.toUpperCase()}</p>
+        <div class="result-row"><span>Gross salary</span><span>${fmt(job.data.salary)}</span></div>
+        <div class="result-row"><span>Take home</span><span>${fmt(job.data.take_home)}</span></div>
+        <div class="result-row"><span>Commute cost</span><span style="color:var(--red)">-${fmt(job.data.commute_cost_yearly)}</span></div>
+        <div class="result-row"><span>Time value lost</span><span style="color:var(--red)">-${fmt(job.data.commute_time_value)}</span></div>
+        <div class="result-row"><span>Pension</span><span style="color:var(--green)">+${fmt(job.data.pension)}</span></div>
+        <p style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;color:var(--text-dimmer);margin-top:12px;">TRUE VALUE</p>
+        <div style="font-family:var(--font-display);font-size:28px;color:${isWinner ? "var(--accent)" : "var(--white)"};">${fmt(job.data.real_value)}</div>
+      </div>`;
+    }).join("");
 
+    // Update key differences
+    document.getElementById("diff_salary").textContent = values.map(v => v.name + ": " + fmt(v.value)).join(" · ");
+    document.getElementById("diff_salary").className = "diff-positive";
+    document.getElementById("diff_takehome").textContent = nameA + ": " + fmt(res1.job_a.take_home) + " · " + nameB + ": " + fmt(res1.job_b.take_home) + " · " + nameC + ": " + fmt(res2.job_b.take_home);
+    document.getElementById("diff_commute").textContent = "Cheapest commute: " + allJobs.sort((a,b) => a.data.commute_cost_yearly - b.data.commute_cost_yearly)[0].name;
+    document.getElementById("diff_real").textContent = winner.name + " wins by " + fmt(margin);
+
+    document.getElementById("res_insight").textContent = winner.name + " is the best offer overall, worth " + fmt(margin) + " more per year in real terms than " + second.name + " once all costs are factored in.";
+
+    lastComparison = { result: res1, nameA, nameB };
     document.getElementById("compResults").classList.remove("hidden");
     document.getElementById("compResults").scrollIntoView({ behavior: "smooth", block: "start" });
-  } catch(err) { showCJToast("Something went wrong. Please try again."); }
-  finally { const s = btn.querySelector("span") || btn; s.textContent = "Compare Job Offers"; btn.disabled = false; }
+
+  } catch(err) {
+    showCJToast("Something went wrong. Please try again.");
+  } finally {
+    const s = btn.querySelector("span") || btn;
+    s.textContent = "Compare Job Offers";
+    btn.disabled = false;
+  }
 }
+
