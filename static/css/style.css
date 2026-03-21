@@ -372,3 +372,258 @@ input:checked + .toggle-slider::after { transform: translateX(18px); }
   transition: background 0.2s, transform 0.15s;
 }
 .generate-card-btn:hover { background: var(--white); transform: translateY(-1px); }
+
+/* =============================================
+   MOBILE LAYOUT — full redesign for small screens
+   ============================================= */
+@media (max-width: 768px) {
+
+  /* Hide desktop calc wrapper, show mobile version */
+  .calc-wrapper { display: none !important; }
+  .mobile-calc { display: block !important; }
+
+  /* Slim header on mobile */
+  .slim-header-inner { padding: 14px 20px; }
+  .slim-logo-main { font-size: 24px; }
+  .slim-stats { display: none; }
+  .ticker-tape { font-size: 10px; padding: 6px 0; }
+
+  /* Mobile calc section */
+  .calc-section { padding: 0; background: var(--black); }
+}
+
+@media (min-width: 769px) {
+  .mobile-calc { display: none !important; }
+}
+
+/* Mobile calculator styles */
+.mobile-calc {
+  display: none;
+  background: var(--black);
+  min-height: 100vh;
+}
+
+/* Mobile tabs */
+.mobile-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  background: var(--off-black);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.mobile-tab {
+  flex: 1;
+  padding: 16px;
+  background: none;
+  border: none;
+  color: var(--text-dimmer);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.mobile-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* Mobile form */
+.mobile-form-panel {
+  padding: 24px 20px;
+  background: var(--panel);
+}
+
+.mobile-form-panel .field-group { margin-bottom: 24px; }
+.mobile-form-panel .calculate-btn { margin-top: 8px; }
+
+/* Mobile results */
+.mobile-results-panel {
+  padding: 20px;
+  background: var(--black);
+  display: none;
+}
+
+.mobile-results-panel.active { display: block; }
+
+/* Mobile verdict */
+.mobile-verdict {
+  background: #0f0f00;
+  border: 1px solid var(--accent);
+  padding: 24px 20px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.mobile-verdict-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.mobile-verdict-number {
+  font-family: var(--font-display);
+  font-size: 64px;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.mobile-verdict-sub {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 6px;
+}
+
+/* Mobile stat grid */
+.mobile-stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.mobile-stat-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mobile-stat-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--text-dimmer);
+  text-transform: uppercase;
+}
+
+.mobile-stat-value {
+  font-family: var(--font-display);
+  font-size: 26px;
+  color: var(--white);
+  line-height: 1.1;
+}
+
+.mobile-stat-tip {
+  font-size: 10px;
+  color: var(--text-dimmer);
+  font-family: var(--font-mono);
+  line-height: 1.3;
+}
+
+/* Mobile blocks */
+.mobile-block {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 18px 16px;
+  margin-bottom: 12px;
+}
+
+.mobile-block .block-title {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+/* Mobile share buttons */
+.mobile-share-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.mobile-share-btn {
+  padding: 14px 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  border: none;
+  text-transform: uppercase;
+}
+
+.mobile-generate-btn {
+  width: 100%;
+  padding: 16px;
+  background: var(--accent);
+  color: var(--black);
+  border: none;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+/* Mobile AR cards */
+.mobile-ar-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mobile-ar-card {
+  background: var(--off-black);
+  border: 1px solid var(--border);
+  padding: 14px;
+}
+
+.mobile-ar-message {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.55;
+  margin-bottom: 8px;
+}
+
+.mobile-ar-message strong { color: var(--accent); font-weight: 500; }
+
+.mobile-ar-share {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  cursor: pointer;
+  padding: 0;
+  letter-spacing: 0.1em;
+}
+
+/* Mobile nudge */
+.mobile-nudge {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.mobile-nudge p { font-size: 12px; color: var(--text-dim); }
+.mobile-nudge p strong { color: var(--text); display: block; font-size: 13px; margin-bottom: 2px; }
+
+.mobile-nudge-link {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--accent);
+  text-decoration: none;
+  border: 1px solid var(--accent);
+  padding: 6px 10px;
+  white-space: nowrap;
+}

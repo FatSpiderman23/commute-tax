@@ -505,3 +505,177 @@ function showToast(msg) {
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 3500);
 }
+
+// =============================================
+// MOBILE CALCULATOR
+// =============================================
+
+let mSelectedDays = 3;
+let mSelectedTransport = "public";
+let mSelectedCarType = "petrol_avg";
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Mobile slider sync
+  const mSlider = document.getElementById("m_commute_minutes");
+  const mManual = document.getElementById("m_commute_manual");
+  if (mSlider && mManual) {
+    mSlider.addEventListener("input", () => { mManual.value = mSlider.value; });
+    mManual.addEventListener("focus", () => { mManual.select(); });
+    mManual.addEventListener("input", () => {
+      const v = parseInt(mManual.value);
+      if (!isNaN(v) && v >= 1) mSlider.value = Math.min(v, 180);
+    });
+    mManual.addEventListener("blur", () => { if (!mManual.value || parseInt(mManual.value) < 1) mManual.value = 1; });
+  }
+
+  // Mobile day toggle
+  const mDayToggle = document.getElementById("m_day_toggle");
+  if (mDayToggle) {
+    mDayToggle.querySelectorAll(".day-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        mDayToggle.querySelectorAll(".day-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        mSelectedDays = parseInt(btn.dataset.val);
+      });
+    });
+  }
+
+  // Mobile transport toggle
+  const mTransToggle = document.getElementById("m_transport_toggle");
+  if (mTransToggle) {
+    mTransToggle.querySelectorAll(".transport-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        mTransToggle.querySelectorAll(".transport-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        mSelectedTransport = btn.dataset.type;
+        document.getElementById("m_public_fields").classList.toggle("hidden", mSelectedTransport === "car");
+        document.getElementById("m_car_fields").classList.toggle("hidden", mSelectedTransport === "public");
+      });
+    });
+  }
+
+  // Mobile car type toggle
+  const mCarToggle = document.getElementById("m_car_type_toggle");
+  if (mCarToggle) {
+    mCarToggle.querySelectorAll(".car-type-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        mCarToggle.querySelectorAll(".car-type-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        mSelectedCarType = btn.dataset.car;
+        const fuelField = document.getElementById("m_fuel_field");
+        if (fuelField) fuelField.classList.toggle("hidden", mSelectedCarType === "electric");
+      });
+    });
+  }
+});
+
+function mobileTab(tab) {
+  const calcTab = document.getElementById("mTabCalc");
+  const resultsTab = document.getElementById("mTabResults");
+  const formPanel = document.getElementById("mobileFormPanel");
+  const resultsPanel = document.getElementById("mobileResultsPanel");
+
+  if (tab === "calc") {
+    calcTab.classList.add("active");
+    resultsTab.classList.remove("active");
+    formPanel.style.display = "block";
+    resultsPanel.style.display = "none";
+  } else {
+    resultsTab.classList.add("active");
+    calcTab.classList.remove("active");
+    formPanel.style.display = "none";
+    resultsPanel.style.display = "block";
+  }
+}
+
+function getMobileFormData() {
+  const mManual = document.getElementById("m_commute_manual");
+  const mSlider = document.getElementById("m_commute_minutes");
+  const minutes = parseFloat((mManual && mManual.value) ? mManual.value : mSlider.value) || 0;
+  return {
+    salary: parseFloat(document.getElementById("m_salary").value) || 0,
+    commute_minutes: minutes,
+    days_per_week: mSelectedDays,
+    weeks_per_year: 48,
+    transport_type: mSelectedTransport,
+    transport_cost_daily: parseFloat(document.getElementById("m_transport_cost").value) || 0,
+    miles_one_way: parseFloat(document.getElementById("m_miles").value) || 0,
+    car_type: mSelectedCarType,
+    fuel_cost_per_litre: parseFloat(document.getElementById("m_fuel").value) || 1.55,
+  };
+}
+
+async function runMobileCalculation() {
+  const btn = document.getElementById("mCalculateBtn");
+  const data = getMobileFormData();
+
+  if (data.salary <= 0) { showToast("Please enter your annual salary."); return; }
+  if (data.commute_minutes <= 0) { showToast("Please set your commute time."); return; }
+  if (data.transport_type === "public" && data.transport_cost_daily <= 0) { showToast("Please enter your daily transport cost."); return; }
+  if (data.transport_type === "car" && data.miles_one_way <= 0) { showToast("Please enter your one-way distance."); return; }
+
+  btn.querySelector("span").textContent = "Calculating...";
+  btn.disabled = true;
+
+  try {
+    const res = await fetch("/calculate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    const result = await res.json();
+    lastResult = result;
+    renderMobileResults(result, data);
+    mobileTab("results");
+  } catch (err) {
+    showToast("Something went wrong. Please try again.");
+  } finally {
+    btn.querySelector("span").textContent = "Calculate My Travel Tax";
+    btn.disabled = false;
+  }
+}
+
+function renderMobileResults(r, data) {
+  document.getElementById("mResultsPlaceholder").classList.add("hidden");
+  document.getElementById("mResultsContent").classList.remove("hidden");
+
+  document.getElementById("m_res_total").textContent = fmt(r.total_yearly_cost);
+  document.getElementById("m_res_sub").textContent = fmt(r.transport_cost_yearly) + " transport + " + fmt(r.time_cost_yearly) + " of your time";
+  document.getElementById("m_res_transport").textContent = fmt(r.transport_cost_yearly);
+  document.getElementById("m_res_hours").textContent = r.commute_hours_yearly + "h";
+  document.getElementById("m_res_time").textContent = fmt(r.time_cost_yearly);
+  document.getElementById("m_res_pct").textContent = r.pct_waking_life + "%";
+
+  setTimeout(() => { document.getElementById("m_life_bar").style.width = Math.min(r.pct_waking_life * 2, 100) + "%"; }, 100);
+  document.getElementById("m_career_text").textContent = "That is " + r.commute_days_yearly + " days/year — and " + r.career_commute_years + " years of your career lost to commuting.";
+
+  document.getElementById("m_monthly_transport").textContent = fmt(r.transport_cost_monthly);
+  document.getElementById("m_monthly_time").textContent = fmt(Math.round(r.time_cost_yearly / 12));
+  document.getElementById("m_monthly_total").textContent = fmt(r.total_monthly_cost);
+
+  // Mobile AR block
+  const metrics = buildAlternativeReality(r.commute_hours_yearly, r.hourly_rate, r.transport_cost_yearly);
+  const top = metrics.slice(0, 4);
+  window._arMetrics = top;
+  window._arHours = r.commute_hours_yearly;
+  window._arHourlyRate = r.hourly_rate;
+  window._arTransportCost = r.transport_cost_yearly;
+
+  const mArBlock = document.getElementById("m_ar_block");
+  mArBlock.innerHTML = top.map((m, i) =>
+    "<div class=\"mobile-ar-card\">" +
+      "<p class=\"mobile-ar-message\">" + m.message + "</p>" +
+      "<button class=\"mobile-ar-share\" onclick=\"shareARMetric(" + i + ")\">Share this stat</button>" +
+    "</div>"
+  ).join("");
+
+  // Mobile nudges
+  const nudgeBlock = document.getElementById("m_nudge_block");
+  nudgeBlock.innerHTML = "";
+  if (data.transport_type === "public" && data.days_per_week >= 3) {
+    nudgeBlock.innerHTML += "<div class=\"mobile-nudge\"><p><strong>Save up to £200/year</strong>A Railcard could cut your fares by a third.</p><a class=\"mobile-nudge-link\" href=\"https://www.trainline.com/railcards\" target=\"_blank\">Railcard</a></div>";
+  }
+  if (r.pct_waking_life > 8 || r.commute_hours_yearly > 200) {
+    nudgeBlock.innerHTML += "<div class=\"mobile-nudge\"><p><strong>Find remote roles</strong>Cut your commute to zero.</p><a class=\"mobile-nudge-link\" href=\"https://www.reed.co.uk/jobs/remote-jobs\" target=\"_blank\">Browse Jobs</a></div>";
+  }
+}
