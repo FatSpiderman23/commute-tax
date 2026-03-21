@@ -709,3 +709,29 @@ input:checked + .toggle-slider::after { transform: translateX(18px); }
   #thResultsPlaceholder { display: none !important; }
   #thResultsContent.hidden + * { display: none; }
 }
+
+/* Fix take home mobile - force form before results */
+@media (max-width: 900px) {
+  #take-home-wrapper {
+    flex-direction: column !important;
+    display: flex !important;
+  }
+  #take-home-wrapper .form-panel {
+    order: 1 !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border) !important;
+  }
+  #take-home-wrapper .results-panel {
+    order: 2 !important;
+    min-height: 0 !important;
+  }
+  #thResultsPlaceholder {
+    display: none !important;
+  }
+
+  /* Smaller ticker tape on mobile */
+  .ticker-tape {
+    font-size: 9px !important;
+    padding: 5px 0 !important;
+  }
+}
