@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UK Redundancy Pay Calculator 2025 — Statutory Redundancy</title>
+  <meta name="description" content="Calculate your statutory redundancy pay in the UK. Find out exactly how much you are entitled to based on your age, years of service and weekly pay." />
+  <meta name="keywords" content="redundancy pay calculator UK, statutory redundancy pay 2025, how much redundancy am I entitled to" />
+  <link rel="canonical" href="https://www.traveltax.co.uk/redundancy-calculator" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8725854592183933" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="slim-header">
+    <div class="slim-header-inner"><div class="slim-logo"><a href="/" style="text-decoration:none"><span class="slim-logo-main">Travel Tax.</span></a></div></div>
+    <div class="ticker-tape"><span>REDUNDANCY CALCULATOR &nbsp;·&nbsp; STATUTORY REDUNDANCY PAY 2025 &nbsp;·&nbsp; KNOW YOUR RIGHTS &nbsp;·&nbsp;</span><span aria-hidden="true">REDUNDANCY CALCULATOR &nbsp;·&nbsp; STATUTORY REDUNDANCY PAY 2025 &nbsp;·&nbsp; KNOW YOUR RIGHTS &nbsp;·&nbsp;</span></div>
+  </header>
+  <nav class="top-nav">
+    <div class="top-nav-inner">
+      <a href="/" class="nav-link">Commute Tax</a>
+      <a href="/take-home" class="nav-link">Take Home Pay</a>
+      <a href="/redundancy-calculator" class="nav-link active">Redundancy</a>
+      <a href="/maternity-calculator" class="nav-link">Maternity Pay</a>
+      <a href="/compare-jobs" class="nav-link">Compare Jobs</a>
+    </div>
+  </nav>
+  <div class="ad-slot ad-leaderboard"><span class="ad-label">Advertisement</span></div>
+  <main class="calc-section">
+    <div class="calc-wrapper">
+      <div class="form-panel">
+        <div class="form-header"><h2>Your Redundancy Pay</h2><p class="form-desc">Calculate your statutory entitlement.</p></div>
+        <div class="field-group"><label for="r_age">Your Age</label><div class="input-wrap"><input type="number" id="r_age" placeholder="35" min="18" max="80" /></div></div>
+        <div class="field-group"><label for="r_years">Years of Service</label><div class="input-wrap"><input type="number" id="r_years" placeholder="5" min="0" step="0.5" /></div><p class="field-hint">You need at least 2 years to qualify for statutory redundancy pay.</p></div>
+        <div class="field-group"><label for="r_weekly">Weekly Gross Pay (£)</label><div class="input-wrap"><span class="prefix">£</span><input type="number" id="r_weekly" placeholder="650" min="0" /></div><p class="field-hint">Capped at £643/week for 2024/25. Divide your annual salary by 52.</p></div>
+        <button class="calculate-btn" id="rCalculateBtn"><span>Calculate My Redundancy Pay</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+      </div>
+      <div class="results-panel" id="rResultsPanel">
+        <div class="results-placeholder" id="rPlaceholder">
+          <div class="fun-facts-wrap">
+            <p class="fun-facts-label">⚡ DID YOU KNOW?</p>
+            <div style="font-family:var(--font-display);font-size:22px;color:var(--white);line-height:1.3;text-align:center;padding:0 20px;">The first £30,000 of redundancy pay is tax-free in the UK.</div>
+            <p class="fun-facts-cta" style="margin-top:24px;">Enter your details to calculate your entitlement →</p>
+          </div>
+        </div>
+        <div class="results-content hidden" id="rResults">
+          <div class="verdict-banner"><p class="verdict-label">YOUR STATUTORY REDUNDANCY PAY</p><div class="verdict-number" id="r_total">£0</div><p class="verdict-sub">based on your age, service and pay</p></div>
+          <div class="breakdown-block">
+            <h3 class="block-title">Redundancy Breakdown</h3>
+            <div class="breakdown-row"><span>Weekly pay used</span><span id="r_weekly_used">£0</span></div>
+            <div class="breakdown-row"><span>Statutory redundancy pay</span><span id="r_statutory">£0</span></div>
+            <div class="breakdown-row"><span>Tax-free portion</span><span id="r_taxfree" style="color:var(--green)">£0</span></div>
+            <div class="breakdown-row"><span>Taxable above £30,000</span><span id="r_taxable">£0</span></div>
+            <div class="breakdown-row total-row"><span>Your entitlement</span><span id="r_total2">£0</span></div>
+          </div>
+          <div class="savings-callout" id="r_insight"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <section class="faq-section">
+    <div class="faq-inner">
+      <h2 class="faq-title">Redundancy FAQs</h2>
+      <div class="faq-item"><h3>How is statutory redundancy pay calculated?</h3><p>You get half a week's pay for each year under 22, one week's pay for each year between 22-40, and one and a half week's pay for each year over 41. Weekly pay is capped at £643 in 2024/25.</p></div>
+      <div class="faq-item"><h3>Is redundancy pay taxable?</h3><p>The first £30,000 of redundancy pay is tax-free. Any amount above £30,000 is subject to income tax but not National Insurance.</p></div>
+      <div class="faq-item"><h3>Can my employer pay more than statutory?</h3><p>Yes — many employers offer enhanced redundancy pay above the statutory minimum. Check your employment contract or staff handbook for details.</p></div>
+    </div>
+  </section>
+  <footer class="site-footer"><p>© 2025 Travel Tax · <a href="/">Commute</a> · <a href="/take-home">Take Home</a> · <a href="/redundancy-calculator">Redundancy</a> · <a href="/privacy">Privacy</a></p></footer>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("rCalculateBtn").addEventListener("click", async () => {
+        const btn = document.getElementById("rCalculateBtn");
+        const age = parseInt(document.getElementById("r_age").value) || 0;
+        const years = parseFloat(document.getElementById("r_years").value) || 0;
+        const weekly = parseFloat(document.getElementById("r_weekly").value) || 0;
+        if (age <= 0 || years < 2 || weekly <= 0) { alert("Please enter your age, at least 2 years service, and weekly pay."); return; }
+        btn.querySelector("span").textContent = "Calculating...";
+        btn.disabled = true;
+        try {
+          const res = await fetch("/calculate-redundancy", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ age, years_service: years, weekly_pay: weekly }) });
+          const r = await res.json();
+          const fmt = n => "£" + Math.round(n).toLocaleString("en-GB");
+          document.getElementById("rPlaceholder").classList.add("hidden");
+          document.getElementById("rResults").classList.remove("hidden");
+          document.getElementById("r_total").textContent = fmt(r.statutory_pay);
+          document.getElementById("r_weekly_used").textContent = fmt(r.weekly_pay_used) + (r.weekly_pay_capped ? " (capped)" : "");
+          document.getElementById("r_statutory").textContent = fmt(r.statutory_pay);
+          document.getElementById("r_taxfree").textContent = fmt(r.tax_free);
+          document.getElementById("r_taxable").textContent = r.taxable_above > 0 ? fmt(r.taxable_above) : "None";
+          document.getElementById("r_total2").textContent = fmt(r.statutory_pay);
+          document.getElementById("r_insight").textContent = r.taxable_above > 0
+            ? "Your redundancy pay exceeds £30,000. The first £30,000 is tax-free, but " + fmt(r.taxable_above) + " will be subject to income tax at your marginal rate."
+            : "Your full redundancy payment of " + fmt(r.statutory_pay) + " is below £30,000 and is completely tax-free. Note this is the statutory minimum — check your contract for any enhanced entitlement.";
+        } catch(err) { alert("Something went wrong."); }
+        finally { btn.querySelector("span").textContent = "Calculate My Redundancy Pay"; btn.disabled = false; }
+      });
+    });
+  </script>
+</body>
+</html>

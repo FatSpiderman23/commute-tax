@@ -286,7 +286,7 @@ BLOG_POSTS = [
 ]
 
 
-@app.route("/commute-cost/<city_slug>")
+@app.route("/commute-cost/<city_slug>", endpoint="city_page_old")
 def city_page(city_slug):
     city = CITIES.get(city_slug)
     if not city:
@@ -321,6 +321,38 @@ def sitemap():
         {"loc": "https://www.traveltax.co.uk/salary", "priority": "0.8", "changefreq": "monthly"},
         {"loc": "https://www.traveltax.co.uk/cost-of-living", "priority": "0.8", "changefreq": "monthly"},
         {"loc": "https://www.traveltax.co.uk/press", "priority": "0.6", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/student-loan", "priority": "0.9", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/pension-calculator", "priority": "0.9", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/redundancy-calculator", "priority": "0.9", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/maternity-calculator", "priority": "0.9", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/tax-year-2026", "priority": "0.9", "changefreq": "weekly"},
+        {"loc": "https://www.traveltax.co.uk/commute-cost/reading", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/commute-cost/brighton", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/commute-cost/guildford", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/commute-cost/oxford", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/commute-cost/cambridge", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/commute-cost/milton-keynes", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/salary/doctor", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/salary/lawyer", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/salary/pilot", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/salary/engineer", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/salary/social-worker", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/student-loan", "priority": "0.9", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/pension-calculator", "priority": "0.9", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/redundancy-calculator", "priority": "0.9", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/maternity-calculator", "priority": "0.9", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/tax-year-2026", "priority": "0.9", "changefreq": "weekly"},
+        {"loc": "https://www.traveltax.co.uk/commute-cost/reading", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/commute-cost/brighton", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/commute-cost/guildford", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/commute-cost/oxford", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/commute-cost/cambridge", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/commute-cost/milton-keynes", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/salary/doctor", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/salary/lawyer", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/salary/pilot", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/salary/engineer", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/salary/social-worker", "priority": "0.8", "changefreq": "monthly"},
     ]
     for slug in CITIES:
         urls.append({"loc": f"https://www.traveltax.co.uk/commute-cost/{slug}", "priority": "0.8", "changefreq": "monthly"})
@@ -843,6 +875,330 @@ def cost_of_living_index():
 @app.route("/press")
 def press_page():
     return render_template("press.html")
+
+
+
+# =============================================
+# NEW SALARY PAGES
+# =============================================
+
+EXTRA_SALARY_BENCHMARKS = {
+    "doctor": {
+        "title": "Doctor (NHS)",
+        "salary_range": [32000, 120000],
+        "avg_salary": 65000,
+        "description": "NHS doctors earn between £32,000 as a junior doctor and £120,000+ as a consultant. Foundation year doctors start at £32,398.",
+        "keywords": "doctor salary UK, NHS doctor take home pay, doctor salary after tax",
+        "sector": "Healthcare",
+        "jobs": ["Foundation Year 1", "Foundation Year 2", "Core Trainee", "Specialty Registrar", "Consultant"],
+    },
+    "lawyer": {
+        "title": "Lawyer / Solicitor",
+        "salary_range": [30000, 120000],
+        "avg_salary": 55000,
+        "description": "Solicitors in the UK earn between £30,000 as a newly qualified and £120,000+ at Magic Circle firms. City lawyers command a significant premium.",
+        "keywords": "lawyer salary UK, solicitor take home pay, lawyer salary after tax",
+        "sector": "Legal",
+        "jobs": ["Trainee Solicitor", "NQ Solicitor", "Associate", "Senior Associate", "Partner"],
+    },
+    "pilot": {
+        "title": "Airline Pilot",
+        "salary_range": [45000, 180000],
+        "avg_salary": 90000,
+        "description": "Airline pilots in the UK earn between £45,000 as a first officer and £180,000+ as a senior captain at a major carrier.",
+        "keywords": "pilot salary UK, airline pilot take home pay, pilot salary after tax",
+        "sector": "Aviation",
+        "jobs": ["First Officer", "Senior First Officer", "Captain", "Senior Captain"],
+    },
+    "engineer": {
+        "title": "Engineer",
+        "salary_range": [28000, 75000],
+        "avg_salary": 45000,
+        "description": "Engineers in the UK earn between £28,000 and £75,000 depending on discipline and experience. Civil, mechanical, and electrical engineers are among the most common.",
+        "keywords": "engineer salary UK, engineer take home pay, engineering salary after tax",
+        "sector": "Engineering",
+        "jobs": ["Graduate Engineer", "Junior Engineer", "Engineer", "Senior Engineer", "Principal Engineer"],
+    },
+    "social-worker": {
+        "title": "Social Worker",
+        "salary_range": [28000, 45000],
+        "avg_salary": 35000,
+        "description": "Social workers in the UK typically earn between £28,000 and £45,000. Newly qualified social workers start at around £28,000 rising with experience.",
+        "keywords": "social worker salary UK, social worker take home pay, social work salary after tax",
+        "sector": "Public Sector",
+        "jobs": ["Newly Qualified Social Worker", "Social Worker", "Senior Social Worker", "Team Manager"],
+    },
+}
+
+# Merge with existing benchmarks
+SALARY_BENCHMARKS.update(EXTRA_SALARY_BENCHMARKS)
+
+# =============================================
+# COMMUTER TOWN PAGES
+# =============================================
+
+COMMUTER_TOWNS = {
+    "reading": {
+        "name": "Reading",
+        "to_city": "London",
+        "avg_commute_mins": 27,
+        "avg_season_ticket": 5240,
+        "avg_salary": 45000,
+        "description": "Reading is one of the UK's most popular commuter towns, with fast trains to London Paddington taking as little as 25 minutes.",
+        "train_operator": "Great Western Railway",
+        "popular_for": ["Tech workers", "Finance professionals", "Consultants"],
+    },
+    "brighton": {
+        "name": "Brighton",
+        "to_city": "London",
+        "avg_commute_mins": 52,
+        "avg_season_ticket": 5760,
+        "avg_salary": 42000,
+        "description": "Brighton is a popular alternative to London living, but its commuters face some of the highest season ticket costs in the country.",
+        "train_operator": "Southern / Thameslink",
+        "popular_for": ["Creative professionals", "Tech workers", "Media"],
+    },
+    "guildford": {
+        "name": "Guildford",
+        "to_city": "London",
+        "avg_commute_mins": 35,
+        "avg_season_ticket": 4800,
+        "avg_salary": 48000,
+        "description": "Guildford offers a high quality of life and relatively fast trains to London Waterloo, making it a popular choice for families.",
+        "train_operator": "South Western Railway",
+        "popular_for": ["Families", "Finance professionals", "Senior managers"],
+    },
+    "oxford": {
+        "name": "Oxford",
+        "to_city": "London",
+        "avg_commute_mins": 57,
+        "avg_season_ticket": 7200,
+        "avg_salary": 44000,
+        "description": "Oxford commuters face long journey times and high fares to London Paddington, but benefit from Oxford's exceptional quality of life.",
+        "train_operator": "Great Western Railway",
+        "popular_for": ["Academia", "Tech workers", "Finance"],
+    },
+    "cambridge": {
+        "name": "Cambridge",
+        "to_city": "London",
+        "avg_commute_mins": 48,
+        "avg_season_ticket": 6100,
+        "avg_salary": 46000,
+        "description": "Cambridge is home to a thriving tech cluster but many residents commute to London, facing significant costs on the Kings Cross line.",
+        "train_operator": "Thameslink / Greater Anglia",
+        "popular_for": ["Tech workers", "Scientists", "Finance"],
+    },
+    "milton-keynes": {
+        "name": "Milton Keynes",
+        "to_city": "London",
+        "avg_commute_mins": 35,
+        "avg_season_ticket": 4900,
+        "avg_salary": 40000,
+        "description": "Milton Keynes offers affordable housing and fast trains to Euston, making it popular with London commuters seeking more space.",
+        "train_operator": "Avanti West Coast / London Northwestern",
+        "popular_for": ["Families", "Finance workers", "Logistics professionals"],
+    },
+}
+
+
+@app.route("/commute-cost/commuter-towns")
+def commuter_towns_index():
+    return render_template("commuter_towns.html", towns=COMMUTER_TOWNS)
+
+
+@app.route("/commute-cost/<town_slug>", endpoint="commuter_town_page")
+def commuter_town_page(town_slug):
+    # Check if it's a commuter town first
+    town = COMMUTER_TOWNS.get(town_slug)
+    if town:
+        hourly = float(town["avg_salary"]) / (48 * 5 * 8)
+        time_cost = round((town["avg_commute_mins"] * 2 * 48 * 5 / 60) * hourly)
+        return render_template("commuter_town.html", town=town, slug=town_slug,
+                             time_cost=time_cost, all_towns=COMMUTER_TOWNS)
+    # Fall back to city page
+    city = CITIES.get(town_slug)
+    if city:
+        return render_template("city.html", city=city, slug=town_slug, all_cities=CITIES)
+    return "Page not found", 404
+
+
+# =============================================
+# CALCULATORS
+# =============================================
+
+def calculate_student_loan(data):
+    salary = float(data.get("salary", 0))
+    plan = data.get("plan", "plan2")
+    balance = float(data.get("balance", 0))
+
+    thresholds = {
+        "plan1": {"threshold": 22015, "rate": 0.09, "interest": 0.065},
+        "plan2": {"threshold": 27295, "rate": 0.09, "interest": 0.075},
+        "plan4": {"threshold": 27660, "rate": 0.09, "interest": 0.065},
+        "plan5": {"threshold": 25000, "rate": 0.06, "interest": 0.075},
+        "postgrad": {"threshold": 21000, "rate": 0.06, "interest": 0.075},
+    }
+
+    p = thresholds.get(plan, thresholds["plan2"])
+    yearly_repayment = max(0, (salary - p["threshold"]) * p["rate"]) if salary > p["threshold"] else 0
+    monthly_repayment = yearly_repayment / 12
+    interest_yearly = balance * p["interest"] if balance > 0 else 0
+    net_balance_change = interest_yearly - yearly_repayment
+
+    years_to_repay = None
+    if yearly_repayment > interest_yearly and balance > 0:
+        years_to_repay = round(balance / (yearly_repayment - interest_yearly), 1)
+
+    write_off_years = {"plan1": 25, "plan2": 30, "plan4": 30, "plan5": 40, "postgrad": 30}
+    write_off = write_off_years.get(plan, 30)
+
+    return {
+        "monthly_repayment": round(monthly_repayment),
+        "yearly_repayment": round(yearly_repayment),
+        "interest_yearly": round(interest_yearly),
+        "net_balance_change": round(net_balance_change),
+        "years_to_repay": years_to_repay,
+        "write_off_years": write_off,
+        "threshold": p["threshold"],
+        "rate": int(p["rate"] * 100),
+        "will_repay_before_writeoff": years_to_repay is not None and years_to_repay < write_off,
+    }
+
+
+def calculate_pension(data):
+    current_age = int(data.get("current_age", 30))
+    retirement_age = int(data.get("retirement_age", 67))
+    salary = float(data.get("salary", 35000))
+    contribution_pct = float(data.get("contribution_pct", 5))
+    employer_pct = float(data.get("employer_pct", 3))
+    current_pot = float(data.get("current_pot", 0))
+    growth_rate = float(data.get("growth_rate", 5)) / 100
+
+    years = retirement_age - current_age
+    annual_contribution = salary * (contribution_pct + employer_pct) / 100
+    monthly_contribution = annual_contribution / 12
+
+    # Future value calculation
+    future_value = current_pot * ((1 + growth_rate) ** years)
+    future_value += annual_contribution * (((1 + growth_rate) ** years - 1) / growth_rate)
+
+    monthly_income = future_value / (25 * 12)  # 4% drawdown rule
+    state_pension = 11502  # 2024/25 full state pension
+    total_monthly = monthly_income + (state_pension / 12)
+
+    recommended_pot = salary * 25  # 25x salary rule
+    on_track = future_value >= recommended_pot * 0.8
+
+    return {
+        "years_to_retirement": years,
+        "projected_pot": round(future_value),
+        "monthly_income": round(monthly_income),
+        "total_monthly_with_state": round(total_monthly),
+        "monthly_contribution": round(monthly_contribution),
+        "annual_contribution": round(annual_contribution),
+        "recommended_pot": round(recommended_pot),
+        "on_track": on_track,
+        "shortfall": round(max(0, recommended_pot - future_value)),
+        "state_pension_monthly": round(state_pension / 12),
+    }
+
+
+def calculate_redundancy(data):
+    age = int(data.get("age", 35))
+    years_service = float(data.get("years_service", 5))
+    weekly_pay = float(data.get("weekly_pay", 500))
+    weekly_pay_capped = min(weekly_pay, 643)  # 2024/25 cap
+
+    statutory_pay = 0
+    for year in range(int(years_service)):
+        current_age = age - year
+        if current_age >= 41:
+            statutory_pay += 1.5 * weekly_pay_capped
+        elif current_age >= 22:
+            statutory_pay += 1.0 * weekly_pay_capped
+        else:
+            statutory_pay += 0.5 * weekly_pay_capped
+
+    statutory_pay = min(statutory_pay, 19290)  # 2024/25 max
+
+    return {
+        "statutory_pay": round(statutory_pay),
+        "weekly_pay_used": round(weekly_pay_capped),
+        "weekly_pay_capped": weekly_pay > 643,
+        "max_statutory": 19290,
+        "taxable_above": max(0, round(statutory_pay - 30000)),
+        "tax_free": min(statutory_pay, 30000),
+    }
+
+
+def calculate_maternity(data):
+    salary = float(data.get("salary", 35000))
+    weeks = int(data.get("weeks", 39))
+
+    weekly_salary = salary / 52
+    smp_rate_enhanced = weekly_salary * 0.90  # First 6 weeks
+    smp_rate_standard = min(184.03, weekly_salary * 0.90)  # Weeks 7-39 (2024/25 rate)
+
+    week_6_total = smp_rate_enhanced * 6
+    remaining_weeks = max(0, weeks - 6)
+    remaining_total = smp_rate_standard * remaining_weeks
+
+    total_smp = round(week_6_total + remaining_total)
+    total_lost = round((salary / 52) * weeks - total_smp)
+
+    return {
+        "total_smp": total_smp,
+        "weekly_first_6": round(smp_rate_enhanced),
+        "weekly_after_6": round(smp_rate_standard),
+        "total_income_lost": total_lost,
+        "monthly_during_leave": round(total_smp / (weeks / 4.33)),
+        "smp_weeks": weeks,
+    }
+
+
+@app.route("/student-loan")
+def student_loan_page():
+    return render_template("student_loan.html")
+
+
+@app.route("/calculate-student-loan", methods=["POST"])
+def calculate_student_loan_route():
+    return jsonify(calculate_student_loan(request.get_json()))
+
+
+@app.route("/pension-calculator")
+def pension_calculator_page():
+    return render_template("pension_calculator.html")
+
+
+@app.route("/calculate-pension", methods=["POST"])
+def calculate_pension_route():
+    return jsonify(calculate_pension(request.get_json()))
+
+
+@app.route("/redundancy-calculator")
+def redundancy_calculator_page():
+    return render_template("redundancy_calculator.html")
+
+
+@app.route("/calculate-redundancy", methods=["POST"])
+def calculate_redundancy_route():
+    return jsonify(calculate_redundancy(request.get_json()))
+
+
+@app.route("/maternity-calculator")
+def maternity_calculator_page():
+    return render_template("maternity_calculator.html")
+
+
+@app.route("/calculate-maternity", methods=["POST"])
+def calculate_maternity_route():
+    return jsonify(calculate_maternity(request.get_json()))
+
+
+@app.route("/tax-year-2026")
+def tax_year_2026():
+    return render_template("tax_year_2026.html")
 
 
 if __name__ == "__main__":

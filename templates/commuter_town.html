@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ town.name }} to {{ town.to_city }} Commute Cost 2025 — Travel Tax</title>
+  <meta name="description" content="How much does it cost to commute from {{ town.name }} to {{ town.to_city }} in 2025? Average season ticket £{{ town.avg_season_ticket|int }}/year. Calculate your exact commute cost." />
+  <meta name="keywords" content="{{ town.name }} to {{ town.to_city }} commute, commuting from {{ town.name }}, {{ town.name }} season ticket cost" />
+  <link rel="canonical" href="https://www.traveltax.co.uk/commute-cost/{{ slug }}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8725854592183933" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="blog-header">
+    <div class="blog-header-inner"><a href="/" class="blog-logo">Travel Tax</a><a href="/" class="blog-cta">Calculate Yours →</a></div>
+  </header>
+  <nav class="top-nav">
+    <div class="top-nav-inner">
+      <a href="/" class="nav-link">Commute Tax</a>
+      <a href="/take-home" class="nav-link">Take Home Pay</a>
+      <a href="/compare-jobs" class="nav-link">Compare Jobs</a>
+      <a href="/blog" class="nav-link active">Guides</a>
+    </div>
+  </nav>
+  <div class="ad-slot ad-leaderboard"><span class="ad-label">Advertisement</span></div>
+  <main class="blog-main">
+    <div class="blog-inner">
+      <div class="blog-hero">
+        <span class="blog-tag">COMMUTER TOWN · {{ town.name|upper }} TO {{ town.to_city|upper }} · 2025</span>
+        <h1 class="blog-title">{{ town.name }} to {{ town.to_city }} Commute Cost 2025</h1>
+        <p class="blog-lead">{{ town.description }}</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:32px 0;">
+        <div style="background:var(--panel);border:1px solid var(--border);padding:20px;text-align:center;">
+          <div style="font-family:var(--font-display);font-size:36px;color:var(--accent);">{{ town.avg_commute_mins }} min</div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dimmer);letter-spacing:0.15em;margin-top:4px;">AVG JOURNEY</div>
+        </div>
+        <div style="background:var(--panel);border:1px solid var(--border);padding:20px;text-align:center;">
+          <div style="font-family:var(--font-display);font-size:36px;color:var(--accent);">£{{ "{:,}".format(town.avg_season_ticket) }}</div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dimmer);letter-spacing:0.15em;margin-top:4px;">AVG SEASON TICKET</div>
+        </div>
+        <div style="background:var(--panel);border:1px solid var(--border);padding:20px;text-align:center;">
+          <div style="font-family:var(--font-display);font-size:36px;color:var(--accent);">£{{ "{:,}".format(time_cost) }}</div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dimmer);letter-spacing:0.15em;margin-top:4px;">TIME COST / YEAR</div>
+        </div>
+      </div>
+      <article class="blog-article">
+        <h2>The True Cost of Commuting from {{ town.name }} to {{ town.to_city }}</h2>
+        <p>The average season ticket from {{ town.name }} to {{ town.to_city }} costs £{{ "{:,}".format(town.avg_season_ticket) }} per year. But this is only the direct transport cost. When you include the monetary value of your commuting time — calculated at the average {{ town.name }} salary of £{{ "{:,}".format(town.avg_salary) }} — the true annual commute cost exceeds £{{ "{:,}".format(town.avg_season_ticket + time_cost) }}.</p>
+        <p>{{ town.name }} is popular with {{ town.popular_for | join(", ") }} who want to be within commuting distance of {{ town.to_city }} while enjoying lower housing costs and a different lifestyle.</p>
+        <div class="blog-callout">
+          <p>🧮 <strong>Calculate your exact commute cost</strong> — use our free <a href="/">Travel Tax calculator</a> to see your personal travel tax including time value.</p>
+        </div>
+        <h2>{{ town.name }} Commuter Tips</h2>
+        <p>Trains from {{ town.name }} are operated by <strong>{{ town.train_operator }}</strong>. To reduce your commute cost, consider an annual season ticket (saves approximately 12 weeks of daily fares), a Railcard if you buy flexible tickets, or negotiating hybrid working to reduce the number of days you commute.</p>
+        <div style="text-align:center;margin:40px 0;">
+          <a href="/" style="display:inline-block;background:var(--accent);color:var(--black);font-family:var(--font-mono);font-size:13px;padding:18px 40px;text-decoration:none;letter-spacing:0.12em;text-transform:uppercase;">Calculate My Commute Cost →</a>
+        </div>
+        <h2>Other Commuter Towns</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;">
+          {% for t_slug, t_data in all_towns.items() %}
+          {% if t_slug != slug %}
+          <a href="/commute-cost/{{ t_slug }}" style="padding:10px 16px;border:1px solid var(--border);color:var(--text-dim);text-decoration:none;font-family:var(--font-mono);font-size:11px;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-dim)'">{{ t_data.name }} to {{ t_data.to_city }} →</a>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </article>
+    </div>
+  </main>
+  <footer class="site-footer"><p>© 2025 Travel Tax · <a href="/">Commute</a> · <a href="/guide">Guide</a> · <a href="/blog">Blog</a> · <a href="/privacy">Privacy</a></p></footer>
+</body>
+</html>

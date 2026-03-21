@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Loan Repayment Calculator UK 2025 — Travel Tax</title>
+  <meta name="description" content="Calculate your UK student loan monthly repayments, interest and when you will pay it off. Covers Plan 1, 2, 4, 5 and Postgraduate loans." />
+  <meta name="keywords" content="student loan repayment calculator UK, student loan calculator 2025, when will I pay off student loan" />
+  <link rel="canonical" href="https://www.traveltax.co.uk/student-loan" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8725854592183933" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="slim-header">
+    <div class="slim-header-inner">
+      <div class="slim-logo"><a href="/" style="text-decoration:none"><span class="slim-logo-main">Travel Tax.</span><span class="slim-logo-sub">UK Financial Reality Check</span></a></div>
+    </div>
+    <div class="ticker-tape">
+      <span>STUDENT LOAN CALCULATOR &nbsp;·&nbsp; PLAN 1 · PLAN 2 · PLAN 4 · PLAN 5 &nbsp;·&nbsp; WHEN WILL I PAY OFF MY STUDENT LOAN? &nbsp;·&nbsp;</span>
+      <span aria-hidden="true">STUDENT LOAN CALCULATOR &nbsp;·&nbsp; PLAN 1 · PLAN 2 · PLAN 4 · PLAN 5 &nbsp;·&nbsp; WHEN WILL I PAY OFF MY STUDENT LOAN? &nbsp;·&nbsp;</span>
+    </div>
+  </header>
+  <nav class="top-nav">
+    <div class="top-nav-inner">
+      <a href="/" class="nav-link">Commute Tax</a>
+      <a href="/take-home" class="nav-link">Take Home Pay</a>
+      <a href="/student-loan" class="nav-link active">Student Loan</a>
+      <a href="/pension-calculator" class="nav-link">Pension</a>
+      <a href="/compare-jobs" class="nav-link">Compare Jobs</a>
+    </div>
+  </nav>
+  <div class="ad-slot ad-leaderboard"><span class="ad-label">Advertisement</span></div>
+
+  <main class="calc-section">
+    <div class="calc-wrapper">
+      <div class="form-panel">
+        <div class="form-header"><h2>Your Student Loan</h2><p class="form-desc">Find out your monthly repayments and when you will clear it.</p></div>
+
+        <div class="field-group">
+          <label for="sl_salary">Annual Salary (£)</label>
+          <div class="input-wrap"><span class="prefix">£</span><input type="number" id="sl_salary" placeholder="35000" min="0" /></div>
+        </div>
+
+        <div class="field-group">
+          <label>Loan Plan</label>
+          <div class="transport-toggle" style="grid-template-columns:1fr 1fr 1fr;">
+            <button class="transport-btn active" data-plan="plan2">Plan 2</button>
+            <button class="transport-btn" data-plan="plan1">Plan 1</button>
+            <button class="transport-btn" data-plan="plan4">Plan 4</button>
+            <button class="transport-btn" data-plan="plan5">Plan 5</button>
+            <button class="transport-btn" data-plan="postgrad">Postgrad</button>
+          </div>
+          <p class="field-hint">Plan 2 = England/Wales from 2012. Plan 1 = before 2012. Plan 4 = Scotland. Plan 5 = from 2023.</p>
+        </div>
+
+        <div class="field-group">
+          <label for="sl_balance">Current Loan Balance (£) — optional</label>
+          <div class="input-wrap"><span class="prefix">£</span><input type="number" id="sl_balance" placeholder="45000" min="0" /></div>
+          <p class="field-hint">Check your balance at studentloans.co.uk</p>
+        </div>
+
+        <button class="calculate-btn" id="slCalculateBtn"><span>Calculate My Repayments</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+      </div>
+
+      <div class="results-panel" id="slResultsPanel">
+        <div class="results-placeholder" id="slPlaceholder">
+          <div class="fun-facts-wrap">
+            <p class="fun-facts-label">⚡ DID YOU KNOW?</p>
+            <div style="font-family:var(--font-display);font-size:22px;color:var(--white);line-height:1.3;text-align:center;padding:0 20px;">Only 25% of Plan 2 graduates will repay their loan in full before it is written off after 30 years.</div>
+            <p class="fun-facts-cta" style="margin-top:24px;">Enter your salary to see your repayments →</p>
+          </div>
+        </div>
+        <div class="results-content hidden" id="slResults">
+          <div class="verdict-banner">
+            <p class="verdict-label">YOUR MONTHLY REPAYMENT</p>
+            <div class="verdict-number" id="sl_monthly">£0</div>
+            <p class="verdict-sub" id="sl_yearly_sub">per year</p>
+          </div>
+          <div class="stat-cards">
+            <div class="stat-card"><span class="stat-icon">📅</span><span class="stat-label">Monthly Repayment</span><span class="stat-value" id="sl_monthly2">£0</span></div>
+            <div class="stat-card highlight"><span class="stat-icon">💰</span><span class="stat-label">Yearly Repayment</span><span class="stat-value" id="sl_yearly">£0</span></div>
+            <div class="stat-card"><span class="stat-icon">📈</span><span class="stat-label">Interest / Year</span><span class="stat-value" id="sl_interest">£0</span></div>
+            <div class="stat-card"><span class="stat-icon">🗓</span><span class="stat-label">Written Off After</span><span class="stat-value" id="sl_writeoff">0 yrs</span></div>
+          </div>
+          <div class="breakdown-block">
+            <h3 class="block-title">Your Repayment Summary</h3>
+            <div class="breakdown-row"><span>Repayment threshold</span><span id="sl_threshold">£0</span></div>
+            <div class="breakdown-row"><span>Repayment rate</span><span id="sl_rate">9%</span></div>
+            <div class="breakdown-row"><span>Monthly repayment</span><span id="sl_monthly3">£0</span></div>
+            <div class="breakdown-row"><span>Annual interest added</span><span id="sl_interest2" style="color:var(--red)">£0</span></div>
+            <div class="breakdown-row total-row"><span id="sl_verdict_label">Years to repay</span><span id="sl_years">—</span></div>
+          </div>
+          <div class="savings-callout" id="sl_insight"></div>
+          <div class="comparison-block">
+            <h3 class="block-title">Also Calculate</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px;">
+              <a href="/take-home" style="display:block;padding:14px;border:1px solid var(--border);color:var(--text-dim);text-decoration:none;font-size:13px;text-align:center;">Take Home Pay →</a>
+              <a href="/pension-calculator" style="display:block;padding:14px;border:1px solid var(--border);color:var(--text-dim);text-decoration:none;font-size:13px;text-align:center;">Pension Calculator →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <section class="faq-section">
+    <div class="faq-inner">
+      <h2 class="faq-title">Student Loan FAQs</h2>
+      <div class="faq-item"><h3>When do I start repaying my student loan?</h3><p>You start repaying in the April after you graduate or leave your course, but only once your income is above the repayment threshold for your plan. Repayments are automatically deducted from your salary by your employer.</p></div>
+      <div class="faq-item"><h3>What happens if I never pay it off?</h3><p>Your student loan is written off after a set number of years — 25 years for Plan 1, 30 years for Plan 2 and Plan 4, 40 years for Plan 5. Any remaining balance is cancelled and does not affect your credit score.</p></div>
+      <div class="faq-item"><h3>Should I overpay my student loan?</h3><p>For most Plan 2 graduates, overpaying is not financially beneficial since the loan is likely to be written off before full repayment. However, if you are on track to repay in full, overpaying can save on interest. Use this calculator to check your situation.</p></div>
+    </div>
+  </section>
+  <footer class="site-footer"><p>© 2025 Travel Tax · <a href="/">Commute</a> · <a href="/take-home">Take Home</a> · <a href="/student-loan">Student Loan</a> · <a href="/privacy">Privacy</a></p></footer>
+  <script src="/static/js/student_loan.js"></script>
+</body>
+</html>
