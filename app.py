@@ -1201,5 +1201,11 @@ def tax_year_2026():
     return render_template("tax_year_2026.html")
 
 
+
+@app.route("/tools")
+def tools_page():
+    all_jobs = {**SALARY_BENCHMARKS}
+    return render_template("tools.html", jobs=all_jobs, cities=CITIES, col_cities=COST_OF_LIVING_CITIES)
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
