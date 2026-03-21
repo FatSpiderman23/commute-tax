@@ -673,11 +673,12 @@ function generateShareCard() {
   if (line.trim()) ctx.fillText(line.trim(), W / 2, ty);
 
   // Distance fact
-  if (r.distance_fact) {
+  if (r.distance_facts && r.distance_facts.length > 0) {
+    const df = r.distance_facts[Math.floor(Math.random() * r.distance_facts.length)];
     ctx.fillStyle = "#f0e040";
     ctx.font = "bold 22px Arial";
     ctx.textAlign = "center";
-    ctx.fillText(r.distance_fact, W / 2, 840);
+    ctx.fillText(df, W / 2, 840);
   }
 
   // Career line - fully dynamic
