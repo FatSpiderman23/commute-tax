@@ -33,13 +33,20 @@ def calculate_commute(data):
 
     if transport_type == "car":
         is_ev = car_type == "electric"
+        fuel_spend = float(data.get("fuel_spend", 0))
+        fuel_period = data.get("fuel_period", "weekly")
         if is_ev:
-            # EV: ~0.25 kWh/mile, ~28p/kWh avg UK home charging
             fuel_cost_daily = miles_one_way * 2 * 0.25 * 0.28
+        elif fuel_spend > 0:
+            # User told us their weekly or monthly spend
+            if fuel_period == "weekly":
+                fuel_cost_daily = fuel_spend / 5
+            else:
+                fuel_cost_daily = (fuel_spend * 12) / (weeks_per_year * days_per_week) if days_per_week > 0 else 0
         else:
             mpg = CAR_MPG.get(car_type, 40)
             litres_per_mile = 1 / (mpg * 4.546)
-            fuel_cost_daily = miles_one_way * 2 * litres_per_mile * fuel_cost_per_litre
+            fuel_cost_daily = miles_one_way * 2 * litres_per_mile * 1.55
 
         miles_yearly = miles_one_way * 2 * working_days
         if miles_yearly <= 10000:

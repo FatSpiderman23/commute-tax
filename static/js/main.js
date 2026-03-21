@@ -3,6 +3,7 @@
 let selectedDays = 3;
 let selectedTransport = "public";
 let selectedCarType = "petrol_avg";
+let selectedFuelPeriod = "weekly";
 let lastResult = null;
 
 const AR_METRICS = [
@@ -224,7 +225,8 @@ function getFormData() {
     transport_cost_daily: parseFloat(document.getElementById("transport_cost_daily").value) || 0,
     miles_one_way: parseFloat(document.getElementById("miles_one_way").value) || 0,
     car_type: selectedCarType,
-    fuel_cost_per_litre: parseFloat(document.getElementById("fuel_cost_per_litre").value) || 1.55,
+    fuel_spend: parseFloat(document.getElementById("fuel_spend") ? document.getElementById("fuel_spend").value : 0) || 0,
+    fuel_period: selectedFuelPeriod,
   };
 }
 
@@ -722,3 +724,18 @@ function renderMobileResults(r, data) {
     nudgeBlock.innerHTML += "<div class=\"mobile-nudge\"><p><strong>Find remote roles</strong>Cut your commute to zero.</p><a class=\"mobile-nudge-link\" href=\"https://www.reed.co.uk/jobs/remote-jobs\" target=\"_blank\">Browse Jobs</a></div>";
   }
 }
+
+// Fuel period toggle
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".fuel-period-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".fuel-period-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      selectedFuelPeriod = btn.dataset.period;
+      const hint = document.getElementById("fuel_hint") || document.getElementById("m_fuel_hint");
+      if (hint) hint.textContent = selectedFuelPeriod === "weekly"
+        ? "How much you spend at the pump per week."
+        : "Your average monthly fuel bill.";
+    });
+  });
+});

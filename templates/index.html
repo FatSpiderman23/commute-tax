@@ -117,12 +117,16 @@
 
           <!-- Advanced: show fuel cost only for petrol/diesel, hidden for electric -->
           <div id="fuel-cost-field" class="field-group">
-            <label for="fuel_cost_per_litre">Current Fuel Cost (£/litre)</label>
-            <div class="input-wrap">
-              <span class="prefix">£</span>
-              <input type="number" id="fuel_cost_per_litre" placeholder="1.55" step="0.01" min="0" value="1.55" />
+            <label>How Much Do You Spend on Fuel?</label>
+            <div class="fuel-period-toggle">
+              <button class="fuel-period-btn active" data-period="weekly">Weekly</button>
+              <button class="fuel-period-btn" data-period="monthly">Monthly</button>
             </div>
-            <p class="field-hint">Check GasPrices.co.uk for current prices near you.</p>
+            <div class="input-wrap" style="margin-top:8px">
+              <span class="prefix">£</span>
+              <input type="number" id="fuel_spend" placeholder="40" step="1" min="0" />
+            </div>
+            <p class="field-hint" id="fuel_hint">How much you spend at the pump per week.</p>
           </div>
         </div>
 
@@ -317,18 +321,22 @@
         <div class="field-group">
           <label>What Type of Car?</label>
           <div class="car-type-toggle" id="m_car_type_toggle">
-            <button class="car-type-btn active" data-car="petrol_avg">Petrol (avg)</button>
-            <button class="car-type-btn" data-car="petrol_large">Petrol (large)</button>
+            <button class="car-type-btn active" data-car="petrol_avg">Petrol</button>
             <button class="car-type-btn" data-car="diesel">Diesel</button>
             <button class="car-type-btn" data-car="electric">Electric</button>
           </div>
         </div>
         <div id="m_fuel_field" class="field-group">
-          <label for="m_fuel">Fuel Cost (£/litre)</label>
-          <div class="input-wrap">
-            <span class="prefix">£</span>
-            <input type="number" id="m_fuel" placeholder="1.55" step="0.01" value="1.55" inputmode="decimal" />
+          <label>How Much Do You Spend on Fuel?</label>
+          <div class="fuel-period-toggle">
+            <button class="fuel-period-btn active" data-period="weekly">Weekly</button>
+            <button class="fuel-period-btn" data-period="monthly">Monthly</button>
           </div>
+          <div class="input-wrap" style="margin-top:8px">
+            <span class="prefix">£</span>
+            <input type="number" id="m_fuel_spend" placeholder="40" step="1" min="0" inputmode="numeric" />
+          </div>
+          <p class="field-hint" id="m_fuel_hint">How much you spend at the pump per week.</p>
         </div>
       </div>
 
