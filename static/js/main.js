@@ -61,7 +61,7 @@ const AR_METRICS = [
     id: "coffee", category: "money",
     getMessage: (hrs, ratio, hourlyRate, transportCost) => {
       const coffees = Math.round(transportCost / 4.50);
-      return "Your commute cost buys <strong>" + coffees.toLocaleString() + " flat whites</strong> — " + Math.round(coffees / 52) + " per week.",
+      return "Your commute cost buys <strong>" + coffees.toLocaleString() + " flat whites</strong> — " + Math.round(coffees / 52) + " per week.";
     },
     shareResult: (hrs, hourlyRate, transportCost) => "My commute costs " + Math.round(transportCost / 4.50).toLocaleString() + " flat whites/year.",
   },
