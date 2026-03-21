@@ -10,6 +10,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/css/style.css" />
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8725854592183933" crossorigin="anonymous"></script>
+  <style>
+    #pension_calculator .slider-wrap,
+    .form-panel .slider-wrap { display:flex; flex-direction:row; align-items:center; gap:12px; flex-wrap:nowrap; }
+    .form-panel .slider-wrap input[type="range"] { flex:1; min-width:0; }
+    .form-panel .slider-input-wrap { flex-shrink:0; }
+  </style>
+  <style>
+    #pension_calculator .slider-wrap,
+    .form-panel .slider-wrap { display:flex; flex-direction:row; align-items:center; gap:12px; flex-wrap:nowrap; }
+    .form-panel .slider-wrap input[type="range"] { flex:1; min-width:0; }
+    .form-panel .slider-input-wrap { flex-shrink:0; }
+  </style>
 </head>
 <body>
   <header class="slim-header">
@@ -46,28 +58,28 @@
         </div>
         <div class="field-group">
           <label for="p_age">Current Age</label>
-          <div class="slider-wrap" style="flex-direction:column;gap:8px;">
+          <div class="slider-wrap">
             <input type="range" id="p_age_slider" min="18" max="65" value="30" step="1" oninput="document.getElementById('p_age').value=this.value" />
             <div class="slider-input-wrap"><input type="number" id="p_age" value="30" min="18" max="65" oninput="document.getElementById('p_age_slider').value=this.value" /><span class="slider-unit">yrs</span></div>
           </div>
         </div>
         <div class="field-group">
           <label for="p_retire">Retirement Age</label>
-          <div class="slider-wrap" style="flex-direction:column;gap:8px;">
+          <div class="slider-wrap">
             <input type="range" id="p_retire_slider" min="55" max="75" value="67" step="1" oninput="document.getElementById('p_retire').value=this.value" />
             <div class="slider-input-wrap"><input type="number" id="p_retire" value="67" min="55" max="75" oninput="document.getElementById('p_retire_slider').value=this.value" /><span class="slider-unit">yrs</span></div>
           </div>
         </div>
         <div class="field-group">
           <label for="p_contrib">Your Contribution (%)</label>
-          <div class="slider-wrap" style="flex-direction:column;gap:8px;">
+          <div class="slider-wrap">
             <input type="range" id="p_contrib_slider" min="0" max="30" value="5" step="1" oninput="document.getElementById('p_contrib').value=this.value" />
             <div class="slider-input-wrap"><input type="number" id="p_contrib" value="5" min="0" max="100" oninput="document.getElementById('p_contrib_slider').value=Math.min(this.value,30)" /><span class="slider-unit">%</span></div>
           </div>
         </div>
         <div class="field-group">
           <label for="p_employer">Employer Contribution (%)</label>
-          <div class="slider-wrap" style="flex-direction:column;gap:8px;">
+          <div class="slider-wrap">
             <input type="range" id="p_employer_slider" min="0" max="20" value="3" step="1" oninput="document.getElementById('p_employer').value=this.value" />
             <div class="slider-input-wrap"><input type="number" id="p_employer" value="3" min="0" max="100" oninput="document.getElementById('p_employer_slider').value=Math.min(this.value,20)" /><span class="slider-unit">%</span></div>
           </div>
