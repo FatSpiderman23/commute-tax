@@ -436,8 +436,8 @@ function generateShareCard() {
   // AR message
   if (arMetric) {
     const cleanMsg = arMetric.message.replace(/<[^>]*>/g, "");
-    ctx.fillStyle = "#cccccc";
-    ctx.font = "400 30px Arial";
+    ctx.fillStyle = "#f0f0e8";
+    ctx.font = "400 36px Arial";
     ctx.textAlign = "center";
     ctx.textBaseline = "alphabetic";
 
@@ -461,7 +461,7 @@ function generateShareCard() {
   }
 
   // Career line
-  ctx.fillStyle = "#2a2a2a";
+  ctx.fillStyle = "#555555";
   ctx.font = "400 20px monospace";
   ctx.textAlign = "center";
   ctx.textBaseline = "alphabetic";
