@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cost of Living in {{ city.name }} 2025 — Full Monthly Breakdown</title>
+  <meta name="description" content="How much does it cost to live in {{ city.name }} in 2025? Full monthly breakdown of rent, food, transport, utilities and disposable income." />
+  <meta name="keywords" content="cost of living {{ city.name }}, {{ city.name }} living costs 2025, how much to live in {{ city.name }}" />
+  <link rel="canonical" href="https://www.traveltax.co.uk/cost-of-living/{{ slug }}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8725854592183933" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="blog-header">
+    <div class="blog-header-inner"><a href="/" class="blog-logo">Travel Tax</a><a href="/take-home" class="blog-cta">Take Home Calculator →</a></div>
+  </header>
+  <nav class="top-nav">
+    <div class="top-nav-inner">
+      <a href="/" class="nav-link">Commute Tax</a>
+      <a href="/take-home" class="nav-link">Take Home Pay</a>
+      <a href="/cost-of-living" class="nav-link active">Cost of Living</a>
+      <a href="/salary" class="nav-link">Salary Guides</a>
+      <a href="/blog" class="nav-link">Blog</a>
+    </div>
+  </nav>
+  <div class="ad-slot ad-leaderboard"><span class="ad-label">Advertisement</span></div>
+
+  <main class="blog-main">
+    <div class="blog-inner">
+      <div class="blog-hero">
+        <span class="blog-tag">COST OF LIVING · {{ city.name|upper }} · 2025</span>
+        <h1 class="blog-title">Cost of Living in {{ city.name }} 2025</h1>
+        <p class="blog-lead">{{ city.description }} Here is a full monthly breakdown of what it costs to live in {{ city.name }} in 2025.</p>
+      </div>
+
+      <!-- Key stats -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:32px 0;">
+        <div style="background:var(--panel);border:1px solid var(--border);padding:20px;text-align:center;">
+          <div style="font-family:var(--font-display);font-size:36px;color:var(--accent);">£{{ "{:,}".format(monthly_total) }}</div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dimmer);letter-spacing:0.15em;margin-top:4px;">MONTHLY ESSENTIALS</div>
+        </div>
+        <div style="background:var(--panel);border:1px solid var(--border);padding:20px;text-align:center;">
+          <div style="font-family:var(--font-display);font-size:36px;color:var(--accent);">£{{ "{:,}".format(take_home.take_home_monthly) }}</div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dimmer);letter-spacing:0.15em;margin-top:4px;">AVG TAKE HOME</div>
+        </div>
+        <div style="background:var(--panel);border:1px solid var(--border);padding:20px;text-align:center;">
+          <div style="font-family:var(--font-display);font-size:36px;color:{% if disposable > 0 %}var(--accent){% else %}var(--red){% endif %};">£{{ "{:,}".format(disposable|abs) }}</div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dimmer);letter-spacing:0.15em;margin-top:4px;">{% if disposable > 0 %}DISPOSABLE{% else %}SHORTFALL{% endif %}</div>
+        </div>
+      </div>
+
+      <article class="blog-article">
+        <h2>Monthly Cost Breakdown for {{ city.name }}</h2>
+        <div class="breakdown-block" style="margin:24px 0;">
+          <div class="breakdown-row"><span>1-bed rent (avg)</span><span>£{{ "{:,}".format(city.avg_rent_1bed) }}</span></div>
+          <div class="breakdown-row"><span>Groceries</span><span>£{{ city.avg_grocery_month }}</span></div>
+          <div class="breakdown-row"><span>Transport</span><span>£{{ city.avg_transport_month }}</span></div>
+          <div class="breakdown-row"><span>Utilities</span><span>£{{ city.avg_utilities_month }}</span></div>
+          <div class="breakdown-row total-row"><span>Total essentials</span><span>£{{ "{:,}".format(monthly_total) }}</span></div>
+        </div>
+
+        <div class="blog-callout">
+          <p>🧮 <strong>See your personal disposable income</strong> — use our <a href="/take-home">Take Home Pay calculator</a> to find out exactly what you keep after tax, then subtract your {{ city.name }} living costs.</p>
+        </div>
+
+        <h2>Tips for Reducing Living Costs in {{ city.name }}</h2>
+        <ul style="color:var(--text-dim);line-height:2.2;padding-left:20px;">
+          {% for tip in city.tips %}
+          <li>{{ tip }}</li>
+          {% endfor %}
+        </ul>
+
+        <h2>How Does Commuting Add to the Cost?</h2>
+        <p>Living costs are only part of the picture. If you commute to work in {{ city.name }}, your transport costs could be significantly higher than the £{{ city.avg_transport_month }}/month average. Use our <a href="/">Travel Tax calculator</a> to see your exact commute cost including the value of your time.</p>
+
+        <div style="text-align:center;margin:40px 0;">
+          <a href="/" style="display:inline-block;background:var(--accent);color:var(--black);font-family:var(--font-mono);font-size:13px;padding:18px 40px;text-decoration:none;letter-spacing:0.12em;text-transform:uppercase;">Calculate My Commute Cost →</a>
+        </div>
+
+        <h2>Cost of Living in Other UK Cities</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;">
+          {% for c_slug, c_data in all_cities.items() %}
+          {% if c_slug != slug %}
+          <a href="/cost-of-living/{{ c_slug }}" style="padding:10px 16px;border:1px solid var(--border);color:var(--text-dim);text-decoration:none;font-family:var(--font-mono);font-size:11px;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-dim)'">{{ c_data.name }} →</a>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </article>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <p>© 2025 Travel Tax · <a href="/">Commute</a> · <a href="/take-home">Take Home</a> · <a href="/cost-of-living">Cost of Living</a> · <a href="/privacy">Privacy</a></p>
+  </footer>
+</body>
+</html>

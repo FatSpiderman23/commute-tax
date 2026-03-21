@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cost of Living UK Cities 2025 — Monthly Breakdown — Travel Tax</title>
+  <meta name="description" content="Full cost of living breakdown for UK cities in 2025. Compare rent, food, transport and disposable income across London, Manchester, Birmingham and more." />
+  <link rel="canonical" href="https://www.traveltax.co.uk/cost-of-living" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8725854592183933" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="blog-header">
+    <div class="blog-header-inner"><a href="/" class="blog-logo">Travel Tax</a><a href="/take-home" class="blog-cta">Take Home Calculator →</a></div>
+  </header>
+  <nav class="top-nav">
+    <div class="top-nav-inner">
+      <a href="/" class="nav-link">Commute Tax</a>
+      <a href="/take-home" class="nav-link">Take Home Pay</a>
+      <a href="/cost-of-living" class="nav-link active">Cost of Living</a>
+      <a href="/salary" class="nav-link">Salary Guides</a>
+      <a href="/blog" class="nav-link">Blog</a>
+    </div>
+  </nav>
+  <div class="ad-slot ad-leaderboard"><span class="ad-label">Advertisement</span></div>
+  <main class="blog-main">
+    <div class="blog-inner">
+      <div class="blog-hero">
+        <span class="blog-tag">UK COST OF LIVING · 2025</span>
+        <h1 class="blog-title">Cost of Living in UK Cities 2025</h1>
+        <p class="blog-lead">Full monthly breakdown of living costs across the UK's major cities — rent, food, transport, utilities and disposable income.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:32px;">
+        {% for slug, city in cities.items() %}
+        {% set monthly = city.avg_rent_1bed + city.avg_grocery_month + city.avg_transport_month + city.avg_utilities_month %}
+        <a href="/cost-of-living/{{ slug }}" style="display:block;padding:24px;border:1px solid var(--border);background:var(--panel);text-decoration:none;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-family:var(--font-display);font-size:28px;color:var(--white);margin-bottom:8px;">{{ city.name }}</div>
+          <div style="font-family:var(--font-display);font-size:22px;color:var(--accent);">£{{ "{:,}".format(monthly) }}/mo</div>
+          <div style="font-size:12px;color:var(--text-dimmer);margin-top:4px;">1-bed rent: £{{ "{:,}".format(city.avg_rent_1bed) }}/mo</div>
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--accent);margin-top:12px;">Full breakdown →</div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <p>© 2025 Travel Tax · <a href="/">Commute</a> · <a href="/take-home">Take Home</a> · <a href="/blog">Blog</a> · <a href="/privacy">Privacy</a></p>
+  </footer>
+</body>
+</html>

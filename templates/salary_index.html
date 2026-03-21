@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UK Salary Guides 2025 — Take Home Pay by Job — Travel Tax</title>
+  <meta name="description" content="Find out exactly what your job pays after tax in 2025. UK salary guides for nurses, teachers, developers, accountants and more." />
+  <link rel="canonical" href="https://www.traveltax.co.uk/salary" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8725854592183933" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="blog-header">
+    <div class="blog-header-inner"><a href="/" class="blog-logo">Travel Tax</a><a href="/take-home" class="blog-cta">Take Home Calculator →</a></div>
+  </header>
+  <nav class="top-nav">
+    <div class="top-nav-inner">
+      <a href="/" class="nav-link">Commute Tax</a>
+      <a href="/take-home" class="nav-link">Take Home Pay</a>
+      <a href="/compare-jobs" class="nav-link">Compare Jobs</a>
+      <a href="/salary" class="nav-link active">Salary Guides</a>
+      <a href="/blog" class="nav-link">Blog</a>
+    </div>
+  </nav>
+  <div class="ad-slot ad-leaderboard"><span class="ad-label">Advertisement</span></div>
+  <main class="blog-main">
+    <div class="blog-inner">
+      <div class="blog-hero">
+        <span class="blog-tag">UK SALARY GUIDES · 2025</span>
+        <h1 class="blog-title">UK Salary Guides 2025</h1>
+        <p class="blog-lead">Find out exactly what your job pays after tax, National Insurance, and pension in 2025.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:32px;">
+        {% for slug, job in jobs.items() %}
+        <a href="/salary/{{ slug }}" style="display:block;padding:24px;border:1px solid var(--border);background:var(--panel);text-decoration:none;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;color:var(--text-dimmer);margin-bottom:8px;">{{ job.sector|upper }}</div>
+          <div style="font-family:var(--font-display);font-size:28px;color:var(--white);margin-bottom:4px;">{{ job.title }}</div>
+          <div style="font-family:var(--font-display);font-size:22px;color:var(--accent);">£{{ "{:,}".format(job.avg_salary) }} avg</div>
+          <div style="font-size:12px;color:var(--text-dimmer);margin-top:4px;">£{{ "{:,}".format(job.salary_range[0]) }} — £{{ "{:,}".format(job.salary_range[1]) }}</div>
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--accent);margin-top:12px;">See take home pay →</div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <p>© 2025 Travel Tax · <a href="/">Commute</a> · <a href="/take-home">Take Home</a> · <a href="/blog">Blog</a> · <a href="/privacy">Privacy</a></p>
+  </footer>
+</body>
+</html>

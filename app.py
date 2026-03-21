@@ -318,6 +318,9 @@ def sitemap():
         {"loc": "https://www.traveltax.co.uk/blog", "priority": "0.8", "changefreq": "weekly"},
         {"loc": "https://www.traveltax.co.uk/take-home", "priority": "0.9", "changefreq": "monthly"},
         {"loc": "https://www.traveltax.co.uk/compare-jobs", "priority": "0.9", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/salary", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/cost-of-living", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/press", "priority": "0.6", "changefreq": "monthly"},
     ]
     for slug in CITIES:
         urls.append({"loc": f"https://www.traveltax.co.uk/commute-cost/{slug}", "priority": "0.8", "changefreq": "monthly"})
@@ -626,6 +629,220 @@ def calculate_comparison():
     data = request.get_json()
     result = calculate_job_comparison(data)
     return jsonify(result)
+
+
+
+# =============================================
+# SALARY BENCHMARK PAGES
+# =============================================
+
+SALARY_BENCHMARKS = {
+    "nurse": {
+        "title": "NHS Nurse",
+        "salary_range": [24000, 40000],
+        "avg_salary": 33000,
+        "description": "NHS nurses in the UK earn between £24,000 and £40,000 depending on band and experience. Band 5 nurses start at £28,407, Band 6 at £35,392.",
+        "keywords": "nurse salary UK, NHS nurse take home pay, nurse salary after tax",
+        "sector": "Healthcare",
+        "jobs": ["Staff Nurse", "Senior Nurse", "Charge Nurse", "Community Nurse"],
+    },
+    "teacher": {
+        "title": "Teacher",
+        "salary_range": [30000, 50000],
+        "avg_salary": 38000,
+        "description": "Teachers in England earn between £30,000 and £50,000. Newly qualified teachers start at £30,000 outside London, rising to £46,525 for experienced teachers.",
+        "keywords": "teacher salary UK, teacher take home pay, teacher salary after tax",
+        "sector": "Education",
+        "jobs": ["NQT Teacher", "Main Scale Teacher", "Upper Pay Scale Teacher", "Head of Department"],
+    },
+    "software-developer": {
+        "title": "Software Developer",
+        "salary_range": [35000, 90000],
+        "avg_salary": 55000,
+        "description": "Software developers in the UK earn between £35,000 and £90,000+ depending on experience and location. London developers typically earn 20-30% more.",
+        "keywords": "software developer salary UK, developer take home pay, software engineer salary after tax",
+        "sector": "Technology",
+        "jobs": ["Junior Developer", "Mid-level Developer", "Senior Developer", "Lead Developer"],
+    },
+    "accountant": {
+        "title": "Accountant",
+        "salary_range": [28000, 70000],
+        "avg_salary": 42000,
+        "description": "Accountants in the UK earn between £28,000 and £70,000. Newly qualified ACCA/CIMA accountants typically start at £35,000-£45,000.",
+        "keywords": "accountant salary UK, accountant take home pay, accountant salary after tax",
+        "sector": "Finance",
+        "jobs": ["Assistant Accountant", "Management Accountant", "Financial Accountant", "Finance Manager"],
+    },
+    "police-officer": {
+        "title": "Police Officer",
+        "salary_range": [28000, 50000],
+        "avg_salary": 38000,
+        "description": "Police constables in England and Wales start at £28,551, rising to £43,032 with experience. Sergeants earn £46,277 to £48,231.",
+        "keywords": "police officer salary UK, police take home pay, police salary after tax",
+        "sector": "Public Sector",
+        "jobs": ["Police Constable", "Detective Constable", "Sergeant", "Inspector"],
+    },
+    "marketing-manager": {
+        "title": "Marketing Manager",
+        "salary_range": [35000, 65000],
+        "avg_salary": 45000,
+        "description": "Marketing managers in the UK earn between £35,000 and £65,000. Digital marketing specialists and those in London command higher salaries.",
+        "keywords": "marketing manager salary UK, marketing salary after tax UK",
+        "sector": "Marketing",
+        "jobs": ["Marketing Executive", "Marketing Manager", "Senior Marketing Manager", "Marketing Director"],
+    },
+    "project-manager": {
+        "title": "Project Manager",
+        "salary_range": [40000, 75000],
+        "avg_salary": 52000,
+        "description": "Project managers in the UK earn between £40,000 and £75,000. Those with PMP or PRINCE2 qualifications and experience in tech or construction earn more.",
+        "keywords": "project manager salary UK, PM take home pay, project manager salary after tax",
+        "sector": "Business",
+        "jobs": ["Junior PM", "Project Manager", "Senior Project Manager", "Programme Manager"],
+    },
+    "electrician": {
+        "title": "Electrician",
+        "salary_range": [30000, 55000],
+        "avg_salary": 38000,
+        "description": "Electricians in the UK earn between £30,000 and £55,000. Self-employed electricians can earn significantly more. London rates are typically higher.",
+        "keywords": "electrician salary UK, electrician take home pay, electrician earnings after tax",
+        "sector": "Trades",
+        "jobs": ["Apprentice Electrician", "Qualified Electrician", "Senior Electrician", "Electrical Contractor"],
+    },
+    "hr-manager": {
+        "title": "HR Manager",
+        "salary_range": [35000, 60000],
+        "avg_salary": 45000,
+        "description": "HR managers in the UK earn between £35,000 and £60,000. CIPD qualified HR professionals and those in larger organisations earn at the higher end.",
+        "keywords": "HR manager salary UK, HR take home pay, human resources salary after tax",
+        "sector": "Human Resources",
+        "jobs": ["HR Advisor", "HR Manager", "Senior HR Manager", "HR Director"],
+    },
+    "data-analyst": {
+        "title": "Data Analyst",
+        "salary_range": [28000, 65000],
+        "avg_salary": 42000,
+        "description": "Data analysts in the UK earn between £28,000 and £65,000. Those with Python, SQL, and machine learning skills command higher salaries.",
+        "keywords": "data analyst salary UK, data analyst take home pay, analyst salary after tax",
+        "sector": "Technology",
+        "jobs": ["Junior Data Analyst", "Data Analyst", "Senior Data Analyst", "Data Science Manager"],
+    },
+}
+
+COST_OF_LIVING_CITIES = {
+    "london": {
+        "name": "London",
+        "avg_rent_1bed": 1800,
+        "avg_rent_2bed": 2400,
+        "avg_grocery_month": 320,
+        "avg_transport_month": 180,
+        "avg_utilities_month": 120,
+        "avg_eating_out": 15,
+        "avg_salary": 42000,
+        "description": "London is the most expensive city in the UK, with rent accounting for the largest portion of living costs.",
+        "tips": ["Zone 2-3 offers better value than Zone 1", "Supermarket own-brands can save £80/month", "Annual Travelcard saves vs monthly"],
+    },
+    "manchester": {
+        "name": "Manchester",
+        "avg_rent_1bed": 950,
+        "avg_rent_2bed": 1300,
+        "avg_grocery_month": 260,
+        "avg_transport_month": 90,
+        "avg_utilities_month": 110,
+        "avg_eating_out": 12,
+        "avg_salary": 32000,
+        "description": "Manchester offers a significantly lower cost of living than London while maintaining a vibrant city lifestyle.",
+        "tips": ["Northern Quarter is trendy but pricier", "Salford offers cheaper rent close to city", "Metrolink is cost-effective for commuting"],
+    },
+    "birmingham": {
+        "name": "Birmingham",
+        "avg_rent_1bed": 850,
+        "avg_rent_2bed": 1100,
+        "avg_grocery_month": 250,
+        "avg_transport_month": 85,
+        "avg_utilities_month": 105,
+        "avg_eating_out": 11,
+        "avg_salary": 30000,
+        "description": "Birmingham is one of the most affordable major UK cities, with rent costs roughly half those of London.",
+        "tips": ["Jewellery Quarter offers good value", "Car ownership is more common than London", "Broad Street area is pricier"],
+    },
+    "edinburgh": {
+        "name": "Edinburgh",
+        "avg_rent_1bed": 1100,
+        "avg_rent_2bed": 1500,
+        "avg_grocery_month": 280,
+        "avg_transport_month": 100,
+        "avg_utilities_month": 115,
+        "avg_eating_out": 13,
+        "avg_salary": 33000,
+        "description": "Edinburgh is Scotland's most expensive city, with costs rising significantly in recent years due to tourism and demand.",
+        "tips": ["Leith offers better value than city centre", "Festival period drives up short-term rents", "Good public transport network"],
+    },
+    "bristol": {
+        "name": "Bristol",
+        "avg_rent_1bed": 1100,
+        "avg_rent_2bed": 1450,
+        "avg_grocery_month": 270,
+        "avg_transport_month": 95,
+        "avg_utilities_month": 110,
+        "avg_eating_out": 13,
+        "avg_salary": 31000,
+        "description": "Bristol has seen rapid cost increases in recent years, driven by demand from London movers and a thriving tech sector.",
+        "tips": ["South Bristol is cheaper than North", "Cycling infrastructure is excellent", "Bath is nearby but pricier"],
+    },
+    "leeds": {
+        "name": "Leeds",
+        "avg_rent_1bed": 850,
+        "avg_rent_2bed": 1100,
+        "avg_grocery_month": 250,
+        "avg_transport_month": 80,
+        "avg_utilities_month": 105,
+        "avg_eating_out": 11,
+        "avg_salary": 29000,
+        "description": "Leeds offers excellent value for money with a thriving city centre, growing tech scene and significantly lower costs than London.",
+        "tips": ["Headingley popular with young professionals", "Good rail links to Manchester and London", "Chapel Allerton is trendy but affordable"],
+    },
+}
+
+
+@app.route("/salary/<job_slug>")
+def salary_page(job_slug):
+    job = SALARY_BENCHMARKS.get(job_slug)
+    if not job:
+        return "Page not found", 404
+    # Pre-calculate take home for avg salary
+    from flask import request as freq
+    take_home_data = calculate_take_home({"salary": job["avg_salary"], "student_loan": "none", "pension_pct": 5})
+    return render_template("salary_page.html", job=job, slug=job_slug,
+                         take_home=take_home_data, all_jobs=SALARY_BENCHMARKS)
+
+
+@app.route("/salary")
+def salary_index():
+    return render_template("salary_index.html", jobs=SALARY_BENCHMARKS)
+
+
+@app.route("/cost-of-living/<city_slug>")
+def cost_of_living_page(city_slug):
+    city = COST_OF_LIVING_CITIES.get(city_slug)
+    if not city:
+        return "Page not found", 404
+    monthly_total = city["avg_rent_1bed"] + city["avg_grocery_month"] + city["avg_transport_month"] + city["avg_utilities_month"]
+    take_home = calculate_take_home({"salary": city["avg_salary"], "student_loan": "none", "pension_pct": 5})
+    disposable = take_home["take_home_monthly"] - monthly_total
+    return render_template("cost_of_living.html", city=city, slug=city_slug,
+                         monthly_total=monthly_total, take_home=take_home,
+                         disposable=disposable, all_cities=COST_OF_LIVING_CITIES)
+
+
+@app.route("/cost-of-living")
+def cost_of_living_index():
+    return render_template("cost_of_living_index.html", cities=COST_OF_LIVING_CITIES)
+
+
+@app.route("/press")
+def press_page():
+    return render_template("press.html")
 
 
 if __name__ == "__main__":

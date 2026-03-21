@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ job.title }} Salary UK 2025 — Take Home Pay After Tax</title>
+  <meta name="description" content="{{ job.description }} Use our calculator to find out exactly what a {{ job.title }} takes home after tax, NI and pension." />
+  <meta name="keywords" content="{{ job.keywords }}" />
+  <meta property="og:title" content="{{ job.title }} Salary UK 2025 — After Tax Take Home Pay" />
+  <meta property="og:description" content="Find out exactly what a {{ job.title }} earns after tax in 2025. Average salary £{{ job.avg_salary|int }} — take home £{{ take_home.take_home_yearly|int }}." />
+  <link rel="canonical" href="https://www.traveltax.co.uk/salary/{{ slug }}" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "{{ job.title }} Salary UK 2025",
+    "description": "{{ job.description }}",
+    "url": "https://www.traveltax.co.uk/salary/{{ slug }}"
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8725854592183933" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="blog-header">
+    <div class="blog-header-inner">
+      <a href="/" class="blog-logo">Travel Tax</a>
+      <a href="/take-home" class="blog-cta">Take Home Calculator →</a>
+    </div>
+  </header>
+  <nav class="top-nav">
+    <div class="top-nav-inner">
+      <a href="/" class="nav-link">Commute Tax</a>
+      <a href="/take-home" class="nav-link">Take Home Pay</a>
+      <a href="/compare-jobs" class="nav-link">Compare Jobs</a>
+      <a href="/salary" class="nav-link active">Salary Guides</a>
+      <a href="/blog" class="nav-link">Blog</a>
+    </div>
+  </nav>
+  <div class="ad-slot ad-leaderboard"><span class="ad-label">Advertisement</span></div>
+
+  <main class="blog-main">
+    <div class="blog-inner">
+      <div class="blog-hero">
+        <span class="blog-tag">{{ job.sector|upper }} · UK SALARY GUIDE · 2025</span>
+        <h1 class="blog-title">{{ job.title }} Salary UK 2025: Take Home Pay After Tax</h1>
+        <p class="blog-lead">{{ job.description }}</p>
+      </div>
+
+      <!-- Key stats -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:32px 0;">
+        <div style="background:var(--panel);border:1px solid var(--border);padding:20px;text-align:center;">
+          <div style="font-family:var(--font-display);font-size:36px;color:var(--accent);">£{{ "{:,}".format(job.avg_salary) }}</div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dimmer);letter-spacing:0.15em;margin-top:4px;">AVG SALARY</div>
+        </div>
+        <div style="background:var(--panel);border:1px solid var(--border);padding:20px;text-align:center;">
+          <div style="font-family:var(--font-display);font-size:36px;color:var(--accent);">£{{ "{:,}".format(take_home.take_home_monthly) }}</div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dimmer);letter-spacing:0.15em;margin-top:4px;">MONTHLY TAKE HOME</div>
+        </div>
+        <div style="background:var(--panel);border:1px solid var(--border);padding:20px;text-align:center;">
+          <div style="font-family:var(--font-display);font-size:36px;color:var(--accent);">{{ take_home.effective_rate }}%</div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dimmer);letter-spacing:0.15em;margin-top:4px;">EFFECTIVE TAX RATE</div>
+        </div>
+      </div>
+
+      <article class="blog-article">
+        <h2>{{ job.title }} Take Home Pay in 2025</h2>
+        <p>Based on the average {{ job.title }} salary of £{{ "{:,}".format(job.avg_salary) }}, here is exactly what lands in your bank account after income tax, National Insurance, and a standard 5% pension contribution:</p>
+
+        <div class="breakdown-block" style="margin:24px 0;">
+          <div class="breakdown-row"><span>Gross salary</span><span>£{{ "{:,}".format(job.avg_salary) }}</span></div>
+          <div class="breakdown-row"><span>Income tax</span><span style="color:var(--red)">-£{{ "{:,}".format(take_home.income_tax) }}</span></div>
+          <div class="breakdown-row"><span>National Insurance</span><span style="color:var(--red)">-£{{ "{:,}".format(take_home.national_insurance) }}</span></div>
+          <div class="breakdown-row"><span>Pension (5%)</span><span style="color:var(--red)">-£{{ "{:,}".format(take_home.pension) }}</span></div>
+          <div class="breakdown-row total-row"><span>Annual take home</span><span>£{{ "{:,}".format(take_home.take_home_yearly) }}</span></div>
+        </div>
+
+        <div class="blog-callout">
+          <p>🧮 <strong>Get your exact take home pay</strong> — use our <a href="/take-home">free Take Home Pay calculator</a> to enter your actual salary, student loan plan and pension contribution.</p>
+        </div>
+
+        <h2>{{ job.title }} Salary Range in the UK</h2>
+        <p>{{ job.title }} salaries in the UK range from £{{ "{:,}".format(job.salary_range[0]) }} to £{{ "{:,}".format(job.salary_range[1]) }} depending on experience, location, and employer. The typical career progression looks like this:</p>
+        <ul style="color:var(--text-dim);line-height:2.2;padding-left:20px;">
+          {% for j in job.jobs %}
+          <li>{{ j }}</li>
+          {% endfor %}
+        </ul>
+
+        <h2>How Does Commuting Affect a {{ job.title }}s Real Income?</h2>
+        <p>A {{ job.title }} earning £{{ "{:,}".format(job.avg_salary) }} who commutes 60 minutes each way to work is losing approximately £4,200 worth of their time per year on top of transport costs. Use our <a href="/">Travel Tax calculator</a> to see exactly how much your commute is costing you.</p>
+
+        <div style="text-align:center;margin:40px 0;">
+          <a href="/take-home" style="display:inline-block;background:var(--accent);color:var(--black);font-family:var(--font-mono);font-size:13px;padding:18px 40px;text-decoration:none;letter-spacing:0.12em;text-transform:uppercase;margin-right:12px;">Calculate Take Home Pay →</a>
+          <a href="/" style="display:inline-block;background:transparent;color:var(--accent);font-family:var(--font-mono);font-size:13px;padding:18px 40px;text-decoration:none;letter-spacing:0.12em;text-transform:uppercase;border:1px solid var(--accent);">Calculate Commute Cost →</a>
+        </div>
+
+        <h2>Other Salary Guides</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;">
+          {% for s, sdata in all_jobs.items() %}
+          {% if s != slug %}
+          <a href="/salary/{{ s }}" style="padding:10px 16px;border:1px solid var(--border);color:var(--text-dim);text-decoration:none;font-family:var(--font-mono);font-size:11px;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-dim)'">{{ sdata.title }} →</a>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2025 Travel Tax · <a href="/">Commute</a> · <a href="/take-home">Take Home</a> · <a href="/salary">Salary Guides</a> · <a href="/blog">Blog</a> · <a href="/privacy">Privacy</a></p>
+  </footer>
+</body>
+</html>
