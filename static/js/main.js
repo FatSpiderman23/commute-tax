@@ -291,6 +291,29 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   initFunFacts();
+
+  // Mobile fun facts
+  const mDisplay = document.getElementById("mFunFactDisplay");
+  const mDots = document.getElementById("mFunFactDots");
+  if (mDisplay && mDots) {
+    mDots.innerHTML = "";
+    FUN_FACTS.forEach((_, i) => {
+      const dot = document.createElement("div");
+      dot.className = "fun-fact-dot" + (i === 0 ? " active" : "");
+      mDots.appendChild(dot);
+    });
+    let mCurrent = 0;
+    function mShowFact(index) {
+      mDisplay.style.opacity = "0";
+      setTimeout(() => {
+        mDisplay.innerHTML = FUN_FACTS[index].text;
+        mDisplay.style.opacity = "1";
+        mDots.querySelectorAll(".fun-fact-dot").forEach((d, i) => d.classList.toggle("active", i === index));
+      }, 400);
+    }
+    mShowFact(0);
+    setInterval(() => { mCurrent = (mCurrent + 1) % FUN_FACTS.length; mShowFact(mCurrent); }, 4000);
+  }
 });
 
 // =============================================
@@ -311,6 +334,7 @@ function getFormData() {
     car_type: selectedCarType,
     fuel_spend: parseFloat(document.getElementById("fuel_spend") ? document.getElementById("fuel_spend").value : 0) || 0,
     fuel_period: selectedFuelPeriod,
+    miles_one_way: parseFloat(document.getElementById("miles_one_way") ? document.getElementById("miles_one_way").value : 0) || 0,
   };
 }
 
@@ -328,6 +352,7 @@ function getMobileFormData() {
     car_type: mSelectedCarType,
     fuel_spend: parseFloat(document.getElementById("m_fuel_spend") ? document.getElementById("m_fuel_spend").value : 0) || 0,
     fuel_period: mSelectedFuelPeriod,
+    miles_one_way: parseFloat(document.getElementById("m_miles") ? document.getElementById("m_miles").value : 0) || 0,
   };
 }
 
