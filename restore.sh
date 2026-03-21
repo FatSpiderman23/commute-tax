@@ -1,3 +1,7 @@
+#!/bin/bash
+TARGET=~/Documents/Commute\ Tax
+
+cat > "$TARGET/static/js/main.js" << 'JSEOF'
 /* TRAVEL TAX — main.js */
 
 let selectedDays = 3;
@@ -758,3 +762,35 @@ function showToast(msg) {
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 3500);
 }
+JSEOF
+
+echo "✅ main.js written"
+
+# Fix petrol/diesel in HTML
+python3 << 'PYEOF'
+path = '/Users/ss/Documents/Commute Tax/templates/index.html'
+with open(path, 'r') as f:
+    content = f.read()
+
+# Fix desktop - any variation of petrol buttons
+import re
+content = re.sub(
+    r'<button class="car-type-btn[^"]*"[^>]*data-car="petrol[^"]*"[^>]*>.*?</button>\s*\n\s*<button class="car-type-btn[^"]*"[^>]*data-car="petrol[^"]*"[^>]*>.*?</button>',
+    '<button class="car-type-btn active" data-car="petrol">Petrol / Diesel</button>',
+    content
+)
+
+# Make sure electric exists alongside petrol
+content = content.replace(
+    'data-car="petrol">Petrol / Diesel</button>\n              <button class="car-type-btn" data-car="diesel',
+    'data-car="petrol">Petrol / Diesel</button>\n              <button class="car-type-btn SKIP" data-car="diesel'
+)
+
+with open(path, 'w') as f:
+    f.write(content)
+print("Done HTML")
+PYEOF
+
+echo ""
+echo "Now push:"
+echo "  cd ~/Documents/Commute\ Tax && git add . && git commit -m 'Full restore and all fixes' && git push"
