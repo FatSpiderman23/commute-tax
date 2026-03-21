@@ -77,12 +77,11 @@ def calculate_commute(data):
         "career_commute_years": round(career_commute_years, 1),
         "working_days": round(working_days),
         "miles_yearly": 0,
-        "distance_fact": _distance_fact(commute_hours_yearly, days_per_week, weeks_per_year) if float(data.get("miles_one_way", 0)) > 0 else None,
+        "distance_facts": _distance_fact(commute_hours_yearly, days_per_week, weeks_per_year) if float(data.get("miles_one_way", 0)) > 0 else [],
     }
 
 
 def _distance_fact(hours, days_per_week, weeks_per_year):
-    import random
     avg_speed_mph = 30
     total_miles = round(hours * avg_speed_mph)
     moon_miles = 238855
@@ -93,24 +92,25 @@ def _distance_fact(hours, days_per_week, weeks_per_year):
     facts = []
     if total_miles >= moon_miles:
         times = round(total_miles / moon_miles, 1)
-        facts.append("You travelled far enough to reach the moon " + str(times) + "x over")
+        facts.append("Far enough to reach the moon " + str(times) + "x over")
     if total_miles >= earth_circumference:
         times = round(total_miles / earth_circumference, 1)
-        facts.append("You could have circled the Earth " + str(times) + " times")
+        facts.append("Could have circled the Earth " + str(times) + " times")
     if total_miles >= london_sydney * 2:
         times = round(total_miles / (london_sydney * 2), 1)
-        facts.append("You could have flown London to Sydney " + str(times) + "x return")
+        facts.append("Could have flown London to Sydney " + str(times) + "x return")
     if total_miles >= london_tokyo * 2:
         times = round(total_miles / (london_tokyo * 2), 1)
-        facts.append("You could have flown London to Tokyo " + str(times) + "x return")
+        facts.append("Could have flown London to Tokyo " + str(times) + "x return")
     if total_miles >= london_ny * 2:
         times = round(total_miles / (london_ny * 2), 1)
-        facts.append("You could have flown London to New York " + str(times) + "x return")
+        facts.append("Could have flown London to New York " + str(times) + "x return")
     if total_miles >= 2000:
-        facts.append("You drove further than London to Cairo and back (" + str(total_miles) + " miles)")
+        facts.append("Further than London to Cairo and back")
     if not facts:
-        facts.append("You travelled " + str(total_miles) + " miles commuting this year")
-    return random.choice(facts)
+        facts.append("Travelled " + str(total_miles) + " miles commuting")
+    # Return all facts so JS can rotate them
+    return facts
 
 
 @app.route("/")

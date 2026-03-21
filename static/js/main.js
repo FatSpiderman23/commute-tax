@@ -414,15 +414,19 @@ function renderResults(r, data) {
   document.getElementById("res-career-text").textContent = "That is " + r.commute_days_yearly + " days/year — " + r.career_commute_years + " years of your career lost to commuting.";
 
   // Distance fun fact
-  if (r.distance_fact) {
+  if (r.distance_facts && r.distance_facts.length > 0) {
     let el = document.getElementById("res-distance-fact");
     if (!el) {
       el = document.createElement("p");
       el.id = "res-distance-fact";
-      el.style.cssText = "font-size:13px;color:var(--accent);font-family:var(--font-mono);margin-top:8px;letter-spacing:0.05em;";
+      el.style.cssText = "font-size:13px;color:var(--accent);font-family:var(--font-mono);margin-top:8px;letter-spacing:0.05em;cursor:pointer;";
+      el.title = "Click to see another fact";
       document.getElementById("res-career-text").after(el);
     }
-    el.textContent = "🌍 " + r.distance_fact;
+    const facts = r.distance_facts;
+    let fi = 0;
+    el.textContent = "🌍 " + facts[fi];
+    el.onclick = () => { fi = (fi + 1) % facts.length; el.textContent = "🌍 " + facts[fi]; };
   }
 
   document.getElementById("res-office-cost").textContent = "-" + fmt(r.remote_total_value) + "/yr";
@@ -450,15 +454,18 @@ function renderMobileResults(r, data) {
   setTimeout(() => { document.getElementById("m_life_bar").style.width = Math.min(r.pct_waking_life * 2, 100) + "%"; }, 100);
   document.getElementById("m_career_text").textContent = "That is " + r.commute_days_yearly + " days/year — " + r.career_commute_years + " years of your career.";
 
-  if (r.distance_fact) {
+  if (r.distance_facts && r.distance_facts.length > 0) {
     let el = document.getElementById("m-distance-fact");
     if (!el) {
       el = document.createElement("p");
       el.id = "m-distance-fact";
-      el.style.cssText = "font-size:12px;color:var(--accent);font-family:var(--font-mono);margin-top:6px;";
+      el.style.cssText = "font-size:12px;color:var(--accent);font-family:var(--font-mono);margin-top:6px;cursor:pointer;";
       document.getElementById("m_career_text").after(el);
     }
-    el.textContent = "🌍 " + r.distance_fact;
+    const mfacts = r.distance_facts;
+    let mfi = 0;
+    el.textContent = "🌍 " + mfacts[mfi];
+    el.onclick = () => { mfi = (mfi + 1) % mfacts.length; el.textContent = "🌍 " + mfacts[mfi]; };
   }
 
   document.getElementById("m_monthly_transport").textContent = fmt(r.transport_cost_monthly);
