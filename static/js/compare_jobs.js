@@ -217,7 +217,8 @@ async function runComparisonWithC() {
 
   if (jobA.salary <= 0 || jobB.salary <= 0) { showCJToast("Please enter a salary for both jobs."); return; }
 
-  btn.querySelector("span").textContent = "Comparing...";
+  const btnSpan = btn.querySelector("span") || btn;
+  btnSpan.textContent = "Comparing...";
   btn.disabled = true;
 
   try {
@@ -254,5 +255,5 @@ async function runComparisonWithC() {
     document.getElementById("compResults").classList.remove("hidden");
     document.getElementById("compResults").scrollIntoView({ behavior: "smooth", block: "start" });
   } catch(err) { showCJToast("Something went wrong. Please try again."); }
-  finally { btn.querySelector("span").textContent = "Compare Job Offers"; btn.disabled = false; }
+  finally { const s = btn.querySelector("span") || btn; s.textContent = "Compare Job Offers"; btn.disabled = false; }
 }
