@@ -350,5 +350,15 @@ Sitemap: https://www.traveltax.co.uk/sitemap.xml"""
 def google_verify():
     return "google-site-verification: google4897a903300840f0.html"
 
+
+@app.route("/BingSiteAuth.xml")
+def bing_verify():
+    from flask import Response
+    xml = '''<?xml version="1.0"?>
+<users>
+    <user>33E58A74CBE9401602924B227FAFAC98</user>
+</users>'''
+    return Response(xml, mimetype="application/xml")
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
