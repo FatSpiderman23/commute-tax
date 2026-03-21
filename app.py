@@ -5,8 +5,9 @@ app = Flask(__name__)
 
 # Real-world UK MPG averages by car type
 CAR_MPG = {
-    "petrol":  40,
-    "diesel":  50,
+    "petrol":   40,
+    "diesel":   40,
+    "petrol_diesel": 40,
     "electric": None,
 }
 
@@ -76,7 +77,27 @@ def calculate_commute(data):
         "career_commute_years": round(career_commute_years, 1),
         "working_days": round(working_days),
         "miles_yearly": 0,
+        "distance_fact": _distance_fact(commute_hours_yearly, days_per_week, weeks_per_year),
     }
+
+
+def _distance_fact(hours, days_per_week, weeks_per_year):
+    working_days = days_per_week * weeks_per_year
+    # Assume average 30mph commute speed
+    avg_speed_mph = 30
+    total_miles = hours * avg_speed_mph
+    moon_miles = 238855
+    earth_circumference = 24901
+    if total_miles >= moon_miles:
+        times = round(total_miles / moon_miles, 1)
+        return "You could have travelled to the moon " + str(times) + "x"
+    elif total_miles >= earth_circumference:
+        times = round(total_miles / earth_circumference, 1)
+        return "You could have circled the Earth " + str(times) + "x"
+    elif total_miles >= 1000:
+        return "You travelled ~" + str(round(total_miles)) + " miles commuting — London to Moscow and back"
+    else:
+        return "You travelled ~" + str(round(total_miles)) + " miles commuting this year"
 
 
 @app.route("/")

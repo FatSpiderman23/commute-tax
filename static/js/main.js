@@ -335,28 +335,42 @@ function copyResult() {
 }
 
 function generateShareCard() {
-  if (!lastResult) return;
+  if (!lastResult) { showToast("Calculate first!"); return; }
+
+  const r = lastResult;
+  const hrs = r.commute_hours_yearly;
+
+  // Build fresh AR message based on actual hours
+  function getCardFact() {
+    if (hrs >= 500) return "You could have completed a full coding bootcamp and be job-ready as a developer.";
+    if (hrs >= 300) return "You could have read " + Math.floor(hrs / 8) + " books — more than one every single month.";
+    if (hrs >= 120) return "You could have trained for and run a full marathon. Every. Single. Year.";
+    if (hrs >= 60)  return "You could have watched Breaking Bad " + Math.floor(hrs / 62) + " times from start to finish.";
+    return "You spent " + Math.round(hrs) + " gym sessions commuting. That is " + Math.round(hrs / 48) + " sessions a week.";
+  }
+
+  const cardFact = getCardFact();
+  const careerYears = r.career_commute_years;
+  const careerLine = careerYears + " years of your career lost to commuting";
+
   const canvas = document.createElement("canvas");
   canvas.width = 1080;
   canvas.height = 1080;
   const ctx = canvas.getContext("2d");
-  ctx.imageSmoothingEnabled = false;
-  const r = lastResult;
-  const arMetric = window._arMetrics ? window._arMetrics[0] : null;
   const W = 1080;
   const H = 1080;
 
-  // Background
+  // ── Background ──
   ctx.fillStyle = "#0a0a0a";
   ctx.fillRect(0, 0, W, H);
 
-  // Subtle grid
+  // Grid
   ctx.strokeStyle = "#141414";
   ctx.lineWidth = 1;
   for (let x = 0; x <= W; x += 108) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
   for (let y = 0; y <= H; y += 108) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
 
-  // Top accent bar
+  // Top bar
   ctx.fillStyle = "#f0e040";
   ctx.fillRect(0, 0, W, 10);
 
@@ -364,127 +378,92 @@ function generateShareCard() {
   ctx.textAlign = "left";
   ctx.textBaseline = "alphabetic";
   ctx.fillStyle = "#f0e040";
-  ctx.font = "700 42px monospace";
-  ctx.fillText("TRAVEL TAX", 80, 86);
-  ctx.fillStyle = "#888888";
-  ctx.font = "400 24px monospace";
-  ctx.fillText("traveltax.co.uk", 80, 116);
-
-  // Divider below logo
-  ctx.strokeStyle = "#1e1e1e";
-  ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(80, 136); ctx.lineTo(W - 80, 136); ctx.stroke();
-
-  // Main cost number — centred
-  const totalCost = "£" + Math.round(r.total_yearly_cost).toLocaleString("en-GB");
-  ctx.textAlign = "center";
-  ctx.textBaseline = "alphabetic";
-  ctx.fillStyle = "#f0e040";
-  ctx.font = "700 130px Arial";
-  ctx.fillText(totalCost, W / 2, 310);
-
-  // Subtitle below cost
-  ctx.fillStyle = "#555555";
-  ctx.font = "400 22px monospace";
-  ctx.fillText("YOUR ANNUAL TRAVEL TAX", W / 2, 352);
+  ctx.font = "bold 44px Arial";
+  ctx.fillText("TRAVEL TAX", 80, 90);
+  ctx.fillStyle = "#888";
+  ctx.font = "24px Arial";
+  ctx.fillText("traveltax.co.uk", 80, 124);
 
   // Divider
-  ctx.strokeStyle = "#1e1e1e";
+  ctx.strokeStyle = "#222";
   ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(80, 390); ctx.lineTo(W - 80, 390); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(80, 148); ctx.lineTo(W - 80, 148); ctx.stroke();
 
-  // 3 stats — evenly spaced, centred
-  const statsY = 490;
-  const statPositions = [W / 2 - 300, W / 2, W / 2 + 300];
+  // Main cost
+  const totalCost = "\u00A3" + Math.round(r.total_yearly_cost).toLocaleString("en-GB");
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#f0e040";
+  ctx.font = "bold 128px Arial";
+  ctx.fillText(totalCost, W / 2, 318);
+
+  // Subtitle
+  ctx.fillStyle = "#555";
+  ctx.font = "22px Arial";
+  ctx.fillText("YOUR ANNUAL TRAVEL TAX", W / 2, 358);
+
+  // Divider
+  ctx.strokeStyle = "#222";
+  ctx.beginPath(); ctx.moveTo(80, 396); ctx.lineTo(W - 80, 396); ctx.stroke();
+
+  // 3 stats
   const stats = [
-    { label: "TRANSPORT / YR", value: "£" + Math.round(r.transport_cost_yearly).toLocaleString("en-GB") },
-    { label: "HOURS LOST / YR", value: r.commute_hours_yearly + "h" },
-    { label: "LIFE STOLEN", value: r.pct_waking_life + "%" },
+    { label: "TRANSPORT/YR", value: "\u00A3" + Math.round(r.transport_cost_yearly).toLocaleString("en-GB") },
+    { label: "HOURS LOST/YR", value: r.commute_hours_yearly + "h" },
+    { label: "LIFE STOLEN",   value: r.pct_waking_life + "%" },
   ];
+  const sx = [W / 2 - 300, W / 2, W / 2 + 300];
 
-  // Vertical dividers between stats
-  ctx.strokeStyle = "#1e1e1e";
-  ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(W / 2 - 150, 410); ctx.lineTo(W / 2 - 150, 540); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(W / 2 + 150, 410); ctx.lineTo(W / 2 + 150, 540); ctx.stroke();
+  ctx.strokeStyle = "#222";
+  ctx.beginPath(); ctx.moveTo(W / 2 - 150, 414); ctx.lineTo(W / 2 - 150, 548); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(W / 2 + 150, 414); ctx.lineTo(W / 2 + 150, 548); ctx.stroke();
 
-  stats.forEach((stat, i) => {
-    const x = statPositions[i];
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "700 52px Arial";
+  stats.forEach((s, i) => {
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 54px Arial";
     ctx.textAlign = "center";
-    ctx.textBaseline = "alphabetic";
-    ctx.fillText(stat.value, x, statsY);
-    ctx.fillStyle = "#888888";
-    ctx.font = "400 20px monospace";
-    ctx.fillText(stat.label, x, statsY + 36);
+    ctx.fillText(s.value, sx[i], 494);
+    ctx.fillStyle = "#888";
+    ctx.font = "20px Arial";
+    ctx.fillText(s.label, sx[i], 530);
   });
 
   // Divider
-  ctx.strokeStyle = "#1e1e1e";
-  ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(80, 568); ctx.lineTo(W - 80, 568); ctx.stroke();
+  ctx.strokeStyle = "#222";
+  ctx.beginPath(); ctx.moveTo(80, 570); ctx.lineTo(W - 80, 570); ctx.stroke();
 
-  // AR section header
+  // AR header
   ctx.fillStyle = "#f0e040";
-  ctx.font = "700 20px monospace";
+  ctx.font = "bold 22px Arial";
   ctx.textAlign = "center";
-  ctx.textBaseline = "alphabetic";
-  ctx.fillText("INSTEAD YOU COULD HAVE...", W / 2, 614);
+  ctx.fillText("INSTEAD YOU COULD HAVE...", W / 2, 618);
 
-  // Pick most relevant AR metric dynamically based on hours
-  let bestMetric = null;
-  if (window._arMetrics && window._arMetrics.length > 0) {
-    const hrs = lastResult.commute_hours_yearly;
-    if (hrs >= 600) {
-      bestMetric = window._arMetrics.find(m => m.id === "spanish") || window._arMetrics[0];
-    } else if (hrs >= 300) {
-      bestMetric = window._arMetrics.find(m => m.id === "coding") || window._arMetrics[0];
-    } else if (hrs >= 200) {
-      bestMetric = window._arMetrics.find(m => m.id === "books") || window._arMetrics[0];
-    } else if (hrs >= 120) {
-      bestMetric = window._arMetrics.find(m => m.id === "marathon") || window._arMetrics[0];
+  // AR fact — dynamic, word wrapped
+  ctx.fillStyle = "#e8e8e0";
+  ctx.font = "34px Arial";
+  ctx.textAlign = "center";
+  const words = cardFact.split(" ");
+  let line = "";
+  let ty = 672;
+  for (let w of words) {
+    const test = line + w + " ";
+    if (ctx.measureText(test).width > 880 && line !== "") {
+      ctx.fillText(line.trim(), W / 2, ty);
+      line = w + " ";
+      ty += 48;
+      if (ty > 830) break;
     } else {
-      bestMetric = window._arMetrics.find(m => m.id === "gym") || window._arMetrics[0];
+      line = test;
     }
   }
+  if (line.trim() && ty <= 830) ctx.fillText(line.trim(), W / 2, ty);
 
-  // AR message
-  if (!bestMetric && window._arMetrics) bestMetric = window._arMetrics[0];
-  if (bestMetric) {
-    const cleanMsg = bestMetric.message.replace(/<[^>]*>/g, "");
-    ctx.fillStyle = "#f0f0e8";
-    ctx.font = "400 36px Arial";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "alphabetic";
-
-    // Word wrap
-    const words = cleanMsg.split(" ");
-    let line = "";
-    let y = 666;
-    const maxW = 860;
-    for (let w of words) {
-      const test = line + w + " ";
-      if (ctx.measureText(test).width > maxW && line !== "") {
-        ctx.fillText(line.trim(), W / 2, y);
-        line = w + " ";
-        y += 44;
-        if (y > 820) break;
-      } else {
-        line = test;
-      }
-    }
-    if (line.trim() && y <= 820) ctx.fillText(line.trim(), W / 2, y);
-  }
-
-  // Career line
-  ctx.fillStyle = "#555555";
-  ctx.font = "400 20px monospace";
+  // Career line — dynamic from lastResult
+  ctx.fillStyle = "#555";
+  ctx.font = "22px Arial";
   ctx.textAlign = "center";
-  ctx.textBaseline = "alphabetic";
-  ctx.fillText(lastResult.career_commute_years + " years of your career lost to commuting", W / 2, 958);
+  ctx.fillText(careerLine, W / 2, 960);
 
-  // Bottom accent bar
+  // Bottom bar
   ctx.fillStyle = "#f0e040";
   ctx.fillRect(0, H - 10, W, 10);
 
