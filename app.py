@@ -344,5 +344,10 @@ Sitemap: https://www.traveltax.co.uk/sitemap.xml"""
     return Response(txt, mimetype="text/plain")
 
 
+
+@app.route("/google4897a903300840f0.html")
+def google_verify():
+    return "google-site-verification: google4897a903300840f0.html"
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
