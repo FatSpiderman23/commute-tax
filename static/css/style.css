@@ -797,3 +797,30 @@ input:checked + .toggle-slider::after { transform: translateX(18px); }
     border-bottom: 1px solid var(--border);
   }
 }
+
+/* Fix all calculator pages on mobile - form always first */
+@media (max-width: 900px) {
+  .calc-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .calc-wrapper .form-panel {
+    order: 1 !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border) !important;
+  }
+  .calc-wrapper .results-panel {
+    order: 2 !important;
+    min-height: 0 !important;
+  }
+  .calc-wrapper .results-placeholder {
+    min-height: 200px !important;
+  }
+  /* Hide placeholder on mobile to save space */
+  .results-placeholder .fun-facts-wrap {
+    padding: 24px 16px !important;
+  }
+  .results-placeholder .fun-fact-display {
+    font-size: 20px !important;
+  }
+}
