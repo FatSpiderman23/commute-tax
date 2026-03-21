@@ -1231,5 +1231,302 @@ def add_cors(response):
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response
 
+
+# =============================================
+# COST OF LIVING VS SALARY MEGA-TOOL
+# =============================================
+
+@app.route("/city-comparison")
+def city_comparison_page():
+    return render_template("city_comparison.html", cities=COST_OF_LIVING_CITIES)
+
+
+@app.route("/calculate-city-comparison", methods=["POST"])
+def calculate_city_comparison():
+    data = request.get_json()
+    
+    city_a_slug = data.get("city_a", "london")
+    city_b_slug = data.get("city_b", "manchester")
+    salary_a = float(data.get("salary_a", 0))
+    salary_b = float(data.get("salary_b", 0))
+    
+    city_a = COST_OF_LIVING_CITIES.get(city_a_slug, COST_OF_LIVING_CITIES["london"])
+    city_b = COST_OF_LIVING_CITIES.get(city_b_slug, COST_OF_LIVING_CITIES["manchester"])
+    
+    def get_disposable(city, salary):
+        th = calculate_take_home({"salary": salary, "student_loan": "none", "pension_pct": 5})
+        monthly_take_home = th["take_home_monthly"]
+        monthly_costs = city["avg_rent_1bed"] + city["avg_grocery_month"] + city["avg_transport_month"] + city["avg_utilities_month"]
+        return {
+            "take_home_monthly": round(monthly_take_home),
+            "monthly_costs": round(monthly_costs),
+            "disposable": round(monthly_take_home - monthly_costs),
+            "rent": city["avg_rent_1bed"],
+            "transport": city["avg_transport_month"],
+            "groceries": city["avg_grocery_month"],
+            "utilities": city["avg_utilities_month"],
+        }
+    
+    result_a = get_disposable(city_a, salary_a)
+    result_b = get_disposable(city_b, salary_b)
+    
+    disposable_diff = result_a["disposable"] - result_b["disposable"]
+    
+    # Salary needed in city_a to match city_b disposable
+    if result_b["disposable"] > result_a["disposable"]:
+        gap = result_b["disposable"] - result_a["disposable"]
+        salary_needed = salary_a + (gap * 12)
+        better_city = city_b_slug
+    else:
+        gap = result_a["disposable"] - result_b["disposable"]
+        salary_needed = salary_b + (gap * 12)
+        better_city = city_a_slug
+    
+    return jsonify({
+        "city_a": {"name": city_a["name"], **result_a},
+        "city_b": {"name": city_b["name"], **result_b},
+        "disposable_diff": round(abs(disposable_diff)),
+        "better_city": better_city,
+        "salary_needed": round(salary_needed),
+        "salary_needed_city": city_a["name"] if better_city == city_b_slug else city_b["name"],
+        "match_city": city_b["name"] if better_city == city_b_slug else city_a["name"],
+    })
+
+
+# =============================================
+# BUY VS RENT CALCULATOR
+# =============================================
+
+@app.route("/buy-vs-rent")
+def buy_vs_rent_page():
+    return render_template("buy_vs_rent.html")
+
+
+@app.route("/calculate-buy-vs-rent", methods=["POST"])
+def calculate_buy_vs_rent():
+    data = request.get_json()
+    
+    property_price = float(data.get("property_price", 300000))
+    deposit_pct = float(data.get("deposit_pct", 10))
+    mortgage_rate = float(data.get("mortgage_rate", 4.5)) / 100
+    mortgage_term = int(data.get("mortgage_term", 25))
+    monthly_rent = float(data.get("monthly_rent", 1500))
+    house_price_growth = float(data.get("house_price_growth", 3.0)) / 100
+    stock_return = float(data.get("stock_return", 7.0)) / 100
+    years = int(data.get("years", 10))
+    
+    deposit = property_price * (deposit_pct / 100)
+    loan = property_price - deposit
+    
+    # Stamp duty (2026 rates)
+    def stamp_duty(price):
+        if price <= 250000:
+            return 0
+        elif price <= 925000:
+            return (price - 250000) * 0.05
+        elif price <= 1500000:
+            return 33750 + (price - 925000) * 0.10
+        else:
+            return 91250 + (price - 1500000) * 0.12
+    
+    sd = stamp_duty(property_price)
+    buying_costs = sd + (property_price * 0.01)  # legal fees ~1%
+    
+    # Monthly mortgage payment
+    monthly_rate = mortgage_rate / 12
+    n_payments = mortgage_term * 12
+    if monthly_rate > 0:
+        monthly_mortgage = loan * (monthly_rate * (1 + monthly_rate)**n_payments) / ((1 + monthly_rate)**n_payments - 1)
+    else:
+        monthly_mortgage = loan / n_payments
+    
+    monthly_maintenance = property_price * 0.01 / 12  # 1% annual maintenance
+    monthly_buying_total = monthly_mortgage + monthly_maintenance
+    
+    # After 'years' years
+    future_property_value = property_price * ((1 + house_price_growth) ** years)
+    
+    # Remaining mortgage balance
+    remaining_balance = loan * ((1 + monthly_rate)**(n_payments) - (1 + monthly_rate)**(years*12)) / ((1 + monthly_rate)**n_payments - 1)
+    
+    equity = future_property_value - remaining_balance
+    total_buying_cost = (monthly_buying_total * years * 12) + buying_costs + deposit
+    buying_net = equity - total_buying_cost + deposit  # get deposit back in equity
+    
+    # Renting — invest deposit in stocks
+    total_rent_paid = monthly_rent * years * 12
+    deposit_invested = deposit * ((1 + stock_return) ** years)
+    rent_net = deposit_invested - total_rent_paid
+    
+    buying_wins = buying_net > rent_net
+    margin = abs(buying_net - rent_net)
+    
+    # Break-even year
+    break_even = None
+    for y in range(1, 31):
+        fv = property_price * ((1 + house_price_growth) ** y)
+        rb = loan * ((1 + monthly_rate)**(n_payments) - (1 + monthly_rate)**(y*12)) / ((1 + monthly_rate)**n_payments - 1)
+        eq = fv - rb
+        bc = (monthly_buying_total * y * 12) + buying_costs + deposit
+        bn = eq - bc + deposit
+        di = deposit * ((1 + stock_return) ** y)
+        rn = di - (monthly_rent * y * 12)
+        if bn > rn:
+            break_even = y
+            break
+    
+    return jsonify({
+        "monthly_mortgage": round(monthly_mortgage),
+        "monthly_maintenance": round(monthly_maintenance),
+        "monthly_buying_total": round(monthly_buying_total),
+        "monthly_rent": round(monthly_rent),
+        "monthly_diff": round(monthly_buying_total - monthly_rent),
+        "stamp_duty": round(sd),
+        "buying_costs": round(buying_costs),
+        "deposit": round(deposit),
+        "future_property_value": round(future_property_value),
+        "equity_after_years": round(equity),
+        "buying_net": round(buying_net),
+        "rent_net": round(rent_net),
+        "buying_wins": buying_wins,
+        "margin": round(margin),
+        "break_even_years": break_even,
+        "years": years,
+        "deposit_invested": round(deposit_invested),
+        "total_rent_paid": round(total_rent_paid),
+    })
+
+
+# =============================================
+# SELF-EMPLOYED VS PAYE
+# =============================================
+
+@app.route("/self-employed-vs-paye")
+def self_employed_vs_paye_page():
+    return render_template("self_employed_vs_paye.html")
+
+
+@app.route("/calculate-self-employed", methods=["POST"])
+def calculate_self_employed():
+    data = request.get_json()
+    
+    paye_salary = float(data.get("paye_salary", 50000))
+    day_rate = float(data.get("day_rate", 350))
+    days_per_year = int(data.get("days_per_year", 220))
+    limited_company = data.get("limited_company", True)
+    expenses = float(data.get("expenses", 3000))
+    
+    # PAYE calculation
+    paye = calculate_take_home({"salary": paye_salary, "student_loan": "none", "pension_pct": 0})
+    paye_take_home = paye["take_home_yearly"]
+    
+    # Self-employed calculation
+    gross_contract = day_rate * days_per_year
+    
+    if limited_company:
+        # Limited company — salary + dividends
+        # Optimal: pay salary to personal allowance, take rest as dividends
+        salary = 12570  # personal allowance
+        profit_before_corp_tax = gross_contract - salary - expenses
+        corp_tax = max(0, profit_before_corp_tax * 0.19)  # 19% small profits rate
+        profit_after_corp_tax = profit_before_corp_tax - corp_tax
+        
+        # Dividends
+        dividend_allowance = 500  # 2025/26
+        taxable_dividends = max(0, profit_after_corp_tax - dividend_allowance)
+        dividend_tax = taxable_dividends * 0.0875  # basic rate dividend tax
+        
+        se_take_home = salary + profit_after_corp_tax - dividend_tax
+        effective_rate = round((1 - se_take_home / gross_contract) * 100, 1)
+        structure = "Limited Company"
+    else:
+        # Sole trader
+        taxable = gross_contract - expenses
+        # Income tax
+        personal_allowance = 12570
+        taxable_income = max(0, taxable - personal_allowance)
+        if taxable_income <= 37700:
+            income_tax = taxable_income * 0.20
+        else:
+            income_tax = 37700 * 0.20 + (taxable_income - 37700) * 0.40
+        # Class 4 NI
+        ni_lower = 12570
+        ni_upper = 50270
+        if taxable <= ni_lower:
+            ni = 0
+        elif taxable <= ni_upper:
+            ni = (taxable - ni_lower) * 0.09
+        else:
+            ni = (ni_upper - ni_lower) * 0.09 + (taxable - ni_upper) * 0.02
+        # Class 2 NI
+        ni += 3.45 * 52
+        se_take_home = taxable - income_tax - ni
+        effective_rate = round((1 - se_take_home / gross_contract) * 100, 1)
+        structure = "Sole Trader"
+    
+    diff = se_take_home - paye_take_home
+    
+    return jsonify({
+        "paye_salary": round(paye_salary),
+        "paye_take_home": round(paye_take_home),
+        "paye_monthly": round(paye_take_home / 12),
+        "gross_contract": round(gross_contract),
+        "se_take_home": round(se_take_home),
+        "se_monthly": round(se_take_home / 12),
+        "difference": round(diff),
+        "difference_monthly": round(diff / 12),
+        "effective_rate": effective_rate,
+        "structure": structure,
+        "se_wins": se_take_home > paye_take_home,
+        "day_rate_needed": round(paye_take_home / days_per_year / 0.7),  # rough equivalent day rate
+    })
+
+
+# =============================================
+# APRIL 2026 TAX TOGGLE
+# =============================================
+
+@app.route("/calculate-tax-comparison", methods=["POST"])
+def calculate_tax_comparison():
+    data = request.get_json()
+    salary = float(data.get("salary", 35000))
+    student_loan = data.get("student_loan", "none")
+    pension_pct = float(data.get("pension_pct", 5))
+    
+    # Current 2025/26 rates
+    current = calculate_take_home({"salary": salary, "student_loan": student_loan, "pension_pct": pension_pct})
+    
+    # 2026/27 — NI employer increase already happened, personal allowance still frozen
+    # Main change: minimum wage increase, NI thresholds may shift
+    # Using same rates as no major personal tax changes confirmed yet
+    future = calculate_take_home({"salary": salary, "student_loan": student_loan, "pension_pct": pension_pct})
+    
+    # If salary increases due to minimum wage
+    min_wage_current = 12.21
+    min_wage_future = 12.82  # projected ~5% increase
+    hours_per_year = 52 * 40
+    
+    current_min_wage_salary = min_wage_current * hours_per_year
+    future_min_wage_salary = min_wage_future * hours_per_year
+    
+    is_min_wage = abs(salary - current_min_wage_salary) < 1000
+    
+    if is_min_wage:
+        future = calculate_take_home({"salary": future_min_wage_salary, "student_loan": student_loan, "pension_pct": pension_pct})
+    
+    diff_monthly = future["take_home_monthly"] - current["take_home_monthly"]
+    diff_yearly = future["take_home_yearly"] - current["take_home_yearly"]
+    
+    return jsonify({
+        "current": current,
+        "future": future,
+        "diff_monthly": round(diff_monthly),
+        "diff_yearly": round(diff_yearly),
+        "is_min_wage": is_min_wage,
+        "current_label": "2025/26 Tax Year",
+        "future_label": "2026/27 Tax Year",
+    })
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))

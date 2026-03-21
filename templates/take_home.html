@@ -113,6 +113,19 @@
           <p class="field-hint">Typical employer minimum is 5%. Enter 0 if no pension.</p>
         </div>
 
+        
+          <!-- April 2026 Tax Year Toggle -->
+          <div style="margin-top:16px;padding:16px;border:1px solid var(--accent);background:#0f0f00;">
+            <p style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;color:var(--accent);margin-bottom:8px;">🗓 APRIL 2026 TAX YEAR</p>
+            <p style="font-size:13px;color:var(--text-dim);margin-bottom:12px;">See how your take home changes from April 2026.</p>
+            <button onclick="calcTaxComparison()" style="width:100%;padding:12px;background:var(--accent);color:#000;border:none;font-family:var(--font-mono);font-size:11px;letter-spacing:0.1em;cursor:pointer;">Compare 2025/26 vs 2026/27 →</button>
+            <div id="tax_compare_result" class="hidden" style="margin-top:12px;">
+              <div class="breakdown-row"><span>2025/26 monthly take home</span><span id="tc_current">£0</span></div>
+              <div class="breakdown-row"><span>2026/27 monthly take home</span><span id="tc_future">£0</span></div>
+              <div class="breakdown-row total-row"><span>Monthly difference</span><span id="tc_diff">£0</span></div>
+            </div>
+          </div>
+
         <button class="calculate-btn" id="thCalculateBtn">
           <span>Calculate My Take Home Pay</span>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>

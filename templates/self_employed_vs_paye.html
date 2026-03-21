@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Self-Employed vs PAYE Calculator UK 2026 — Contractor vs Salary</title>
+  <meta name="description" content="Compare self-employed contracting vs PAYE employment in the UK. Calculate take-home pay as a limited company, sole trader, or employee. Includes IR35 guidance." />
+  <meta name="keywords" content="self employed vs PAYE UK, contractor vs employee take home pay, limited company vs PAYE calculator, IR35 calculator UK" />
+  <link rel="canonical" href="https://www.traveltax.co.uk/self-employed-vs-paye" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8725854592183933" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="slim-header">
+    <div class="slim-header-inner">
+      <div class="slim-logo"><a href="/" style="text-decoration:none"><span class="slim-logo-main">Travel Tax.</span><span class="slim-logo-sub">UK Financial Reality Check</span></a></div>
+    </div>
+    <div class="ticker-tape">
+      <span>SELF-EMPLOYED VS PAYE &nbsp;·&nbsp; CONTRACTOR CALCULATOR UK &nbsp;·&nbsp; LIMITED COMPANY VS SALARY &nbsp;·&nbsp; IR35 2026 &nbsp;·&nbsp;</span>
+      <span aria-hidden="true">SELF-EMPLOYED VS PAYE &nbsp;·&nbsp; CONTRACTOR CALCULATOR UK &nbsp;·&nbsp; LIMITED COMPANY VS SALARY &nbsp;·&nbsp; IR35 2026 &nbsp;·&nbsp;</span>
+    </div>
+  </header>
+  <nav class="top-nav">
+    <div class="top-nav-inner">
+      <a href="/" class="nav-link">Commute Tax</a>
+      <a href="/take-home" class="nav-link">Take Home Pay</a>
+      <a href="/self-employed-vs-paye" class="nav-link active">Self-Employed</a>
+      <a href="/buy-vs-rent" class="nav-link">Buy vs Rent</a>
+      <a href="/tools" class="nav-link">All Tools</a>
+    </div>
+  </nav>
+  <div class="ad-slot ad-leaderboard"><span class="ad-label">Advertisement</span></div>
+
+  <main class="calc-section">
+    <div class="calc-wrapper" style="display:flex;flex-direction:row;">
+      <div class="form-panel">
+        <div class="form-header"><h2>Self-Employed vs PAYE</h2><p class="form-desc">Compare your take-home as a contractor vs employee.</p></div>
+
+        <div class="field-group"><label>Equivalent PAYE Salary (£)</label><div class="input-wrap"><span class="prefix">£</span><input type="number" id="se_paye" placeholder="50000" min="0" /></div><p class="field-hint">The salary you would earn as a permanent employee.</p></div>
+        <div class="field-group"><label>Contract Day Rate (£)</label><div class="input-wrap"><span class="prefix">£</span><input type="number" id="se_dayrate" placeholder="350" min="0" /></div></div>
+        <div class="field-group"><label>Billable Days Per Year</label>
+          <div class="slider-wrap">
+            <input type="range" id="se_days_slider" min="100" max="250" value="220" step="5" oninput="document.getElementById('se_days').value=this.value" />
+            <div class="slider-input-wrap"><input type="number" id="se_days" value="220" min="50" max="260" oninput="document.getElementById('se_days_slider').value=Math.min(this.value,250)" /><span class="slider-unit">days</span></div>
+          </div>
+          <p class="field-hint">220 days is typical after holidays and gaps between contracts.</p>
+        </div>
+        <div class="field-group"><label>Structure</label>
+          <div class="transport-toggle" style="grid-template-columns:1fr 1fr;">
+            <button class="transport-btn active" id="se_ltd_btn" onclick="setSEStructure(true)">Limited Company</button>
+            <button class="transport-btn" id="se_sole_btn" onclick="setSEStructure(false)">Sole Trader</button>
+          </div>
+        </div>
+        <div class="field-group"><label>Annual Business Expenses (£)</label><div class="input-wrap"><span class="prefix">£</span><input type="number" id="se_expenses" placeholder="3000" min="0" /></div><p class="field-hint">Laptop, phone, software, accountant fees etc.</p></div>
+
+        <button class="calculate-btn" id="seBtn" onclick="calcSE()"><span>Compare Self-Employed vs PAYE</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+      </div>
+
+      <div class="results-panel" id="seResultsPanel">
+        <div class="results-placeholder" id="sePlaceholder">
+          <div class="fun-facts-wrap">
+            <p class="fun-facts-label">⚡ DID YOU KNOW?</p>
+            <div class="fun-fact-display">A £350/day contractor working 220 days earns £77,000 gross — but their take-home depends heavily on how they structure their company.</div>
+            <p class="fun-facts-cta">Enter your details to compare →</p>
+          </div>
+        </div>
+        <div class="results-content hidden" id="seResults">
+          <div class="verdict-banner">
+            <p class="verdict-label" id="se_verdict_label">SELF-EMPLOYED WINS</p>
+            <div class="verdict-number" id="se_diff">£0</div>
+            <p class="verdict-sub" id="se_verdict_sub">more per year</p>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+            <div style="background:var(--panel);border:1px solid var(--border);padding:20px;" id="se_paye_col">
+              <p style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;color:var(--text-dimmer);margin-bottom:8px;">PAYE EMPLOYEE</p>
+              <div style="font-family:var(--font-display);font-size:32px;color:var(--white);" id="se_paye_takehome">£0</div>
+              <p style="font-size:11px;color:var(--text-dimmer);font-family:var(--font-mono);">ANNUAL TAKE HOME</p>
+              <p style="font-size:13px;color:var(--text-dim);margin-top:8px;" id="se_paye_monthly">£0/month</p>
+            </div>
+            <div style="background:var(--panel);border:1px solid var(--border);padding:20px;" id="se_col">
+              <p style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;color:var(--text-dimmer);margin-bottom:8px;" id="se_structure_label">LIMITED COMPANY</p>
+              <div style="font-family:var(--font-display);font-size:32px;color:var(--accent);" id="se_takehome">£0</div>
+              <p style="font-size:11px;color:var(--text-dimmer);font-family:var(--font-mono);">ANNUAL TAKE HOME</p>
+              <p style="font-size:13px;color:var(--text-dim);margin-top:8px;" id="se_monthly">£0/month</p>
+            </div>
+          </div>
+          <div class="breakdown-block">
+            <h3 class="block-title">Self-Employed Summary</h3>
+            <div class="breakdown-row"><span>Gross contract income</span><span id="se_gross">£0</span></div>
+            <div class="breakdown-row"><span>Effective tax rate</span><span id="se_rate">0%</span></div>
+            <div class="breakdown-row"><span>Annual take home</span><span id="se_takehome2">£0</span></div>
+            <div class="breakdown-row total-row"><span>Equivalent day rate (PAYE)</span><span id="se_equiv_rate">£0/day</span></div>
+          </div>
+          <div class="savings-callout" id="se_insight"></div>
+          <div class="comparison-block">
+            <h3 class="block-title">Also Try</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px;">
+              <a href="/take-home" style="display:block;padding:14px;border:1px solid var(--border);color:var(--text-dim);text-decoration:none;font-size:13px;text-align:center;">Take Home Pay →</a>
+              <a href="/compare-jobs" style="display:block;padding:14px;border:1px solid var(--border);color:var(--text-dim);text-decoration:none;font-size:13px;text-align:center;">Compare Job Offers →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <section class="faq-section">
+    <div class="faq-inner">
+      <h2 class="faq-title">Self-Employed vs PAYE FAQs</h2>
+      <div class="faq-item"><h3>Is contracting through a limited company more tax efficient?</h3><p>Generally yes — a limited company allows you to pay yourself a salary up to the personal allowance and take the rest as dividends, which are taxed at a lower rate than income tax. The saving versus PAYE typically ranges from £3,000 to £15,000 per year depending on income.</p></div>
+      <div class="faq-item"><h3>What is IR35 and how does it affect contractors?</h3><p>IR35 is legislation designed to prevent disguised employment. If HMRC decides your contract is effectively employment, you pay tax as if you were a PAYE employee. Your end client now determines IR35 status in the public sector and large private companies. This calculator shows the tax position outside IR35.</p></div>
+      <div class="faq-item"><h3>What is a good day rate equivalent to a £50k salary?</h3><p>A rough guide is to divide your salary by 220 (working days) and multiply by 1.5 to 2x to account for lack of benefits, holiday pay, sick pay, and gaps between contracts. For £50,000 that works out to around £340-£455/day.</p></div>
+    </div>
+  </section>
+  <footer class="site-footer"><p>© 2026 Travel Tax · <a href="/">Commute</a> · <a href="/self-employed-vs-paye">Self-Employed</a> · <a href="/take-home">Take Home</a> · <a href="/tools">All Tools</a> · <a href="/privacy">Privacy</a></p></footer>
+  <script>
+    let seLimited = true;
+    function setSEStructure(ltd) {
+      seLimited = ltd;
+      document.getElementById("se_ltd_btn").classList.toggle("active", ltd);
+      document.getElementById("se_sole_btn").classList.toggle("active", !ltd);
+    }
+    async function calcSE() {
+      const btn = document.getElementById("seBtn");
+      const paye = parseFloat(document.getElementById("se_paye").value) || 0;
+      const rate = parseFloat(document.getElementById("se_dayrate").value) || 0;
+      if (paye <= 0 || rate <= 0) { alert("Please enter both salary and day rate."); return; }
+      btn.querySelector("span").textContent = "Calculating...";
+      btn.disabled = true;
+      try {
+        const res = await fetch("/calculate-self-employed", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({
+          paye_salary: paye,
+          day_rate: rate,
+          days_per_year: parseInt(document.getElementById("se_days").value) || 220,
+          limited_company: seLimited,
+          expenses: parseFloat(document.getElementById("se_expenses").value) || 0,
+        })});
+        const r = await res.json();
+        const fmt = n => "£" + Math.round(Math.abs(n)).toLocaleString("en-GB");
+        document.getElementById("sePlaceholder").classList.add("hidden");
+        document.getElementById("seResults").classList.remove("hidden");
+        document.getElementById("se_verdict_label").textContent = r.se_wins ? "SELF-EMPLOYED WINS" : "PAYE WINS";
+        document.getElementById("se_diff").textContent = fmt(Math.abs(r.difference));
+        document.getElementById("se_verdict_sub").textContent = (r.se_wins ? "more per year as " + r.structure : "more per year as PAYE employee");
+        document.getElementById("se_paye_takehome").textContent = fmt(r.paye_take_home);
+        document.getElementById("se_paye_monthly").textContent = fmt(r.paye_monthly) + "/month";
+        document.getElementById("se_structure_label").textContent = r.structure.toUpperCase();
+        document.getElementById("se_takehome").textContent = fmt(r.se_take_home);
+        document.getElementById("se_takehome").style.color = r.se_wins ? "var(--accent)" : "var(--white)";
+        document.getElementById("se_monthly").textContent = fmt(r.se_monthly) + "/month";
+        document.getElementById("se_gross").textContent = fmt(r.gross_contract);
+        document.getElementById("se_rate").textContent = r.effective_rate + "%";
+        document.getElementById("se_takehome2").textContent = fmt(r.se_take_home);
+        document.getElementById("se_equiv_rate").textContent = fmt(r.day_rate_needed) + "/day";
+        document.getElementById("se_insight").textContent = r.se_wins
+          ? "As a " + r.structure + " you take home " + fmt(r.difference) + " more per year than as a PAYE employee on £" + fmt(r.paye_salary) + ". Your effective tax rate is " + r.effective_rate + "% vs approximately " + Math.round((1 - r.paye_take_home/r.paye_salary)*100) + "% as PAYE."
+          : "In this scenario PAYE wins by " + fmt(Math.abs(r.difference)) + " — the day rate may not be high enough to offset the lack of benefits and pension contributions. You would need around " + fmt(r.day_rate_needed) + "/day to match your PAYE take-home.";
+      } catch(e) { alert("Something went wrong."); }
+      finally { btn.querySelector("span").textContent = "Compare Self-Employed vs PAYE"; btn.disabled = false; }
+    }
+  </script>
+</body>
+</html>

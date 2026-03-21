@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cost of Living vs Salary Calculator UK 2026 — City Comparison Tool</title>
+  <meta name="description" content="Compare cost of living and salary between any two UK cities. Find out how much you need to earn in London to match your lifestyle in Manchester, Leeds, or Bristol." />
+  <meta name="keywords" content="cost of living salary comparison UK, how much to earn in London vs Manchester, UK city salary calculator" />
+  <link rel="canonical" href="https://www.traveltax.co.uk/city-comparison" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8725854592183933" crossorigin="anonymous"></script>
+  <style>
+    .city-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--border); }
+    .city-col { padding: 32px 28px; background: var(--panel); }
+    .city-col:first-child { border-right: 1px solid var(--border); }
+    .city-select { width: 100%; background: var(--off-black); border: 1px solid var(--border-light); color: var(--text); font-family: var(--font-mono); font-size: 14px; padding: 12px 16px; outline: none; cursor: pointer; appearance: none; }
+    .city-select:focus { border-color: var(--accent); }
+    .verdict-big { font-family: var(--font-display); font-size: 64px; color: var(--accent); line-height: 1; }
+    .share-sentence { font-size: 18px; color: var(--white); line-height: 1.5; margin: 16px 0; font-family: var(--font-sans); }
+    .share-sentence strong { color: var(--accent); }
+    @media(max-width:768px) { .city-grid { grid-template-columns: 1fr; } .city-col:first-child { border-right: none; border-bottom: 1px solid var(--border); } }
+  </style>
+</head>
+<body>
+  <header class="slim-header">
+    <div class="slim-header-inner">
+      <div class="slim-logo"><a href="/" style="text-decoration:none"><span class="slim-logo-main">Travel Tax.</span><span class="slim-logo-sub">UK Financial Reality Check</span></a></div>
+    </div>
+    <div class="ticker-tape">
+      <span>CITY COMPARISON &nbsp;·&nbsp; COST OF LIVING VS SALARY &nbsp;·&nbsp; HOW MUCH DO I NEED TO EARN IN LONDON? &nbsp;·&nbsp; UK CITY SALARY CALCULATOR 2026 &nbsp;·&nbsp;</span>
+      <span aria-hidden="true">CITY COMPARISON &nbsp;·&nbsp; COST OF LIVING VS SALARY &nbsp;·&nbsp; HOW MUCH DO I NEED TO EARN IN LONDON? &nbsp;·&nbsp; UK CITY SALARY CALCULATOR 2026 &nbsp;·&nbsp;</span>
+    </div>
+  </header>
+  <nav class="top-nav">
+    <div class="top-nav-inner">
+      <a href="/" class="nav-link">Commute Tax</a>
+      <a href="/take-home" class="nav-link">Take Home Pay</a>
+      <a href="/city-comparison" class="nav-link active">City Comparison</a>
+      <a href="/buy-vs-rent" class="nav-link">Buy vs Rent</a>
+      <a href="/tools" class="nav-link">All Tools</a>
+    </div>
+  </nav>
+  <div class="ad-slot ad-leaderboard"><span class="ad-label">Advertisement</span></div>
+
+  <main class="calc-section" style="max-width:1000px;margin:0 auto;">
+
+    <div style="padding:32px 40px 0;">
+      <h1 style="font-family:var(--font-display);font-size:48px;color:var(--white);margin-bottom:8px;">Cost of Living vs Salary</h1>
+      <p style="color:var(--text-dim);font-size:15px;margin-bottom:24px;">Compare two cities. Find out exactly how much you need to earn to maintain the same lifestyle.</p>
+    </div>
+
+    <div class="city-grid" style="margin:0 40px;">
+      <!-- City A -->
+      <div class="city-col">
+        <div style="font-family:var(--font-display);font-size:32px;color:var(--accent);margin-bottom:16px;">City A</div>
+        <div class="field-group">
+          <label>City</label>
+          <select class="city-select" id="city_a">
+            {% for slug, city in cities.items() %}
+            <option value="{{ slug }}" {% if slug == 'london' %}selected{% endif %}>{{ city.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="field-group">
+          <label for="salary_a">Your Salary (£)</label>
+          <div class="input-wrap"><span class="prefix">£</span><input type="number" id="salary_a" placeholder="42000" min="0" /></div>
+        </div>
+      </div>
+      <!-- City B -->
+      <div class="city-col">
+        <div style="font-family:var(--font-display);font-size:32px;color:var(--white);margin-bottom:16px;">City B</div>
+        <div class="field-group">
+          <label>City</label>
+          <select class="city-select" id="city_b">
+            {% for slug, city in cities.items() %}
+            <option value="{{ slug }}" {% if slug == 'manchester' %}selected{% endif %}>{{ city.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="field-group">
+          <label for="salary_b">Your Salary (£)</label>
+          <div class="input-wrap"><span class="prefix">£</span><input type="number" id="salary_b" placeholder="32000" min="0" /></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin:0 40px;">
+      <button class="calculate-btn" id="cityCompBtn" onclick="runCityComparison()">
+        <span>Compare Cities</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+
+    <!-- Results -->
+    <div id="cityResults" class="hidden" style="padding:0 40px 40px;">
+
+      <!-- The headline -->
+      <div style="border:1px solid var(--accent);background:#0f0f00;padding:32px;margin:24px 0;text-align:center;">
+        <p style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;color:var(--accent);margin-bottom:8px;">THE VERDICT</p>
+        <div class="verdict-big" id="city_winner_name">Manchester</div>
+        <div class="share-sentence" id="city_headline"></div>
+        <div style="margin-top:16px;padding:16px;background:var(--panel);border:1px solid var(--border);">
+          <p style="font-family:var(--font-mono);font-size:11px;color:var(--text-dimmer);letter-spacing:0.1em;margin-bottom:4px;">TO MATCH THIS LIFESTYLE IN</p>
+          <p style="font-family:var(--font-display);font-size:32px;color:var(--white);" id="city_salary_needed_city">London</p>
+          <p style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.1em;color:var(--text-dimmer);margin-top:4px;">YOU WOULD NEED TO EARN</p>
+          <p style="font-family:var(--font-display);font-size:48px;color:var(--accent);" id="city_salary_needed">£0</p>
+        </div>
+      </div>
+
+      <!-- Side by side -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+        <div id="city_col_a" style="background:var(--panel);border:1px solid var(--border);padding:20px;">
+          <p style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;color:var(--text-dimmer);margin-bottom:12px;" id="city_label_a">CITY A</p>
+          <div style="font-family:var(--font-display);font-size:36px;color:var(--accent);" id="city_a_disposable">£0</div>
+          <p style="font-size:11px;color:var(--text-dimmer);font-family:var(--font-mono);">MONTHLY DISPOSABLE</p>
+          <div style="margin-top:16px;">
+            <div class="breakdown-row"><span>Take home/mo</span><span id="city_a_takehome">£0</span></div>
+            <div class="breakdown-row"><span>Rent (1-bed)</span><span id="city_a_rent">£0</span></div>
+            <div class="breakdown-row"><span>Transport</span><span id="city_a_transport">£0</span></div>
+            <div class="breakdown-row"><span>Groceries</span><span id="city_a_groceries">£0</span></div>
+            <div class="breakdown-row"><span>Utilities</span><span id="city_a_utilities">£0</span></div>
+            <div class="breakdown-row total-row"><span>Monthly costs</span><span id="city_a_costs">£0</span></div>
+          </div>
+        </div>
+        <div id="city_col_b" style="background:var(--panel);border:1px solid var(--border);padding:20px;">
+          <p style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;color:var(--text-dimmer);margin-bottom:12px;" id="city_label_b">CITY B</p>
+          <div style="font-family:var(--font-display);font-size:36px;color:var(--white);" id="city_b_disposable">£0</div>
+          <p style="font-size:11px;color:var(--text-dimmer);font-family:var(--font-mono);">MONTHLY DISPOSABLE</p>
+          <div style="margin-top:16px;">
+            <div class="breakdown-row"><span>Take home/mo</span><span id="city_b_takehome">£0</span></div>
+            <div class="breakdown-row"><span>Rent (1-bed)</span><span id="city_b_rent">£0</span></div>
+            <div class="breakdown-row"><span>Transport</span><span id="city_b_transport">£0</span></div>
+            <div class="breakdown-row"><span>Groceries</span><span id="city_b_groceries">£0</span></div>
+            <div class="breakdown-row"><span>Utilities</span><span id="city_b_utilities">£0</span></div>
+            <div class="breakdown-row total-row"><span>Monthly costs</span><span id="city_b_costs">£0</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Share -->
+      <div class="share-block">
+        <p class="share-label">Share this comparison</p>
+        <div class="share-btns-grid">
+          <button class="share-btn s-twitter" onclick="shareCityComparison('twitter')">X Twitter</button>
+          <button class="share-btn s-whatsapp" onclick="shareCityComparison('whatsapp')">WhatsApp</button>
+          <button class="share-btn s-linkedin" onclick="shareCityComparison('linkedin')">LinkedIn</button>
+          <button class="share-btn s-copy" onclick="shareCityComparison('copy')">Copy</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <section class="faq-section">
+    <div class="faq-inner">
+      <h2 class="faq-title">FAQs</h2>
+      <div class="faq-item"><h3>How is disposable income calculated?</h3><p>We take your take-home pay after income tax, NI, and pension, then subtract average 1-bed rent, groceries, transport, and utilities for each city. The remainder is your disposable income for everything else.</p></div>
+      <div class="faq-item"><h3>Is London always worth the higher salary?</h3><p>Not always. Despite London salaries averaging £13,000 more than Leeds, the average London worker has less disposable income due to significantly higher rent and commute costs. Use this tool to see your specific numbers.</p></div>
+    </div>
+  </section>
+  <footer class="site-footer"><p>© 2026 Travel Tax · <a href="/">Commute</a> · <a href="/city-comparison">City Comparison</a> · <a href="/buy-vs-rent">Buy vs Rent</a> · <a href="/tools">All Tools</a> · <a href="/privacy">Privacy</a></p></footer>
+  <script src="/static/js/city_comparison.js"></script>
+</body>
+</html>

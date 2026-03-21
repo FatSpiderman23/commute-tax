@@ -204,3 +204,24 @@ async function runTakeHomeMobile() {
     thTab("results");
   } catch(err) { showTHToast("Something went wrong."); }
 }
+
+async function calcTaxComparison() {
+  const salary = parseFloat(document.getElementById("th_salary").value) || 0;
+  if (salary <= 0) { showTHToast("Enter your salary first."); return; }
+  const pension = parseFloat(document.getElementById("th_pension").value) || 0;
+  try {
+    const res = await fetch("/calculate-tax-comparison", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ salary, student_loan: thSelectedPlan, pension_pct: pension })
+    });
+    const r = await res.json();
+    const fmt = n => "£" + Math.round(Math.abs(n)).toLocaleString("en-GB");
+    document.getElementById("tc_current").textContent = fmt(r.current.take_home_monthly);
+    document.getElementById("tc_future").textContent = fmt(r.future.take_home_monthly);
+    const diff = r.diff_monthly;
+    const diffEl = document.getElementById("tc_diff");
+    diffEl.textContent = (diff >= 0 ? "+" : "-") + fmt(diff) + "/mo";
+    diffEl.style.color = diff >= 0 ? "var(--green)" : "var(--red)";
+    document.getElementById("tax_compare_result").classList.remove("hidden");
+  } catch(e) { showTHToast("Something went wrong."); }
+}
