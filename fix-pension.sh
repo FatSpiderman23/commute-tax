@@ -1,3 +1,5 @@
+#!/bin/bash
+cat > ~/Documents/Commute\ Tax/templates/pension_calculator.html << 'EOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -221,3 +223,7 @@
   <script src="/static/js/pension_calculator.js"></script>
 </body>
 </html>
+EOF
+
+echo "Done - push with:"
+echo "cd ~/Documents/Commute\ Tax && git add . && git commit -m 'Rebuild pension calculator layout' && git push"
