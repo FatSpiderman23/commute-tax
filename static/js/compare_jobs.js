@@ -41,6 +41,7 @@ function getJobData(prefix, remoteDays) {
 }
 
 async function runComparison() {
+  if (jobCVisible) { runComparisonWithC(); return; }
   const btn = document.getElementById("compareBtn");
   const jobA = getJobData("a", aRemoteDays);
   const jobB = getJobData("b", bRemoteDays);
@@ -48,7 +49,7 @@ async function runComparison() {
   const nameB = document.getElementById("job_b_name").value.trim() || "B";
 
   if (jobA.salary <= 0 || jobB.salary <= 0) {
-    alert("Please enter a salary for both jobs.");
+    showCJToast("Please enter a salary for both jobs.");
     return;
   }
 
@@ -203,10 +204,8 @@ function toggleJobC() {
   }
 }
 
-// Override runComparison to handle Job C
-const _origRunComparison = window.runComparison;
-window.runComparison = async function() {
-  if (!jobCVisible) { _origRunComparison(); return; }
+// Job C version of runComparison
+async function runComparisonWithC() {
 
   const btn = document.getElementById("compareBtn");
   const jobA = getJobData("a", aRemoteDays);
@@ -256,4 +255,4 @@ window.runComparison = async function() {
     document.getElementById("compResults").scrollIntoView({ behavior: "smooth", block: "start" });
   } catch(err) { showCJToast("Something went wrong. Please try again."); }
   finally { btn.querySelector("span").textContent = "Compare Job Offers"; btn.disabled = false; }
-};
+}
