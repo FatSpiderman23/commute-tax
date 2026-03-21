@@ -322,8 +322,7 @@ def sitemap():
     for post in BLOG_POSTS:
         urls.append({"loc": f"https://www.traveltax.co.uk/blog/{post['slug']}", "priority": "0.7", "changefreq": "monthly"})
 
-    xml = '''<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'''
+    xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
     for url in urls:
         xml += f"""
   <url>
@@ -332,8 +331,7 @@ def sitemap():
     <changefreq>{url["changefreq"]}</changefreq>
     <priority>{url["priority"]}</priority>
   </url>"""
-    xml += "
-</urlset>"
+    xml += "</urlset>"
     return Response(xml, mimetype="application/xml")
 
 
