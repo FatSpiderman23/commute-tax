@@ -106,8 +106,8 @@ def _distance_fact(hours, days_per_week, weeks_per_year):
     if total_miles >= london_ny * 2:
         times = round(total_miles / (london_ny * 2), 1)
         facts.append("You could have flown London to New York " + str(times) + "x return")
-    if total_miles >= 1000:
-        facts.append("You drove the equivalent of London to " + ("Moscow" if total_miles >= 1550 else "Edinburgh x" + str(round(total_miles / 403))) + " and back")
+    if total_miles >= 2000:
+        facts.append("You drove further than London to Cairo and back (" + str(total_miles) + " miles)")
     if not facts:
         facts.append("You travelled " + str(total_miles) + " miles commuting this year")
     return random.choice(facts)
