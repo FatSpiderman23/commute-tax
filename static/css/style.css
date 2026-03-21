@@ -684,57 +684,8 @@ input:checked + .toggle-slider::after { transform: translateX(18px); }
   .nav-link { padding: 12px 14px; font-size: 10px; }
 }
 
-/* Take home page - form first on mobile */
-@media (max-width: 900px) {
-  #take-home-wrapper {
-    display: flex;
-    flex-direction: column;
-  }
-  #take-home-wrapper .form-panel {
-    order: 1;
-  }
-  #take-home-wrapper .results-panel {
-    order: 2;
-  }
-  #thResultsPlaceholder {
-    display: none !important;
-  }
-}
 
-/* Fix take home mobile */
-@media (max-width: 900px) {
-  #take-home-wrapper { flex-direction: column !important; }
-  #take-home-wrapper .form-panel { order: 1 !important; }
-  #take-home-wrapper .results-panel { order: 2 !important; min-height: 0 !important; }
-  #thResultsPlaceholder { display: none !important; }
-  #thResultsContent.hidden + * { display: none; }
-}
 
-/* Fix take home mobile - force form before results */
-@media (max-width: 900px) {
-  #take-home-wrapper {
-    flex-direction: column !important;
-    display: flex !important;
-  }
-  #take-home-wrapper .form-panel {
-    order: 1 !important;
-    border-right: none !important;
-    border-bottom: 1px solid var(--border) !important;
-  }
-  #take-home-wrapper .results-panel {
-    order: 2 !important;
-    min-height: 0 !important;
-  }
-  #thResultsPlaceholder {
-    display: none !important;
-  }
-
-  /* Smaller ticker tape on mobile */
-  .ticker-tape {
-    font-size: 9px !important;
-    padding: 5px 0 !important;
-  }
-}
 
 /* Ticker tape mobile fix */
 @media (max-width: 768px) {
@@ -798,76 +749,52 @@ input:checked + .toggle-slider::after { transform: translateX(18px); }
   }
 }
 
-/* Fix all calculator pages on mobile - form always first */
+
+.calc-wrapper .form-panel .slider-wrap {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+
+
+/* =============================================
+   MOBILE — SINGLE CLEAN RULE SET
+   ============================================= */
 @media (max-width: 900px) {
+  /* All calc wrappers stack vertically */
   .calc-wrapper {
     display: flex !important;
     flex-direction: column !important;
   }
   .calc-wrapper .form-panel {
     order: 1 !important;
+    flex: none !important;
+    width: 100% !important;
     border-right: none !important;
     border-bottom: 1px solid var(--border) !important;
+    padding: 24px 20px !important;
   }
   .calc-wrapper .results-panel {
     order: 2 !important;
-    min-height: 0 !important;
-  }
-  .calc-wrapper .results-placeholder {
-    min-height: 200px !important;
-  }
-  /* Hide placeholder on mobile to save space */
-  .results-placeholder .fun-facts-wrap {
-    padding: 24px 16px !important;
-  }
-  .results-placeholder .fun-fact-display {
-    font-size: 20px !important;
-  }
-}
-
-/* Pension calculator slider fix */
-#p_age_slider, #p_retire_slider, #p_contrib_slider, #p_employer_slider {
-  width: 100%;
-}
-.calc-wrapper .form-panel .slider-wrap {
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-/* =============================================
-   MOBILE CALC FIX — OVERRIDES ALL PREVIOUS
-   ============================================= */
-@media (max-width: 900px) {
-  .calc-wrapper,
-  #take-home-wrapper,
-  #pension-wrapper {
-    display: flex !important;
-    flex-direction: column !important;
-    width: 100% !important;
-  }
-  .calc-wrapper .form-panel,
-  #take-home-wrapper .form-panel,
-  #pension-wrapper .form-panel {
-    order: 1 !important;
-    flex: none !important;
-    width: 100% !important;
-    border-right: none !important;
-    border-bottom: 1px solid var(--border) !important;
-  }
-  .calc-wrapper .results-panel,
-  #take-home-wrapper .results-panel,
-  #pension-wrapper .results-panel {
-    order: 2 !important;
     flex: none !important;
     width: 100% !important;
     min-height: 0 !important;
+    padding: 24px 20px !important;
   }
-  .results-placeholder,
-  #thResultsPlaceholder,
-  #pPlaceholder,
-  #slPlaceholder,
-  #rPlaceholder,
-  #mPlaceholder {
+  /* Hide placeholders on mobile */
+  .results-placeholder {
     display: none !important;
   }
+  /* Ticker tape smaller */
+  .ticker-tape span {
+    font-size: 9px !important;
+  }
+}
+
+/* Show/hide desktop vs mobile calculator */
+.mobile-calc { display: none; }
+
+@media (max-width: 768px) {
+  #calculator { display: none !important; }
+  .mobile-calc { display: block !important; }
 }
