@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Embed Travel Tax Calculator — Free UK Commute Widget</title>
+  <meta name="description" content="Add the Travel Tax calculator to your website for free. One line of code. Free UK commute cost widget for blogs, HR sites, and career pages." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+  <header class="blog-header">
+    <div class="blog-header-inner"><a href="/" class="blog-logo">Travel Tax</a><a href="/" class="blog-cta">Full Calculator →</a></div>
+  </header>
+  <nav class="top-nav">
+    <div class="top-nav-inner">
+      <a href="/" class="nav-link">Commute Tax</a>
+      <a href="/tools" class="nav-link">All Tools</a>
+      <a href="/embed" class="nav-link active">Embed</a>
+      <a href="/press" class="nav-link">Press</a>
+      <a href="/blog" class="nav-link">Blog</a>
+    </div>
+  </nav>
+  <main class="blog-main">
+    <div class="blog-inner">
+      <div class="blog-hero">
+        <span class="blog-tag">FREE WIDGET · EMBED ON YOUR SITE</span>
+        <h1 class="blog-title">Add the Travel Tax Calculator to Your Website</h1>
+        <p class="blog-lead">Free to embed. No sign up. Works on any website, blog, or HR intranet. Just copy and paste one line of code.</p>
+      </div>
+
+      <!-- Live preview -->
+      <h2 style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;color:var(--accent);margin-bottom:16px;">LIVE PREVIEW</h2>
+      <div style="border:1px solid var(--border);margin-bottom:32px;overflow:hidden;">
+        <iframe src="/widget" width="100%" height="520" frameborder="0" scrolling="no" style="display:block;"></iframe>
+      </div>
+
+      <!-- Embed code -->
+      <h2 style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;color:var(--accent);margin-bottom:16px;">EMBED CODE</h2>
+      <div style="background:var(--panel);border:1px solid var(--border);padding:20px;margin-bottom:32px;position:relative;">
+        <pre id="embedCode" style="font-family:monospace;font-size:13px;color:var(--accent);white-space:pre-wrap;line-height:1.6;">&lt;iframe src="https://www.traveltax.co.uk/widget" width="400" height="520" frameborder="0" scrolling="no"&gt;&lt;/iframe&gt;</pre>
+        <button onclick="copyEmbed()" style="position:absolute;top:16px;right:16px;background:var(--accent);color:#000;border:none;padding:8px 16px;font-family:monospace;font-size:11px;cursor:pointer;letter-spacing:0.08em;">Copy Code</button>
+      </div>
+
+      <!-- Who should use it -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:48px;">
+        <div style="padding:20px;border:1px solid var(--border);background:var(--panel);">
+          <div style="font-size:24px;margin-bottom:8px;">📰</div>
+          <div style="font-family:var(--font-display);font-size:20px;color:var(--white);margin-bottom:6px;">Finance Blogs</div>
+          <p style="font-size:13px;color:var(--text-dim);">Add a live calculator to salary and commute articles to increase engagement and time on page.</p>
+        </div>
+        <div style="padding:20px;border:1px solid var(--border);background:var(--panel);">
+          <div style="font-size:24px;margin-bottom:8px;">💼</div>
+          <div style="font-family:var(--font-display);font-size:20px;color:var(--white);margin-bottom:6px;">HR & Recruitment</div>
+          <p style="font-size:13px;color:var(--text-dim);">Help candidates understand the true value of job offers including commute costs.</p>
+        </div>
+        <div style="padding:20px;border:1px solid var(--border);background:var(--panel);">
+          <div style="font-size:24px;margin-bottom:8px;">🏢</div>
+          <div style="font-family:var(--font-display);font-size:20px;color:var(--white);margin-bottom:6px;">Company Intranets</div>
+          <p style="font-size:13px;color:var(--text-dim);">Help employees calculate commute costs when deciding on office vs hybrid working patterns.</p>
+        </div>
+        <div style="padding:20px;border:1px solid var(--border);background:var(--panel);">
+          <div style="font-size:24px;margin-bottom:8px;">🎓</div>
+          <div style="font-family:var(--font-display);font-size:20px;color:var(--white);margin-bottom:6px;">Careers Sites</div>
+          <p style="font-size:13px;color:var(--text-dim);">Add a commute cost widget to job listings so candidates can assess the real cost before applying.</p>
+        </div>
+      </div>
+
+      <div style="background:#0f0f00;border:1px solid var(--accent);padding:28px;text-align:center;">
+        <p style="font-family:var(--font-display);font-size:28px;color:var(--accent);margin-bottom:8px;">Want a custom version?</p>
+        <p style="font-size:14px;color:var(--text-dim);margin-bottom:16px;">We can build a branded version for your site. Get in touch.</p>
+        <a href="mailto:press@traveltax.co.uk" style="display:inline-block;background:var(--accent);color:#000;font-family:monospace;font-size:12px;padding:14px 32px;text-decoration:none;letter-spacing:0.1em;">Contact Us →</a>
+      </div>
+    </div>
+  </main>
+  <footer class="site-footer"><p>© 2026 Travel Tax · <a href="/">Commute</a> · <a href="/embed">Embed</a> · <a href="/press">Press</a> · <a href="/privacy">Privacy</a></p></footer>
+  <script>
+  function copyEmbed() {
+    navigator.clipboard.writeText('<iframe src="https://www.traveltax.co.uk/widget" width="400" height="520" frameborder="0" scrolling="no"></iframe>');
+    document.querySelector('button[onclick="copyEmbed()"]').textContent = 'Copied!';
+    setTimeout(() => document.querySelector('button[onclick="copyEmbed()"]').textContent = 'Copy Code', 2000);
+  }
+  </script>
+</body>
+</html>

@@ -321,6 +321,8 @@ def sitemap():
         {"loc": "https://www.traveltax.co.uk/salary", "priority": "0.8", "changefreq": "monthly"},
         {"loc": "https://www.traveltax.co.uk/cost-of-living", "priority": "0.8", "changefreq": "monthly"},
         {"loc": "https://www.traveltax.co.uk/press", "priority": "0.6", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/embed", "priority": "0.7", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/best-cities-uk", "priority": "0.9", "changefreq": "monthly"},
         {"loc": "https://www.traveltax.co.uk/student-loan", "priority": "0.9", "changefreq": "monthly"},
         {"loc": "https://www.traveltax.co.uk/pension-calculator", "priority": "0.9", "changefreq": "monthly"},
         {"loc": "https://www.traveltax.co.uk/redundancy-calculator", "priority": "0.9", "changefreq": "monthly"},
@@ -1206,6 +1208,28 @@ def tax_year_2026():
 def tools_page():
     all_jobs = {**SALARY_BENCHMARKS}
     return render_template("tools.html", jobs=all_jobs, cities=CITIES, col_cities=COST_OF_LIVING_CITIES)
+
+
+@app.route("/widget")
+def widget():
+    return render_template("widget.html")
+
+@app.route("/embed")
+def embed():
+    return render_template("embed.html")
+
+@app.route("/best-cities-uk")
+def best_cities():
+    return render_template("best_cities.html")
+
+
+from flask import make_response
+
+@app.after_request
+def add_cors(response):
+    response.headers["X-Frame-Options"] = "ALLOWALL"
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))

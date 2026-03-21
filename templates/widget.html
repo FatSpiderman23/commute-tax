@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', -apple-system, sans-serif; background: #0a0a0a; color: #e8e8e0; }
+    .w { padding: 20px; max-width: 400px; margin: 0 auto; }
+    .w-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: #f0e040; margin-bottom: 4px; }
+    .w-sub { font-size: 11px; color: #555; font-family: monospace; letter-spacing: 0.1em; margin-bottom: 16px; }
+    .w-field { margin-bottom: 12px; }
+    .w-label { font-size: 11px; color: #888; font-family: monospace; letter-spacing: 0.08em; margin-bottom: 4px; display: block; }
+    .w-input { width: 100%; background: #111; border: 1px solid #222; color: #e8e8e0; padding: 10px 12px; font-size: 14px; outline: none; }
+    .w-input:focus { border-color: #f0e040; }
+    .w-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+    .w-btn-group { display: flex; gap: 4px; }
+    .w-btn { flex: 1; padding: 8px 4px; background: #111; border: 1px solid #222; color: #888; font-size: 12px; cursor: pointer; font-family: monospace; transition: all 0.15s; }
+    .w-btn.active { background: #f0e040; color: #000; border-color: #f0e040; }
+    .w-calc { width: 100%; padding: 14px; background: #f0e040; border: none; color: #000; font-family: monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; cursor: pointer; margin-top: 4px; }
+    .w-result { display: none; margin-top: 16px; padding: 16px; border: 1px solid #f0e040; background: #0f0f00; }
+    .w-result-label { font-family: monospace; font-size: 10px; color: #f0e040; letter-spacing: 0.2em; margin-bottom: 4px; }
+    .w-result-num { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: #f0e040; line-height: 1; }
+    .w-result-sub { font-size: 12px; color: #888; margin-top: 4px; }
+    .w-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+    .w-stat { background: #111; padding: 10px; border: 1px solid #1a1a1a; }
+    .w-stat-val { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: #fff; }
+    .w-stat-label { font-size: 10px; color: #555; font-family: monospace; margin-top: 2px; }
+    .w-cta { display: block; text-align: center; margin-top: 12px; padding: 10px; background: #111; border: 1px solid #222; color: #f0e040; text-decoration: none; font-family: monospace; font-size: 11px; letter-spacing: 0.1em; }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="w">
+  <div class="w-title">Travel Tax</div>
+  <div class="w-sub">What is your commute really costing you?</div>
+  <div class="w-row">
+    <div class="w-field">
+      <label class="w-label">Salary (£)</label>
+      <input class="w-input" type="number" id="w_salary" placeholder="35000" />
+    </div>
+    <div class="w-field">
+      <label class="w-label">Commute (mins)</label>
+      <input class="w-input" type="number" id="w_mins" placeholder="45" />
+    </div>
+  </div>
+  <div class="w-field">
+    <label class="w-label">Days in office</label>
+    <div class="w-btn-group">
+      <button class="w-btn" onclick="setWDay(this,1)">1</button>
+      <button class="w-btn" onclick="setWDay(this,2)">2</button>
+      <button class="w-btn active" onclick="setWDay(this,3)">3</button>
+      <button class="w-btn" onclick="setWDay(this,4)">4</button>
+      <button class="w-btn" onclick="setWDay(this,5)">5</button>
+    </div>
+  </div>
+  <div class="w-field">
+    <label class="w-label">Transport</label>
+    <div class="w-btn-group">
+      <button class="w-btn active" onclick="setWTransport(this,'public')">Train / Bus</button>
+      <button class="w-btn" onclick="setWTransport(this,'car')">Car</button>
+    </div>
+  </div>
+  <div class="w-field" id="w_cost_field">
+    <label class="w-label">Daily cost (£)</label>
+    <input class="w-input" type="number" id="w_cost" placeholder="12.50" step="0.50" />
+  </div>
+  <button class="w-calc" onclick="calcWidget()">Calculate My Travel Tax →</button>
+  <div class="w-result" id="w_result">
+    <div class="w-result-label">YOUR ANNUAL TRAVEL TAX</div>
+    <div class="w-result-num" id="w_total">£0</div>
+    <div class="w-result-sub" id="w_sub">transport cost per year</div>
+    <div class="w-stats">
+      <div class="w-stat"><div class="w-stat-val" id="w_hours">0h</div><div class="w-stat-label">HOURS LOST/YR</div></div>
+      <div class="w-stat"><div class="w-stat-val" id="w_pct">0%</div><div class="w-stat-label">LIFE STOLEN</div></div>
+      <div class="w-stat"><div class="w-stat-val" id="w_days">0</div><div class="w-stat-label">DAYS LOST/YR</div></div>
+      <div class="w-stat"><div class="w-stat-val" id="w_monthly">£0</div><div class="w-stat-label">MONTHLY COST</div></div>
+    </div>
+    <a class="w-cta" href="https://www.traveltax.co.uk" target="_blank">Get full breakdown at traveltax.co.uk →</a>
+  </div>
+</div>
+<script>
+let wDays = 3, wTransport = 'public';
+function setWDay(btn, d) { document.querySelectorAll('.w-btn-group .w-btn').forEach(b => { if (b.closest('.w-field') === btn.closest('.w-field')) b.classList.remove('active'); }); btn.classList.add('active'); wDays = d; }
+function setWTransport(btn, t) { btn.closest('.w-btn-group').querySelectorAll('.w-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); wTransport = t; }
+async function calcWidget() {
+  const salary = parseFloat(document.getElementById('w_salary').value) || 0;
+  const mins = parseFloat(document.getElementById('w_mins').value) || 0;
+  const cost = parseFloat(document.getElementById('w_cost').value) || 0;
+  if (!salary || !mins) return;
+  try {
+    const res = await fetch('https://www.traveltax.co.uk/calculate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ salary, commute_minutes: mins, days_per_week: wDays, weeks_per_year: 48, transport_type: wTransport, transport_cost_daily: cost, car_type: 'petrol', fuel_spend: 0, fuel_period: 'weekly', miles_one_way: 0 }) });
+    const r = await res.json();
+    document.getElementById('w_result').style.display = 'block';
+    document.getElementById('w_total').textContent = '£' + Math.round(r.transport_cost_yearly).toLocaleString('en-GB');
+    document.getElementById('w_sub').textContent = 'transport cost per year';
+    document.getElementById('w_hours').textContent = r.commute_hours_yearly + 'h';
+    document.getElementById('w_pct').textContent = r.pct_waking_life + '%';
+    document.getElementById('w_days').textContent = Math.round(r.commute_hours_yearly / 8);
+    document.getElementById('w_monthly').textContent = '£' + Math.round(r.transport_cost_monthly).toLocaleString('en-GB');
+  } catch(e) { console.error(e); }
+}
+</script>
+</body>
+</html>
