@@ -403,11 +403,13 @@ async function runMobileCalculation() {
 function renderResults(r, data) {
   document.getElementById("resultsPlaceholder").classList.add("hidden");
   document.getElementById("resultsContent").classList.remove("hidden");
-  document.getElementById("res-total-cost").textContent = fmt(r.total_yearly_cost);
-  document.getElementById("res-total-sub").textContent = fmt(r.transport_cost_yearly) + " transport + " + fmt(r.time_cost_yearly) + " of your time";
+  document.getElementById("res-total-cost").textContent = fmt(r.transport_cost_yearly);
+  document.getElementById("res-total-sub").textContent = "Your annual transport cost";
   document.getElementById("res-transport-yearly").textContent = fmt(r.transport_cost_yearly);
   document.getElementById("res-hours-yearly").textContent = r.commute_hours_yearly + "h";
-  document.getElementById("res-time-cost").textContent = fmt(r.time_cost_yearly);
+  const daysLost = Math.round(r.commute_hours_yearly / 8);
+  const daysEl = document.getElementById("res-days-lost");
+  if (daysEl) daysEl.textContent = daysLost;
   document.getElementById("res-pct-life").textContent = r.pct_waking_life + "%";
   setTimeout(() => { document.getElementById("life-bar").style.width = Math.min(r.pct_waking_life * 2, 100) + "%"; }, 100);
   document.getElementById("res-life-text").textContent = r.pct_waking_life + "%";
@@ -433,7 +435,7 @@ function renderResults(r, data) {
   document.getElementById("res-remote-hours").textContent = r.remote_savings_time_hours + " hours";
   document.getElementById("res-remote-money").textContent = fmt(r.remote_total_value);
   document.getElementById("res-monthly-transport").textContent = fmt(r.transport_cost_monthly);
-  document.getElementById("res-monthly-time").textContent = fmt(Math.round(r.time_cost_yearly / 12));
+  document.getElementById("res-monthly-time").textContent = Math.round(r.commute_hours_yearly / 12) + "h";
   document.getElementById("res-monthly-total").textContent = fmt(r.total_monthly_cost);
   document.getElementById("share-pct").textContent = r.pct_waking_life + "%";
   document.getElementById("share-desc").textContent = "of my waking life goes on commuting. That is " + r.commute_days_yearly + " days/year & " + fmt(r.total_yearly_cost) + " I will never get back.";
