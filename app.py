@@ -134,5 +134,217 @@ def calculate():
     return jsonify(result)
 
 
+
+# =============================================
+# SEO DATA
+# =============================================
+
+CITIES = {
+    "london": {
+        "name": "London",
+        "avg_commute_mins": 74,
+        "avg_daily_cost": 14.80,
+        "avg_salary": 42000,
+        "zones": "Zone 1-3 Travelcard",
+        "popular_routes": ["Reading to London", "Brighton to London", "Guildford to London", "St Albans to London"],
+        "description": "London commuters face the highest commute costs in the UK, with the average worker spending over £3,500/year on transport alone.",
+        "monthly_cost": 290,
+        "yearly_cost": 3480,
+    },
+    "manchester": {
+        "name": "Manchester",
+        "avg_commute_mins": 58,
+        "avg_daily_cost": 9.20,
+        "avg_salary": 32000,
+        "zones": "Metrolink and Northern Rail",
+        "popular_routes": ["Bolton to Manchester", "Stockport to Manchester", "Salford to Manchester"],
+        "description": "Manchester commuters benefit from the Metrolink network but face rising rail costs from surrounding towns.",
+        "monthly_cost": 184,
+        "yearly_cost": 2208,
+    },
+    "birmingham": {
+        "name": "Birmingham",
+        "avg_commute_mins": 55,
+        "avg_daily_cost": 8.40,
+        "avg_salary": 30000,
+        "zones": "West Midlands Rail",
+        "popular_routes": ["Coventry to Birmingham", "Wolverhampton to Birmingham", "Solihull to Birmingham"],
+        "description": "Birmingham commuters have seen costs rise steadily, with West Midlands Rail fares increasing year on year.",
+        "monthly_cost": 168,
+        "yearly_cost": 2016,
+    },
+    "leeds": {
+        "name": "Leeds",
+        "avg_commute_mins": 52,
+        "avg_daily_cost": 7.80,
+        "avg_salary": 29000,
+        "zones": "West Yorkshire rail network",
+        "popular_routes": ["Bradford to Leeds", "York to Leeds", "Harrogate to Leeds"],
+        "description": "Leeds commuters face growing costs as housing prices push workers further from the city centre.",
+        "monthly_cost": 156,
+        "yearly_cost": 1872,
+    },
+    "edinburgh": {
+        "name": "Edinburgh",
+        "avg_commute_mins": 56,
+        "avg_daily_cost": 9.80,
+        "avg_salary": 33000,
+        "zones": "ScotRail network",
+        "popular_routes": ["Glasgow to Edinburgh", "Livingston to Edinburgh", "Falkirk to Edinburgh"],
+        "description": "Edinburgh commuters pay some of the highest costs relative to local salaries in Scotland.",
+        "monthly_cost": 196,
+        "yearly_cost": 2352,
+    },
+    "glasgow": {
+        "name": "Glasgow",
+        "avg_commute_mins": 50,
+        "avg_daily_cost": 8.60,
+        "avg_salary": 30000,
+        "zones": "SPT and ScotRail",
+        "popular_routes": ["Paisley to Glasgow", "Hamilton to Glasgow", "Motherwell to Glasgow"],
+        "description": "Glasgow commuters benefit from the SPT subway but face rising costs on longer rail commutes.",
+        "monthly_cost": 172,
+        "yearly_cost": 2064,
+    },
+    "bristol": {
+        "name": "Bristol",
+        "avg_commute_mins": 54,
+        "avg_daily_cost": 8.20,
+        "avg_salary": 31000,
+        "zones": "Great Western Railway",
+        "popular_routes": ["Bath to Bristol", "Cardiff to Bristol", "Weston-super-Mare to Bristol"],
+        "description": "Bristol commuters face unique challenges with limited rail options and heavy road congestion.",
+        "monthly_cost": 164,
+        "yearly_cost": 1968,
+    },
+    "liverpool": {
+        "name": "Liverpool",
+        "avg_commute_mins": 48,
+        "avg_daily_cost": 7.20,
+        "avg_salary": 28000,
+        "zones": "Merseyrail network",
+        "popular_routes": ["Wirral to Liverpool", "Southport to Liverpool", "Chester to Liverpool"],
+        "description": "Liverpool benefits from the Merseyrail network, one of the most used commuter rail networks outside London.",
+        "monthly_cost": 144,
+        "yearly_cost": 1728,
+    },
+    "nottingham": {
+        "name": "Nottingham",
+        "avg_commute_mins": 46,
+        "avg_daily_cost": 6.80,
+        "avg_salary": 27000,
+        "zones": "East Midlands Railway",
+        "popular_routes": ["Derby to Nottingham", "Leicester to Nottingham", "Loughborough to Nottingham"],
+        "description": "Nottingham commuters have access to one of the best tram networks outside London.",
+        "monthly_cost": 136,
+        "yearly_cost": 1632,
+    },
+    "sheffield": {
+        "name": "Sheffield",
+        "avg_commute_mins": 49,
+        "avg_daily_cost": 7.40,
+        "avg_salary": 28000,
+        "zones": "South Yorkshire rail",
+        "popular_routes": ["Rotherham to Sheffield", "Barnsley to Sheffield", "Chesterfield to Sheffield"],
+        "description": "Sheffield commuters use the Supertram network alongside Northern Rail services.",
+        "monthly_cost": 148,
+        "yearly_cost": 1776,
+    },
+}
+
+BLOG_POSTS = [
+    {
+        "slug": "is-my-commute-worth-it",
+        "title": "Is My Commute Worth It? How to Calculate the True Cost",
+        "description": "Most UK workers underestimate their commute cost by 50%. Here is how to calculate the real financial and time impact of your daily commute.",
+        "keywords": "is my commute worth it, commute cost calculator, should I work from home",
+    },
+    {
+        "slug": "hybrid-working-savings",
+        "title": "How Much Does Hybrid Working Save You? The Complete UK Guide",
+        "description": "Switching from 5 days to 3 days in the office could save the average UK worker over £2,000 a year. Find out exactly how much hybrid working saves you.",
+        "keywords": "hybrid working savings, work from home savings, hybrid commute cost",
+    },
+    {
+        "slug": "uk-commute-cost-2025",
+        "title": "UK Commute Costs 2025: What Are You Really Paying?",
+        "description": "UK commute costs have risen 40% since 2010. Here is a complete breakdown of what commuters are paying in 2025 by city, transport type and salary.",
+        "keywords": "UK commute cost 2025, commuting costs UK, average commute cost",
+    },
+    {
+        "slug": "railcard-worth-it",
+        "title": "Is a Railcard Worth It? The Complete UK Guide for 2025",
+        "description": "A Railcard costs £30 and saves 33% on rail fares. Here is exactly when a Railcard is worth it and which one to get.",
+        "keywords": "is a railcard worth it, railcard savings, railcard 2025",
+    },
+    {
+        "slug": "remote-vs-office-salary",
+        "title": "Remote vs Office Job: Which Pays More After Commute Costs?",
+        "description": "A remote job paying £5,000 less could actually be worth more than an office job once you factor in commute costs and time. Here is how to compare.",
+        "keywords": "remote vs office salary, remote job worth it, commute cost salary",
+    },
+]
+
+
+@app.route("/commute-cost/<city_slug>")
+def city_page(city_slug):
+    city = CITIES.get(city_slug)
+    if not city:
+        return "Page not found", 404
+    return render_template("city.html", city=city, slug=city_slug, all_cities=CITIES)
+
+
+@app.route("/blog/<post_slug>")
+def blog_post(post_slug):
+    post = next((p for p in BLOG_POSTS if p["slug"] == post_slug), None)
+    if not post:
+        return "Page not found", 404
+    return render_template("blog_post.html", post=post, all_posts=BLOG_POSTS)
+
+
+@app.route("/blog")
+def blog_index():
+    return render_template("blog_index.html", posts=BLOG_POSTS, cities=CITIES)
+
+
+@app.route("/sitemap.xml")
+def sitemap():
+    from flask import Response
+    import datetime
+    today = datetime.date.today().isoformat()
+    urls = [
+        {"loc": "https://www.traveltax.co.uk/", "priority": "1.0", "changefreq": "weekly"},
+        {"loc": "https://www.traveltax.co.uk/guide", "priority": "0.9", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/blog", "priority": "0.8", "changefreq": "weekly"},
+    ]
+    for slug in CITIES:
+        urls.append({"loc": f"https://www.traveltax.co.uk/commute-cost/{slug}", "priority": "0.8", "changefreq": "monthly"})
+    for post in BLOG_POSTS:
+        urls.append({"loc": f"https://www.traveltax.co.uk/blog/{post['slug']}", "priority": "0.7", "changefreq": "monthly"})
+
+    xml = '''<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'''
+    for url in urls:
+        xml += f"""
+  <url>
+    <loc>{url["loc"]}</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>{url["changefreq"]}</changefreq>
+    <priority>{url["priority"]}</priority>
+  </url>"""
+    xml += "
+</urlset>"
+    return Response(xml, mimetype="application/xml")
+
+
+@app.route("/robots.txt")
+def robots():
+    from flask import Response
+    txt = """User-agent: *
+Allow: /
+Sitemap: https://www.traveltax.co.uk/sitemap.xml"""
+    return Response(txt, mimetype="text/plain")
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))

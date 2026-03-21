@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ post.title }} — Travel Tax</title>
+  <meta name="description" content="{{ post.description }}" />
+  <meta name="keywords" content="{{ post.keywords }}" />
+  <meta property="og:title" content="{{ post.title }}" />
+  <meta property="og:description" content="{{ post.description }}" />
+  <meta property="og:url" content="https://www.traveltax.co.uk/blog/{{ post.slug }}" />
+  <link rel="canonical" href="https://www.traveltax.co.uk/blog/{{ post.slug }}" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "{{ post.title }}",
+    "description": "{{ post.description }}",
+    "url": "https://www.traveltax.co.uk/blog/{{ post.slug }}",
+    "publisher": {"@type": "Organization", "name": "Travel Tax", "url": "https://www.traveltax.co.uk"}
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8725854592183933" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="blog-header">
+    <div class="blog-header-inner">
+      <a href="/" class="blog-logo">Travel Tax</a>
+      <a href="/" class="blog-cta">Calculate Yours →</a>
+    </div>
+  </header>
+  <main class="blog-main">
+    <div class="blog-inner">
+      <div class="blog-hero">
+        <span class="blog-tag">TRAVEL TAX · UK GUIDE · 2025</span>
+        <h1 class="blog-title">{{ post.title }}</h1>
+        <p class="blog-lead">{{ post.description }}</p>
+        <div class="blog-meta"><span>Updated 2025</span><span>·</span><span>6 min read</span></div>
+      </div>
+      <article class="blog-article">
+        <div class="blog-callout">
+          <p>🧮 <strong>Get your personal answer instantly</strong> — use our free <a href="/">Travel Tax calculator</a> to calculate your exact commute cost in under 60 seconds.</p>
+        </div>
+
+        {% if post.slug == "is-my-commute-worth-it" %}
+        <h2>The Hidden Cost Most People Ignore</h2>
+        <p>When people think about their commute cost, they think about their train ticket or petrol. But this is only half the true cost. The other half — the part most people never calculate — is the value of their time.</p>
+        <p>If you earn £35,000 per year and spend 90 minutes commuting each day, your hourly rate works out at approximately £17.50. Those 90 minutes of commuting are therefore worth £26.25 every single day. Over a working year, that adds up to over £5,000 of your time — on top of your transport costs.</p>
+        <p>This is what we call the Travel Tax. It is the true, combined cost of your commute in both money and time.</p>
+        <h2>How to Calculate If Your Commute Is Worth It</h2>
+        <p>To work out if your commute is worth it, you need to compare three things: the salary premium of your job versus a closer or remote alternative, your annual transport cost, and the annual monetary value of your commute time.</p>
+        <p>If the salary premium is greater than the transport cost plus time cost, your commute is financially worth it. If not, you may be better off finding a role closer to home or negotiating remote working days.</p>
+        <h2>The Hybrid Working Calculation</h2>
+        <p>For many UK workers, the question is not whether to commute at all, but how many days. Each additional day working from home saves the average UK commuter around £15 in transport costs and 90 minutes of time. Over a year, one extra remote day per week saves over £700 in transport and the equivalent of 72 hours of your life.</p>
+        <h2>When Is a Commute Worth It?</h2>
+        <p>A commute is financially worth it when the salary you earn as a result of commuting exceeds the true cost of commuting — transport plus time value. For most UK workers, a commute is worth it when the salary premium over a remote or local role exceeds £5,000 to £8,000 per year, depending on commute length.</p>
+
+        {% elif post.slug == "hybrid-working-savings" %}
+        <h2>The Real Financial Value of Hybrid Working</h2>
+        <p>Hybrid working has transformed UK workplaces since 2020. But most workers have never calculated exactly how much it saves them. The answer is often surprising.</p>
+        <p>For a typical London commuter spending £14.80 per day on transport, working from home two days per week saves £1,420 per year in transport alone. When the time saving is valued at the commuter's hourly salary rate, the total annual value of two remote days per week often exceeds £3,000.</p>
+        <h2>Hybrid Working Savings by City</h2>
+        <p>The savings from hybrid working vary significantly by city. London commuters save the most — up to £2,800 per year in transport alone for two remote days per week. Manchester commuters save around £880 per year, while Birmingham commuters save approximately £800.</p>
+        <h2>How to Negotiate More Remote Days</h2>
+        <p>The most effective approach is to frame the request in terms of productivity rather than personal preference. Research shows that remote workers are typically 13% more productive than office workers. Present your employer with data on your output and propose a trial period of increased remote working.</p>
+        <p>Use our <a href="/">Travel Tax calculator</a> to calculate the exact financial value of additional remote days — this can be a powerful negotiating tool when discussing salary or working arrangements.</p>
+
+        {% elif post.slug == "uk-commute-cost-2025" %}
+        <h2>UK Commute Costs in 2025</h2>
+        <p>UK commute costs have risen significantly over the past decade. Rail fares have increased by over 40% since 2010, consistently outpacing wage growth. In 2025, the average UK commuter spends between £1,800 and £6,800 per year on transport, depending on location and mode of transport.</p>
+        <h2>Commute Costs by Transport Type</h2>
+        <p>Train commuters face the highest costs, with London rail commuters spending an average of £3,480 per year. Car commuters face lower direct costs but must account for fuel, depreciation, and maintenance. Electric vehicle commuters pay significantly less — around £400 to £600 per year in energy costs for a typical commute.</p>
+        <h2>The Time Cost Employers Do Not Tell You About</h2>
+        <p>Beyond transport costs, the time spent commuting has a significant monetary value. For a worker earning £35,000 per year, each hour spent commuting is worth £17.50. The average UK commuter loses over £4,000 worth of time per year — a hidden cost that rarely appears in job offer comparisons.</p>
+
+        {% elif post.slug == "railcard-worth-it" %}
+        <h2>What Is a Railcard?</h2>
+        <p>A Railcard is a discount card that saves 33% on most UK rail fares. There are several types available, costing between £30 and £35 per year. The most popular for commuters are the 16-25 Railcard, the 26-30 Railcard, and the Two Together Railcard.</p>
+        <h2>When Is a Railcard Worth It?</h2>
+        <p>A Railcard pays for itself as soon as you have saved more than its cost in discounts. At 33% off, a £30 Railcard pays for itself after you have spent £91 on eligible rail fares. For most regular commuters buying individual tickets, this happens within the first two weeks.</p>
+        <p>Note that Railcard discounts do not apply to season tickets, so they are most valuable for flexible or part-time commuters buying individual tickets rather than season ticket holders.</p>
+        <h2>Which Railcard Should I Get?</h2>
+        <p>If you are aged 16-25, get the 16-25 Railcard. If you are aged 26-30, get the 26-30 Railcard. If you regularly travel with the same person, the Two Together Railcard saves both of you 33% and costs £30 in total. If you commute in the South East, the Network Railcard at £35 covers most routes in the region.</p>
+
+        {% elif post.slug == "remote-vs-office-salary" %}
+        <h2>Why Salary Alone Does Not Tell the Full Story</h2>
+        <p>A job paying £40,000 with a 90-minute daily commute is not the same as a remote job paying £35,000. Once you account for transport costs and the value of commuting time, the remote role may actually be worth more in real terms.</p>
+        <h2>How to Compare Remote vs Office Salaries</h2>
+        <p>To compare accurately, calculate the true annual cost of your commute — transport plus time value at your hourly rate. Subtract this from your office salary. The result is your effective take-home value. Compare this to the remote salary to see which is actually worth more.</p>
+        <p>For example: £40,000 office salary minus £8,000 commute tax (transport plus time) equals an effective value of £32,000. A remote role paying £35,000 is therefore worth £3,000 more in real terms — despite appearing to pay £5,000 less.</p>
+        <h2>Other Factors to Consider</h2>
+        <p>Beyond the financial calculation, consider the wellbeing value of not commuting. Research shows that long commutes are associated with higher stress, poorer sleep, and reduced job satisfaction. Some workers value reclaiming their commute time at significantly more than their hourly salary rate suggests.</p>
+        {% endif %}
+
+        <div style="text-align:center;margin:48px 0 32px;">
+          <p style="font-size:14px;color:var(--text-dim);margin-bottom:20px;">Calculate your exact commute cost and compare your options</p>
+          <a href="/" style="display:inline-block;background:var(--accent);color:var(--black);font-family:var(--font-mono);font-size:13px;padding:18px 40px;text-decoration:none;letter-spacing:0.12em;text-transform:uppercase;">Calculate My Travel Tax →</a>
+        </div>
+
+        <h2>More Guides</h2>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          {% for other in all_posts %}
+          {% if other.slug != post.slug %}
+          <a href="/blog/{{ other.slug }}" style="display:block;padding:16px;border:1px solid var(--border);color:var(--text-dim);text-decoration:none;font-size:14px;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">{{ other.title }} →</a>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </article>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <p>© 2025 Travel Tax · <a href="/">Calculator</a> · <a href="/guide">Guide</a> · <a href="/blog">Blog</a> · <a href="/privacy">Privacy</a></p>
+  </footer>
+</body>
+</html>

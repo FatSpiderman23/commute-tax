@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ city.name }} Commute Cost Calculator 2025 — Travel Tax</title>
+  <meta name="description" content="How much does commuting to {{ city.name }} cost in 2025? The average {{ city.name }} commuter spends £{{ city.yearly_cost }}/year on transport alone. Calculate your personal commute cost." />
+  <meta name="keywords" content="{{ city.name }} commute cost, commuting to {{ city.name }}, {{ city.name }} travel cost, {{ city.name }} commute calculator" />
+  <meta property="og:title" content="{{ city.name }} Commute Cost 2025 — Travel Tax" />
+  <meta property="og:description" content="The average {{ city.name }} commuter spends £{{ city.yearly_cost }}/year. Find out your true commute cost including time value." />
+  <meta property="og:url" content="https://www.traveltax.co.uk/commute-cost/{{ slug }}" />
+  <link rel="canonical" href="https://www.traveltax.co.uk/commute-cost/{{ slug }}" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "{{ city.name }} Commute Cost Calculator",
+    "description": "{{ city.description }}",
+    "url": "https://www.traveltax.co.uk/commute-cost/{{ slug }}",
+    "mainEntity": {
+      "@type": "SoftwareApplication",
+      "name": "Travel Tax Calculator",
+      "applicationCategory": "FinanceApplication",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "GBP"}
+    }
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8725854592183933" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="blog-header">
+    <div class="blog-header-inner">
+      <a href="/" class="blog-logo">Travel Tax</a>
+      <a href="/" class="blog-cta">Calculate Yours →</a>
+    </div>
+  </header>
+
+  <main class="blog-main">
+    <div class="blog-inner">
+
+      <div class="blog-hero">
+        <span class="blog-tag">COMMUTE COST GUIDE · {{ city.name|upper }} · 2025</span>
+        <h1 class="blog-title">{{ city.name }} Commute Cost 2025: What Are You Really Paying?</h1>
+        <p class="blog-lead">The average {{ city.name }} commuter spends <strong>£{{ city.yearly_cost }}/year</strong> on transport alone — and that is before counting the value of their time. Here is what commuting to {{ city.name }} is really costing you.</p>
+        <div class="blog-meta"><span>Updated 2025</span><span>·</span><span>5 min read</span></div>
+      </div>
+
+      <!-- Key stats -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:32px 0;">
+        <div style="background:var(--panel);border:1px solid var(--border);padding:20px;text-align:center;">
+          <div style="font-family:var(--font-display);font-size:36px;color:var(--accent);">{{ city.avg_commute_mins }} min</div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dimmer);letter-spacing:0.15em;margin-top:4px;">AVG COMMUTE</div>
+        </div>
+        <div style="background:var(--panel);border:1px solid var(--border);padding:20px;text-align:center;">
+          <div style="font-family:var(--font-display);font-size:36px;color:var(--accent);">£{{ city.yearly_cost }}</div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dimmer);letter-spacing:0.15em;margin-top:4px;">AVG YEARLY COST</div>
+        </div>
+        <div style="background:var(--panel);border:1px solid var(--border);padding:20px;text-align:center;">
+          <div style="font-family:var(--font-display);font-size:36px;color:var(--accent);">£{{ city.monthly_cost }}</div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dimmer);letter-spacing:0.15em;margin-top:4px;">AVG MONTHLY COST</div>
+        </div>
+      </div>
+
+      <article class="blog-article">
+
+        <h2>The True Cost of Commuting to {{ city.name }}</h2>
+        <p>{{ city.description }} But the transport cost is only half the story. When you factor in the monetary value of the time you spend commuting — calculated at your hourly salary rate — the true annual cost of commuting to {{ city.name }} is significantly higher.</p>
+        <p>For someone earning £{{ city.avg_salary|int }} per year with an average {{ city.avg_commute_mins }}-minute commute, the time cost alone adds up to over £{{ (city.avg_salary / 52 / 5 / 8 * city.avg_commute_mins / 30 * 2 * 48 * 5)|int }} per year. Combined with transport costs, the true annual commute tax for an average {{ city.name }} worker exceeds <strong>£{{ (city.yearly_cost + city.avg_salary / 52 / 5 / 8 * city.avg_commute_mins / 30 * 2 * 48 * 5)|int }}</strong>.</p>
+
+        <div class="blog-callout">
+          <p>🧮 <strong>Calculate your exact {{ city.name }} commute cost</strong> — including transport, time value, and life impact — using our free <a href="/">Travel Tax calculator</a>. Takes 60 seconds.</p>
+        </div>
+
+        <h2>Popular {{ city.name }} Commuter Routes</h2>
+        <p>The {{ city.name }} commuter belt has grown significantly as housing prices push workers further from the city. The most common commuter routes into {{ city.name }} include:</p>
+        <ul style="color:var(--text-dim);line-height:2;padding-left:20px;">
+          {% for route in city.popular_routes %}
+          <li>{{ route }}</li>
+          {% endfor %}
+        </ul>
+        <p>Workers on these routes often face the highest commute costs, with some spending over £{{ (city.yearly_cost * 1.5)|int }} per year on season tickets.</p>
+
+        <h2>How to Reduce Your {{ city.name }} Commute Cost</h2>
+        <p><strong>Get a Railcard.</strong> If you commute by rail into {{ city.name }}, a Railcard could save you up to £{{ (city.yearly_cost * 0.33)|int }} per year. The 26-30 Railcard and Two Together Railcard are the most useful for regular commuters buying individual tickets.</p>
+        <p><strong>Negotiate hybrid working.</strong> Each day you work from home saves you approximately £{{ city.avg_daily_cost }} in transport costs. Two remote days per week saves over £{{ (city.avg_daily_cost * 2 * 48)|int }} per year — the equivalent of a pay rise.</p>
+        <p><strong>Buy an annual season ticket.</strong> Annual tickets are priced at 40 weeks of daily fares, giving you 12 weeks free. If your employer offers a season ticket loan, you can spread the cost interest-free.</p>
+
+        <h2>Calculate Your Personal {{ city.name }} Commute Cost</h2>
+        <p>The figures above are averages. Your actual commute cost depends on your specific route, salary, and working pattern. Use our free calculator to get your exact number — including what your commute time is worth in monetary terms and what percentage of your waking life you spend travelling.</p>
+
+        <div style="text-align:center;margin:40px 0;">
+          <a href="/" style="display:inline-block;background:var(--accent);color:var(--black);font-family:var(--font-mono);font-size:13px;padding:18px 40px;text-decoration:none;letter-spacing:0.12em;text-transform:uppercase;">Calculate My {{ city.name }} Commute Cost →</a>
+        </div>
+
+        <h2>{{ city.name }} Commute Cost FAQs</h2>
+        <div class="blog-faq">
+          <div class="blog-faq-item">
+            <h3>How much does it cost to commute to {{ city.name }}?</h3>
+            <p>The average {{ city.name }} commuter spends £{{ city.monthly_cost }}/month or £{{ city.yearly_cost }}/year on transport. However, when the time cost is included — valued at the commuter's hourly salary rate — the true annual cost typically exceeds £{{ (city.yearly_cost * 2.2)|int }}.</p>
+          </div>
+          <div class="blog-faq-item">
+            <h3>What is the average commute time to {{ city.name }}?</h3>
+            <p>The average one-way commute to {{ city.name }} is {{ city.avg_commute_mins }} minutes, making a round trip of {{ city.avg_commute_mins * 2 }} minutes per day. Over a working year, this adds up to {{ (city.avg_commute_mins * 2 * 5 * 48 / 60)|int }} hours lost to commuting.</p>
+          </div>
+          <div class="blog-faq-item">
+            <h3>Is it worth commuting to {{ city.name }}?</h3>
+            <p>It depends on your salary, route, and working pattern. Use our <a href="/">Travel Tax calculator</a> to calculate your personal commute cost and compare it to the salary premium of working in {{ city.name }} versus closer to home or remotely.</p>
+          </div>
+        </div>
+
+      </article>
+
+      <!-- Other cities -->
+      <div style="margin-top:48px;padding-top:32px;border-top:1px solid var(--border);">
+        <p style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;color:var(--accent);margin-bottom:16px;">COMMUTE COSTS BY CITY</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          {% for city_slug, city_data in all_cities.items() %}
+          <a href="/commute-cost/{{ city_slug }}" style="padding:8px 16px;border:1px solid var(--border);color:var(--text-dim);text-decoration:none;font-family:var(--font-mono);font-size:11px;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-dim)'">{{ city_data.name }}</a>
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2025 Travel Tax · <a href="/">Calculator</a> · <a href="/guide">Commute Guide</a> · <a href="/blog">Blog</a> · <a href="/privacy">Privacy</a></p>
+  </footer>
+</body>
+</html>
