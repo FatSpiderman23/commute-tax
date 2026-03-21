@@ -1,3 +1,74 @@
+#!/bin/bash
+TARGET=~/Documents/Commute\ Tax
+
+# Fix ticker tape size on mobile
+cat >> "$TARGET/static/css/style.css" << 'CSSEOF'
+
+/* Ticker tape mobile fix */
+@media (max-width: 768px) {
+  .ticker-tape span {
+    font-size: 9px !important;
+  }
+}
+
+/* Compare jobs simplified */
+.compare-grid-simple {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border: 1px solid var(--border);
+}
+
+.compare-grid-simple .job-col {
+  padding: 28px 24px;
+  background: var(--panel);
+}
+
+.compare-grid-simple .job-col:first-child {
+  border-right: 1px solid var(--border);
+}
+
+.advanced-toggle {
+  width: 100%;
+  background: none;
+  border: 1px dashed var(--border);
+  color: var(--text-dimmer);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: all 0.2s;
+}
+
+.advanced-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.advanced-fields {
+  display: none;
+  margin-top: 8px;
+}
+
+.advanced-fields.open {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .compare-grid-simple {
+    grid-template-columns: 1fr;
+  }
+  .compare-grid-simple .job-col:first-child {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+}
+CSSEOF
+
+# Rewrite compare_jobs.html with simplified form
+cat > "$TARGET/templates/compare_jobs.html" << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -290,3 +361,28 @@
   <script src="/static/js/compare_jobs.js"></script>
 </body>
 </html>
+HTMLEOF
+
+# Update compare_jobs.js to add toggleAdvanced and handle missing fields
+cat >> "$TARGET/static/js/compare_jobs.js" << 'JSEOF'
+
+function toggleAdvanced(job) {
+  const el = document.getElementById(job + "_advanced");
+  const btn = el.previousElementSibling;
+  if (el.classList.contains("open")) {
+    el.classList.remove("open");
+    btn.textContent = "+ Advanced options (bonus, pension, holidays, culture)";
+  } else {
+    el.classList.add("open");
+    btn.textContent = "- Hide advanced options";
+  }
+}
+JSEOF
+
+echo ""
+echo "Testing..."
+cd "$TARGET" && python3 -c "import app; print('OK')" 2>&1
+
+echo ""
+echo "Push with:"
+echo "  cd ~/Documents/Commute\ Tax && git add . && git commit -m 'Simplify compare jobs, fix ticker mobile' && git push"

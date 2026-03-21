@@ -163,3 +163,15 @@ function showCJToast(msg) {
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 3500);
 }
+
+function toggleAdvanced(job) {
+  const el = document.getElementById(job + "_advanced");
+  const btn = el.previousElementSibling;
+  if (el.classList.contains("open")) {
+    el.classList.remove("open");
+    btn.textContent = "+ Advanced options (bonus, pension, holidays, culture)";
+  } else {
+    el.classList.add("open");
+    btn.textContent = "- Hide advanced options";
+  }
+}
