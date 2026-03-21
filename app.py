@@ -266,16 +266,16 @@ BLOG_POSTS = [
         "keywords": "hybrid working savings, work from home savings, hybrid commute cost",
     },
     {
-        "slug": "uk-commute-cost-2025",
+        "slug": "uk-commute-cost-2026",
         "title": "UK Commute Costs 2026: What Are You Really Paying?",
         "description": "UK commute costs have risen 40% since 2010. Here is a complete breakdown of what commuters are paying in 2026 by city, transport type and salary.",
-        "keywords": "UK commute cost 2025, commuting costs UK, average commute cost",
+        "keywords": "UK commute cost 2026, commuting costs UK, average commute cost",
     },
     {
         "slug": "railcard-worth-it",
         "title": "Is a Railcard Worth It? The Complete UK Guide for 2026",
         "description": "A Railcard costs £30 and saves 33% on rail fares. Here is exactly when a Railcard is worth it and which one to get.",
-        "keywords": "is a railcard worth it, railcard savings, railcard 2025",
+        "keywords": "is a railcard worth it, railcard savings, railcard 2026",
     },
     {
         "slug": "remote-vs-office-salary",
