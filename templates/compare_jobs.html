@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job Offer Comparison Tool UK 2025 — Which Job Should I Take?</title>
+  <meta name="description" content="Compare two job offers side by side. Takes into account salary, take home pay, commute cost, pension, holidays and remote days to show which job is really worth more." />
+  <meta name="keywords" content="job offer comparison, which job should I take, compare job offers UK, job offer calculator" />
+  <link rel="canonical" href="https://www.traveltax.co.uk/compare-jobs" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Job Offer Comparison Tool",
+    "description": "Compare two UK job offers including salary, commute, pension and culture.",
+    "url": "https://www.traveltax.co.uk/compare-jobs",
+    "applicationCategory": "FinanceApplication",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "GBP"}
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8725854592183933" crossorigin="anonymous"></script>
+  <style>
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--border); }
+    .job-col { padding: 32px 28px; background: var(--panel); }
+    .job-col:first-child { border-right: 1px solid var(--border); }
+    .job-col-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+    .job-label { font-family: var(--font-display); font-size: 32px; color: var(--accent); }
+    .job-name-input { flex: 1; background: var(--off-black); border: 1px solid var(--border-light); color: var(--text); font-family: var(--font-mono); font-size: 13px; padding: 8px 12px; outline: none; }
+    .job-name-input:focus { border-color: var(--accent); }
+    .compare-btn { width: 100%; padding: 20px; background: var(--accent); color: var(--black); border: none; font-family: var(--font-mono); font-size: 14px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; margin-top: 0; }
+    .compare-btn:hover { background: var(--white); }
+    .verdict-wrap { border: 1px solid var(--accent); background: #0f0f00; padding: 40px; text-align: center; margin-bottom: 24px; }
+    .verdict-winner { font-family: var(--font-display); font-size: 80px; color: var(--accent); line-height: 1; }
+    .verdict-margin { font-family: var(--font-display); font-size: 48px; color: var(--white); }
+    .verdict-desc { font-size: 14px; color: var(--text-dim); margin-top: 12px; }
+    .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+    .result-col { background: var(--panel); border: 1px solid var(--border); padding: 24px; }
+    .result-col.winner { border-color: var(--accent); background: #0f0f00; }
+    .result-col-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; color: var(--text-dimmer); margin-bottom: 16px; }
+    .result-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-dim); }
+    .result-row:last-child { border-bottom: none; }
+    .result-row span:last-child { font-family: var(--font-mono); color: var(--text); }
+    .result-real-value { font-family: var(--font-display); font-size: 36px; color: var(--accent); margin-top: 12px; }
+    .diff-block { background: var(--panel); border: 1px solid var(--border); padding: 24px; margin-bottom: 24px; }
+    .diff-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .diff-row:last-child { border-bottom: none; }
+    .diff-positive { color: var(--green); font-family: var(--font-mono); font-weight: 500; }
+    .diff-negative { color: var(--red); font-family: var(--font-mono); font-weight: 500; }
+    .culture-slider { -webkit-appearance: none; width: 100%; height: 2px; background: var(--border-light); outline: none; cursor: pointer; }
+    .culture-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: var(--accent); cursor: pointer; border-radius: 0; }
+    @media (max-width: 768px) {
+      .compare-grid { grid-template-columns: 1fr; }
+      .job-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+      .results-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="slim-header">
+    <div class="slim-header-inner">
+      <div class="slim-logo">
+        <a href="/" style="text-decoration:none">
+          <span class="slim-logo-main">Travel Tax.</span>
+          <span class="slim-logo-sub">UK Financial Reality Check</span>
+        </a>
+      </div>
+      <div class="slim-stats">
+        <span>Salary · Commute · Pension · Culture</span>
+      </div>
+    </div>
+    <div class="ticker-tape">
+      <span>JOB OFFER COMPARISON &nbsp;·&nbsp; WHICH JOB SHOULD I TAKE? &nbsp;·&nbsp; TRUE VALUE CALCULATOR &nbsp;·&nbsp; SALARY IS NOT THE WHOLE STORY &nbsp;·&nbsp; JOB OFFER COMPARISON &nbsp;·&nbsp;</span>
+      <span aria-hidden="true">JOB OFFER COMPARISON &nbsp;·&nbsp; WHICH JOB SHOULD I TAKE? &nbsp;·&nbsp; TRUE VALUE CALCULATOR &nbsp;·&nbsp; SALARY IS NOT THE WHOLE STORY &nbsp;·&nbsp; JOB OFFER COMPARISON &nbsp;·&nbsp;</span>
+    </div>
+  </header>
+
+  <main class="calc-section">
+
+    <!-- INPUT GRID -->
+    <div class="compare-grid" id="inputGrid">
+
+      <!-- JOB A -->
+      <div class="job-col">
+        <div class="job-col-header">
+          <span class="job-label">A</span>
+          <input type="text" class="job-name-input" id="job_a_name" placeholder="Job A (e.g. Current role)" />
+        </div>
+
+        <div class="field-group">
+          <label>Annual Salary (£)</label>
+          <div class="input-wrap"><span class="prefix">£</span><input type="number" id="a_salary" placeholder="35000" min="0" /></div>
+        </div>
+        <div class="field-group">
+          <label>Annual Bonus (£)</label>
+          <div class="input-wrap"><span class="prefix">£</span><input type="number" id="a_bonus" placeholder="0" min="0" /></div>
+        </div>
+        <div class="field-group">
+          <label>Employer Pension (%)</label>
+          <div class="slider-wrap">
+            <input type="range" id="a_pension_slider" min="0" max="20" value="5" step="1" oninput="document.getElementById('a_pension').value=this.value" />
+            <div class="slider-input-wrap">
+              <input type="number" id="a_pension" value="5" min="0" max="100" oninput="document.getElementById('a_pension_slider').value=Math.min(this.value,20)" />
+              <span class="slider-unit">%</span>
+            </div>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Holiday Days</label>
+          <div class="slider-wrap">
+            <input type="range" id="a_holiday_slider" min="20" max="40" value="25" step="1" oninput="document.getElementById('a_holiday').value=this.value" />
+            <div class="slider-input-wrap">
+              <input type="number" id="a_holiday" value="25" min="0" oninput="document.getElementById('a_holiday_slider').value=Math.min(this.value,40)" />
+              <span class="slider-unit">days</span>
+            </div>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Remote Days Per Week</label>
+          <div class="day-toggle" id="a_remote_toggle">
+            <button class="day-btn active" data-val="0">0</button>
+            <button class="day-btn" data-val="1">1</button>
+            <button class="day-btn" data-val="2">2</button>
+            <button class="day-btn" data-val="3">3</button>
+            <button class="day-btn" data-val="4">4</button>
+            <button class="day-btn" data-val="5">5</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>One-Way Commute Time (mins)</label>
+          <div class="input-wrap"><input type="number" id="a_commute_mins" placeholder="45" min="0" /></div>
+        </div>
+        <div class="field-group">
+          <label>Daily Transport Cost (£)</label>
+          <div class="input-wrap"><span class="prefix">£</span><input type="number" id="a_commute_cost" placeholder="12.50" min="0" step="0.50" /></div>
+        </div>
+        <div class="field-group">
+          <label>Company Culture Score</label>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <input type="range" class="culture-slider" id="a_culture" min="1" max="10" value="5" oninput="document.getElementById('a_culture_val').textContent=this.value+'/10'" />
+            <span id="a_culture_val" style="font-family:var(--font-display);font-size:24px;color:var(--accent);min-width:60px;">5/10</span>
+          </div>
+          <p class="field-hint">1 = toxic, 10 = dream workplace</p>
+        </div>
+      </div>
+
+      <!-- JOB B -->
+      <div class="job-col">
+        <div class="job-col-header">
+          <span class="job-label" style="color:var(--white)">B</span>
+          <input type="text" class="job-name-input" id="job_b_name" placeholder="Job B (e.g. New offer)" />
+        </div>
+
+        <div class="field-group">
+          <label>Annual Salary (£)</label>
+          <div class="input-wrap"><span class="prefix">£</span><input type="number" id="b_salary" placeholder="40000" min="0" /></div>
+        </div>
+        <div class="field-group">
+          <label>Annual Bonus (£)</label>
+          <div class="input-wrap"><span class="prefix">£</span><input type="number" id="b_bonus" placeholder="0" min="0" /></div>
+        </div>
+        <div class="field-group">
+          <label>Employer Pension (%)</label>
+          <div class="slider-wrap">
+            <input type="range" id="b_pension_slider" min="0" max="20" value="5" step="1" oninput="document.getElementById('b_pension').value=this.value" />
+            <div class="slider-input-wrap">
+              <input type="number" id="b_pension" value="5" min="0" max="100" oninput="document.getElementById('b_pension_slider').value=Math.min(this.value,20)" />
+              <span class="slider-unit">%</span>
+            </div>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Holiday Days</label>
+          <div class="slider-wrap">
+            <input type="range" id="b_holiday_slider" min="20" max="40" value="25" step="1" oninput="document.getElementById('b_holiday').value=this.value" />
+            <div class="slider-input-wrap">
+              <input type="number" id="b_holiday" value="25" min="0" oninput="document.getElementById('b_holiday_slider').value=Math.min(this.value,40)" />
+              <span class="slider-unit">days</span>
+            </div>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Remote Days Per Week</label>
+          <div class="day-toggle" id="b_remote_toggle">
+            <button class="day-btn active" data-val="0">0</button>
+            <button class="day-btn" data-val="1">1</button>
+            <button class="day-btn" data-val="2">2</button>
+            <button class="day-btn" data-val="3">3</button>
+            <button class="day-btn" data-val="4">4</button>
+            <button class="day-btn" data-val="5">5</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>One-Way Commute Time (mins)</label>
+          <div class="input-wrap"><input type="number" id="b_commute_mins" placeholder="30" min="0" /></div>
+        </div>
+        <div class="field-group">
+          <label>Daily Transport Cost (£)</label>
+          <div class="input-wrap"><span class="prefix">£</span><input type="number" id="b_commute_cost" placeholder="8.00" min="0" step="0.50" /></div>
+        </div>
+        <div class="field-group">
+          <label>Company Culture Score</label>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <input type="range" class="culture-slider" id="b_culture" min="1" max="10" value="5" oninput="document.getElementById('b_culture_val').textContent=this.value+'/10'" />
+            <span id="b_culture_val" style="font-family:var(--font-display);font-size:24px;color:var(--white);min-width:60px;">5/10</span>
+          </div>
+          <p class="field-hint">1 = toxic, 10 = dream workplace</p>
+        </div>
+      </div>
+    </div>
+
+    <button class="compare-btn" id="compareBtn" onclick="runComparison()">
+      Compare Job Offers →
+    </button>
+
+    <!-- RESULTS -->
+    <div id="compResults" class="hidden" style="margin-top:32px;">
+
+      <!-- Verdict -->
+      <div class="verdict-wrap">
+        <p class="verdict-label">THE WINNER IS</p>
+        <div class="verdict-winner" id="res_winner">A</div>
+        <div class="verdict-margin" id="res_margin">£0</div>
+        <p class="verdict-desc" id="res_desc">better in real terms after all costs</p>
+      </div>
+
+      <!-- Side by side results -->
+      <div class="results-grid">
+        <div class="result-col" id="res_col_a">
+          <p class="result-col-label" id="res_label_a">JOB A</p>
+          <div class="result-row"><span>Gross salary</span><span id="ra_gross">£0</span></div>
+          <div class="result-row"><span>+ Bonus</span><span id="ra_bonus">£0</span></div>
+          <div class="result-row"><span>+ Pension</span><span id="ra_pension">£0</span></div>
+          <div class="result-row"><span>Take home (yearly)</span><span id="ra_takehome">£0</span></div>
+          <div class="result-row"><span>Commute cost</span><span id="ra_commute" style="color:var(--red)">-£0</span></div>
+          <div class="result-row"><span>Commute time value</span><span id="ra_time" style="color:var(--red)">-£0</span></div>
+          <div class="result-row"><span>Holiday value</span><span id="ra_holiday" style="color:var(--green)">+£0</span></div>
+          <p style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;color:var(--text-dimmer);margin-top:16px;">TRUE ANNUAL VALUE</p>
+          <div class="result-real-value" id="ra_real">£0</div>
+        </div>
+        <div class="result-col" id="res_col_b">
+          <p class="result-col-label" id="res_label_b">JOB B</p>
+          <div class="result-row"><span>Gross salary</span><span id="rb_gross">£0</span></div>
+          <div class="result-row"><span>+ Bonus</span><span id="rb_bonus">£0</span></div>
+          <div class="result-row"><span>+ Pension</span><span id="rb_pension">£0</span></div>
+          <div class="result-row"><span>Take home (yearly)</span><span id="rb_takehome">£0</span></div>
+          <div class="result-row"><span>Commute cost</span><span id="rb_commute" style="color:var(--red)">-£0</span></div>
+          <div class="result-row"><span>Commute time value</span><span id="rb_time" style="color:var(--red)">-£0</span></div>
+          <div class="result-row"><span>Holiday value</span><span id="rb_holiday" style="color:var(--green)">+£0</span></div>
+          <p style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;color:var(--text-dimmer);margin-top:16px;">TRUE ANNUAL VALUE</p>
+          <div class="result-real-value" id="rb_real" style="color:var(--white)">£0</div>
+        </div>
+      </div>
+
+      <!-- Key differences -->
+      <div class="diff-block">
+        <h3 class="block-title">Key Differences</h3>
+        <div class="diff-row">
+          <span>Salary difference</span>
+          <span id="diff_salary" class="diff-positive">£0</span>
+        </div>
+        <div class="diff-row">
+          <span>Take home difference</span>
+          <span id="diff_takehome" class="diff-positive">£0</span>
+        </div>
+        <div class="diff-row">
+          <span>Commute cost difference</span>
+          <span id="diff_commute" class="diff-positive">£0</span>
+        </div>
+        <div class="diff-row" style="font-weight:500;font-size:15px;">
+          <span>Real value difference</span>
+          <span id="diff_real" class="diff-positive">£0</span>
+        </div>
+      </div>
+
+      <!-- Insight -->
+      <div class="savings-callout" id="res_insight" style="margin-bottom:24px;font-size:14px;line-height:1.7;"></div>
+
+      <!-- Share -->
+      <div class="share-block">
+        <p class="share-label">Share your comparison</p>
+        <div class="share-btns-grid">
+          <button class="share-btn s-twitter" onclick="shareComparison('twitter')">X Twitter</button>
+          <button class="share-btn s-whatsapp" onclick="shareComparison('whatsapp')">WhatsApp</button>
+          <button class="share-btn s-linkedin" onclick="shareComparison('linkedin')">LinkedIn</button>
+          <button class="share-btn s-copy" onclick="shareComparison('copy')">Copy</button>
+        </div>
+      </div>
+
+      <!-- Cross-sell -->
+      <div class="comparison-block">
+        <h3 class="block-title">Also Calculate</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px;">
+          <a href="/" style="display:block;padding:16px;border:1px solid var(--border);color:var(--text-dim);text-decoration:none;font-size:13px;text-align:center;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">Commute Cost Calculator →</a>
+          <a href="/take-home" style="display:block;padding:16px;border:1px solid var(--border);color:var(--text-dim);text-decoration:none;font-size:13px;text-align:center;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">Take Home Pay Calculator →</a>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <section class="faq-section">
+    <div class="faq-inner">
+      <h2 class="faq-title">Frequently Asked Questions</h2>
+      <div class="faq-item">
+        <h3>How is the "true value" calculated?</h3>
+        <p>We take your take home pay, add bonus and pension value, then subtract the full commute cost — both transport and the monetary value of your commute time at your hourly rate. This gives you the real annual value of each job, not just the headline salary.</p>
+      </div>
+      <div class="faq-item">
+        <h3>How is commute time valued?</h3>
+        <p>We divide your annual salary by 2,080 working hours (52 weeks × 40 hours) to get your hourly rate. We then multiply this by your annual commute hours to show what that time is worth in monetary terms.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What does the culture score affect?</h3>
+        <p>The culture score adjusts the happiness-weighted value of the role. A job with a 10/10 culture score is worth more in real life than its financial value alone suggests. We weight it at 30% of the final adjusted value.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Should I always take the higher real value job?</h3>
+        <p>Not necessarily — the tool gives you the financial picture. Career development, job security, and personal circumstances all matter too. Use the tool as one input in your decision, not the only one.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>© 2025 Travel Tax · <a href="/">Commute Calculator</a> · <a href="/take-home">Take Home Pay</a> · <a href="/compare-jobs">Compare Jobs</a> · <a href="/guide">Guide</a> · <a href="/blog">Blog</a> · <a href="/privacy">Privacy</a></p>
+  </footer>
+
+  <script src="/static/js/compare_jobs.js"></script>
+</body>
+</html>

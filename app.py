@@ -317,6 +317,7 @@ def sitemap():
         {"loc": "https://www.traveltax.co.uk/guide", "priority": "0.9", "changefreq": "monthly"},
         {"loc": "https://www.traveltax.co.uk/blog", "priority": "0.8", "changefreq": "weekly"},
         {"loc": "https://www.traveltax.co.uk/take-home", "priority": "0.9", "changefreq": "monthly"},
+        {"loc": "https://www.traveltax.co.uk/compare-jobs", "priority": "0.9", "changefreq": "monthly"},
     ]
     for slug in CITIES:
         urls.append({"loc": f"https://www.traveltax.co.uk/commute-cost/{slug}", "priority": "0.8", "changefreq": "monthly"})
@@ -515,6 +516,116 @@ def subscribe():
             pass  # Still saved locally
 
     return jsonify({"success": True})
+
+
+
+# =============================================
+# TOOL 3: JOB OFFER COMPARISON
+# =============================================
+
+def calculate_job_comparison(data):
+    weeks = 48
+
+    def calc_job(job):
+        salary = float(job.get("salary", 0))
+        bonus = float(job.get("bonus", 0))
+        pension_pct = float(job.get("pension_pct", 0))
+        holiday_days = float(job.get("holiday_days", 25))
+        remote_days = float(job.get("remote_days", 0))
+        commute_mins = float(job.get("commute_mins", 0))
+        commute_cost_daily = float(job.get("commute_cost_daily", 0))
+        culture_score = float(job.get("culture_score", 5))
+
+        office_days = 5 - remote_days
+        working_days = office_days * weeks
+
+        # Take home (simplified)
+        personal_allowance = 12570
+        taxable = max(0, salary - personal_allowance)
+        if taxable <= 37700:
+            tax = taxable * 0.20
+        elif taxable <= 112570:
+            tax = 37700 * 0.20 + (taxable - 37700) * 0.40
+        else:
+            tax = 37700 * 0.20 + 74870 * 0.40 + (taxable - 112570) * 0.45
+
+        ni = 0
+        if salary > 12570:
+            if salary <= 50270:
+                ni = (salary - 12570) * 0.08
+            else:
+                ni = (50270 - 12570) * 0.08 + (salary - 50270) * 0.02
+
+        pension = salary * (pension_pct / 100)
+        take_home = salary - tax - ni - pension
+
+        # Commute costs
+        commute_cost_yearly = commute_cost_daily * working_days
+        commute_hours_yearly = (commute_mins * 2 * working_days) / 60
+        hourly_rate = salary / (weeks * 5 * 8) if salary > 0 else 0
+        commute_time_value = commute_hours_yearly * hourly_rate
+
+        # Total real value
+        total_commute_cost = commute_cost_yearly + commute_time_value
+        real_value = take_home + bonus - total_commute_cost
+
+        # Holiday value
+        daily_rate = salary / 260
+        holiday_value = holiday_days * daily_rate
+
+        # Remote value (time saved)
+        remote_time_hours = remote_days * weeks * (commute_mins * 2 / 60)
+        remote_time_value = remote_time_hours * hourly_rate
+
+        # Culture adjusted value
+        culture_multiplier = culture_score / 5
+        happiness_adjusted = real_value * (0.7 + culture_multiplier * 0.3)
+
+        return {
+            "salary": round(salary),
+            "bonus": round(bonus),
+            "take_home": round(take_home),
+            "take_home_monthly": round(take_home / 12),
+            "pension": round(pension),
+            "commute_cost_yearly": round(commute_cost_yearly),
+            "commute_time_value": round(commute_time_value),
+            "total_commute_cost": round(total_commute_cost),
+            "real_value": round(real_value),
+            "holiday_value": round(holiday_value),
+            "remote_time_value": round(remote_time_value),
+            "happiness_adjusted": round(happiness_adjusted),
+            "commute_hours_yearly": round(commute_hours_yearly),
+            "total_package": round(salary + bonus + pension + holiday_value),
+        }
+
+    job_a = calc_job(data.get("job_a", {}))
+    job_b = calc_job(data.get("job_b", {}))
+
+    diff = job_a["real_value"] - job_b["real_value"]
+    winner = "A" if diff > 0 else "B"
+    margin = abs(diff)
+
+    return {
+        "job_a": job_a,
+        "job_b": job_b,
+        "winner": winner,
+        "margin": round(margin),
+        "diff_take_home": round(job_a["take_home"] - job_b["take_home"]),
+        "diff_commute": round(job_b["total_commute_cost"] - job_a["total_commute_cost"]),
+        "diff_real_value": round(diff),
+    }
+
+
+@app.route("/compare-jobs")
+def compare_jobs_page():
+    return render_template("compare_jobs.html")
+
+
+@app.route("/calculate-comparison", methods=["POST"])
+def calculate_comparison():
+    data = request.get_json()
+    result = calculate_job_comparison(data)
+    return jsonify(result)
 
 
 if __name__ == "__main__":
