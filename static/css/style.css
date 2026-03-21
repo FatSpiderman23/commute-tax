@@ -640,6 +640,7 @@ input:checked + .toggle-slider::after { transform: translateX(18px); }
   position: sticky;
   top: 0;
   z-index: 100;
+  overflow: visible !important;
 }
 
 .top-nav-inner {
@@ -649,7 +650,7 @@ input:checked + .toggle-slider::after { transform: translateX(18px); }
   display: flex;
   align-items: center;
   gap: 0;
-  overflow-x: auto;
+  overflow: visible !important;
   scrollbar-width: none;
 }
 
@@ -974,4 +975,59 @@ label { color: var(--white) !important; font-size: 12px !important; }
     min-height: 0 !important;
   }
   #bvrPlaceholder { display: none !important; }
+}
+
+
+/* =============================================
+   COMPREHENSIVE WHITE TEXT FIX
+   ============================================= */
+.form-panel label,
+.form-panel .field-hint,
+.form-panel .form-desc,
+.form-panel p,
+.form-panel .slider-unit,
+.form-panel .field-hint,
+.mobile-form-panel label,
+.mobile-form-panel p,
+.calc-tab-panel label,
+.calc-tab-panel p,
+.calc-tab-panel .field-hint {
+  color: var(--white) !important;
+  opacity: 0.9;
+}
+
+.form-panel .field-hint,
+.calc-tab-panel .field-hint,
+.mobile-form-panel .field-hint {
+  opacity: 0.6;
+  font-size: 11px !important;
+}
+
+.form-panel .form-desc {
+  opacity: 0.7;
+  font-size: 13px !important;
+}
+
+.form-panel label,
+.calc-tab-panel label,
+.mobile-form-panel label {
+  font-size: 12px !important;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+  display: block;
+  opacity: 1;
+}
+
+.results-panel .block-title,
+.results-panel .breakdown-row span,
+.results-panel p,
+.results-content p {
+  color: var(--white) !important;
+  opacity: 0.85;
+}
+
+.breakdown-row span:last-child {
+  color: var(--white) !important;
+  opacity: 1;
+  font-family: var(--font-mono);
 }
