@@ -824,3 +824,12 @@ input:checked + .toggle-slider::after { transform: translateX(18px); }
     font-size: 20px !important;
   }
 }
+
+/* Pension calculator slider fix */
+#p_age_slider, #p_retire_slider, #p_contrib_slider, #p_employer_slider {
+  width: 100%;
+}
+.calc-wrapper .form-panel .slider-wrap {
+  flex-wrap: wrap;
+  gap: 8px;
+}
