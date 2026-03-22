@@ -41,9 +41,6 @@ function getJobData(prefix, remoteDays) {
 }
 
 async function runComparison() {
-  // Clear any previous Job C results
-  const oldBlock = document.getElementById("jobC_results_block");
-  if (oldBlock) oldBlock.remove();
   if (jobCVisible) { runComparisonWithC(); return; }
   const btn = document.getElementById("compareBtn");
   const jobA = getJobData("a", aRemoteDays);
@@ -196,19 +193,26 @@ function toggleJobC() {
   container.classList.toggle("hidden", !jobCVisible);
   btn.textContent = jobCVisible ? "- Remove third job" : "+ Add a third job to compare";
 
-  if (jobCVisible) {
-    document.querySelectorAll("#c_remote_toggle .day-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll("#c_remote_toggle .day-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        cRemoteDays = parseInt(btn.dataset.val);
-      });
-    });
+  // Remove previous Job C results when hiding
+  if (!jobCVisible) {
+    const block = document.getElementById("jobC_results_block");
+    if (block) block.remove();
   }
+
+  // Wire up remote toggle for Job C
+  document.querySelectorAll("#c_remote_toggle .day-btn").forEach(b => {
+    b.onclick = () => {
+      document.querySelectorAll("#c_remote_toggle .day-btn").forEach(x => x.classList.remove("active"));
+      b.classList.add("active");
+      cRemoteDays = parseInt(b.dataset.val);
+    };
+  });
 }
 
 // Job C version of runComparison
 async function runComparisonWithC() {
+  const oldBlock = document.getElementById("jobC_results_block");
+  if (oldBlock) oldBlock.remove();
   const btn = document.getElementById("compareBtn");
   const jobA = getJobData("a", aRemoteDays);
   const jobB = getJobData("b", bRemoteDays);
