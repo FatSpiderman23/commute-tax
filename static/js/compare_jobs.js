@@ -41,6 +41,9 @@ function getJobData(prefix, remoteDays) {
 }
 
 async function runComparison() {
+  // Clear any previous Job C results
+  const oldBlock = document.getElementById("jobC_results_block");
+  if (oldBlock) oldBlock.remove();
   if (jobCVisible) { runComparisonWithC(); return; }
   const btn = document.getElementById("compareBtn");
   const jobA = getJobData("a", aRemoteDays);
