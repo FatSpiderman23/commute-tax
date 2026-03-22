@@ -174,27 +174,45 @@ function renderJobC(r2, nameA, nameB, nameC, valA, valB, valC) {
   const all = [{name:nameA,val:valA},{name:nameB,val:valB},{name:nameC,val:valC}].sort((a,b)=>b.val-a.val);
   const winner = all[0].name;
 
-  // Add C as third column in the results grid
-  const grid = document.querySelector(".results-grid");
-  grid.style.gridTemplateColumns = "1fr 1fr 1fr";
-
   // Remove old C col if exists
   const oldC = document.getElementById("res_col_c");
   if (oldC) oldC.remove();
 
+  // Add C as full-width row below A and B
   const colC = document.createElement("div");
   colC.id = "res_col_c";
   colC.className = "result-col" + (winner === nameC ? " winner" : "");
+  colC.style.cssText = "grid-column: 1 / -1;";
   colC.innerHTML = `
-    <p class="result-col-label">${nameC.toUpperCase()}</p>
-    <div class="result-row"><span>Gross salary</span><span>${fmt(r2.job_b.salary)}</span></div>
-    <div class="result-row"><span>Take home</span><span>${fmt(r2.job_b.take_home)}</span></div>
-    <div class="result-row"><span>Commute cost</span><span style="color:#f44">-${fmt(r2.job_b.commute_cost_yearly)}</span></div>
-    <div class="result-row"><span>Time cost</span><span style="color:#f44">-${fmt(r2.job_b.commute_time_value)}</span></div>
-    <div class="result-row"><span>Pension</span><span style="color:#4c4">+${fmt(r2.job_b.pension)}</span></div>
-    <p style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;color:var(--text-dimmer);margin-top:12px;">TRUE VALUE</p>
-    <div class="result-real-value" style="color:${winner===nameC?"var(--accent)":"var(--white)"};">${fmt(valC)}</div>
+    <p class="result-col-label" style="margin-bottom:16px;">${nameC.toUpperCase()} — THIRD OPTION</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+      <div style="padding:12px;border:1px solid var(--border);">
+        <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dimmer);margin-bottom:4px;">GROSS SALARY</div>
+        <div style="font-family:var(--font-display);font-size:22px;color:var(--white);">${fmt(r2.job_b.salary)}</div>
+      </div>
+      <div style="padding:12px;border:1px solid var(--border);">
+        <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dimmer);margin-bottom:4px;">TAKE HOME</div>
+        <div style="font-family:var(--font-display);font-size:22px;color:var(--white);">${fmt(r2.job_b.take_home)}</div>
+      </div>
+      <div style="padding:12px;border:1px solid var(--border);">
+        <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dimmer);margin-bottom:4px;">COMMUTE COST</div>
+        <div style="font-family:var(--font-display);font-size:22px;color:#f44;">-${fmt(r2.job_b.commute_cost_yearly)}</div>
+      </div>
+      <div style="padding:12px;border:1px solid var(--border);">
+        <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dimmer);margin-bottom:4px;">TIME COST</div>
+        <div style="font-family:var(--font-display);font-size:22px;color:#f44;">-${fmt(r2.job_b.commute_time_value)}</div>
+      </div>
+      <div style="padding:12px;border:1px solid var(--border);">
+        <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dimmer);margin-bottom:4px;">PENSION</div>
+        <div style="font-family:var(--font-display);font-size:22px;color:#4c4;">+${fmt(r2.job_b.pension)}</div>
+      </div>
+      <div style="padding:12px;border:1px solid ${winner===nameC?"var(--accent)":"var(--border)"};">
+        <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dimmer);margin-bottom:4px;">TRUE VALUE</div>
+        <div style="font-family:var(--font-display);font-size:28px;color:${winner===nameC?"var(--accent)":"var(--white)"};">${fmt(valC)}</div>
+      </div>
+    </div>
   `;
+  const grid = document.querySelector(".results-grid");
   grid.appendChild(colC);
 
   // Update winner banner to reflect 3-way result
