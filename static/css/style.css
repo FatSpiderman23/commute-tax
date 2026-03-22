@@ -1126,3 +1126,21 @@ label { color: var(--white) !important; font-size: 12px !important; }
   #bvrPlaceholder,
   #sePlaceholder { display: none !important; }
 }
+
+/* Job C — always full width below A and B */
+#jobC_container {
+  width: 100% !important;
+  display: block !important;
+}
+
+#jobC_inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  #jobC_inner {
+    grid-template-columns: 1fr !important;
+  }
+}
