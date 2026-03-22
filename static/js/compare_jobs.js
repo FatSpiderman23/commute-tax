@@ -171,18 +171,43 @@ function renderComparison(r, nameA, nameB) {
 
 function renderJobC(r2, nameA, nameB, nameC, valA, valB, valC) {
   const fmt = n => "£" + Math.round(Math.abs(n)).toLocaleString("en-GB");
-  const block = document.getElementById("jobC_result_block");
-  const label = document.getElementById("jobC_result_label");
   const all = [{name:nameA,val:valA},{name:nameB,val:valB},{name:nameC,val:valC}].sort((a,b)=>b.val-a.val);
+  const winner = all[0].name;
 
-  label.textContent = nameC.toUpperCase() + " — OPTIONAL THIRD JOB";
-  document.getElementById("jc_takehome").textContent = fmt(r2.job_b.take_home);
-  document.getElementById("jc_commute").textContent = "-" + fmt(r2.job_b.commute_cost_yearly);
-  document.getElementById("jc_value").textContent = fmt(valC);
-  document.getElementById("jc_value").style.color = all[0].name === nameC ? "var(--accent)" : "var(--white)";
-  document.getElementById("jc_insight").textContent =
-    "Overall winner across all 3 options: " + all[0].name + " with " + fmt(all[0].val) + " true annual value — " + fmt(all[0].val - all[1].val) + " ahead of " + all[1].name + ".";
-  block.style.display = "block";
+  // Add C as third column in the results grid
+  const grid = document.querySelector(".results-grid");
+  grid.style.gridTemplateColumns = "1fr 1fr 1fr";
+
+  // Remove old C col if exists
+  const oldC = document.getElementById("res_col_c");
+  if (oldC) oldC.remove();
+
+  const colC = document.createElement("div");
+  colC.id = "res_col_c";
+  colC.className = "result-col" + (winner === nameC ? " winner" : "");
+  colC.innerHTML = `
+    <p class="result-col-label">${nameC.toUpperCase()}</p>
+    <div class="result-row"><span>Gross salary</span><span>${fmt(r2.job_b.salary)}</span></div>
+    <div class="result-row"><span>Take home</span><span>${fmt(r2.job_b.take_home)}</span></div>
+    <div class="result-row"><span>Commute cost</span><span style="color:#f44">-${fmt(r2.job_b.commute_cost_yearly)}</span></div>
+    <div class="result-row"><span>Time cost</span><span style="color:#f44">-${fmt(r2.job_b.commute_time_value)}</span></div>
+    <div class="result-row"><span>Pension</span><span style="color:#4c4">+${fmt(r2.job_b.pension)}</span></div>
+    <p style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;color:var(--text-dimmer);margin-top:12px;">TRUE VALUE</p>
+    <div class="result-real-value" style="color:${winner===nameC?"var(--accent)":"var(--white)"};">${fmt(valC)}</div>
+  `;
+  grid.appendChild(colC);
+
+  // Update winner banner to reflect 3-way result
+  document.getElementById("res_winner").textContent = winner;
+  document.getElementById("res_margin").textContent = fmt(all[0].val - all[1].val);
+  document.getElementById("res_desc").textContent = "better real value than the next best option across all 3 jobs";
+
+  // Update insight
+  document.getElementById("res_insight").textContent =
+    winner + " wins across all 3 options with " + fmt(all[0].val) + " true annual value — " + fmt(all[0].val - all[1].val) + " ahead of " + all[1].name + ".";
+
+  // Hide the separate C block
+  document.getElementById("jobC_result_block").style.display = "none";
 }
 
 function shareComparison(platform) {
