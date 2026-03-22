@@ -190,7 +190,7 @@ function toggleJobC() {
   jobCVisible = !jobCVisible;
   const container = document.getElementById("jobC_container");
   const btn = document.getElementById("addJobCBtn");
-  container.classList.toggle("hidden", !jobCVisible);
+  container.style.display = jobCVisible ? "block" : "none";
   btn.textContent = jobCVisible ? "- Remove third job" : "+ Add a third job to compare";
 
   // Remove previous Job C results when hiding
