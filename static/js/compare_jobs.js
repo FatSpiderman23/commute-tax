@@ -221,62 +221,62 @@ async function runComparisonWithC() {
   btn.disabled = true;
 
   try {
-    // Get all 3 results by running A vs B, then A vs C
-    const [res1, res2] = await Promise.all([
-      fetch("/calculate-comparison", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ job_a: jobA, job_b: jobB }) }).then(r => r.json()),
-      fetch("/calculate-comparison", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ job_a: jobA, job_b: jobC }) }).then(r => r.json()),
-    ]);
+    // Run A vs B
+    const res1 = await fetch("/calculate-comparison", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ job_a: jobA, job_b: jobB })
+    });
+    const r1 = await res1.json();
+    lastComparison = { result: r1, nameA, nameB };
 
-    // Find overall winner by real value
-    const values = [
-      { name: nameA, value: res1.job_a.real_value },
-      { name: nameB, value: res1.job_b.real_value },
-      { name: nameC, value: res2.job_b.real_value },
-    ];
-    values.sort((a, b) => b.value - a.value);
-    const winner = values[0];
-    const second = values[1];
-    const margin = winner.value - second.value;
+    // Show A vs B results normally
+    renderComparison(r1, nameA, nameB);
 
-    // Update verdict
-    document.getElementById("res_winner").textContent = winner.name;
-    document.getElementById("res_margin").textContent = fmt(margin);
-    document.getElementById("res_desc").textContent = "better real value than the next best option";
+    // If Job C has salary — run comparison and show below
+    if (jobC.salary > 0) {
+      const res2 = await fetch("/calculate-comparison", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ job_a: jobA, job_b: jobC })
+      });
+      const r2 = await res2.json();
 
-    // Update results columns — show all 3
-    const allJobs = [
-      { name: nameA, data: res1.job_a },
-      { name: nameB, data: res1.job_b },
-      { name: nameC, data: res2.job_b },
-    ];
+      // Find overall winner
+      const values = [
+        { name: nameA, value: r1.job_a.real_value },
+        { name: nameB, value: r1.job_b.real_value },
+        { name: nameC, value: r2.job_b.real_value },
+      ].sort((a,b) => b.value - a.value);
 
-    // Rebuild results grid with 3 columns
-    const grid = document.querySelector(".results-grid");
-    grid.style.gridTemplateColumns = "1fr 1fr 1fr";
-    grid.innerHTML = allJobs.map((job, i) => {
-      const isWinner = job.name === winner.name;
-      return `<div class="result-col ${isWinner ? "winner" : ""}">
-        <p class="result-col-label">${job.name.toUpperCase()}</p>
-        <div class="result-row"><span>Gross salary</span><span>${fmt(job.data.salary)}</span></div>
-        <div class="result-row"><span>Take home</span><span>${fmt(job.data.take_home)}</span></div>
-        <div class="result-row"><span>Commute cost</span><span style="color:var(--red)">-${fmt(job.data.commute_cost_yearly)}</span></div>
-        <div class="result-row"><span>Time value lost</span><span style="color:var(--red)">-${fmt(job.data.commute_time_value)}</span></div>
-        <div class="result-row"><span>Pension</span><span style="color:var(--green)">+${fmt(job.data.pension)}</span></div>
-        <p style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;color:var(--text-dimmer);margin-top:12px;">TRUE VALUE</p>
-        <div style="font-family:var(--font-display);font-size:28px;color:${isWinner ? "var(--accent)" : "var(--white)"};">${fmt(job.data.real_value)}</div>
-      </div>`;
-    }).join("");
+      // Show Job C block below existing results
+      let jobCBlock = document.getElementById("jobC_results_block");
+      if (!jobCBlock) {
+        jobCBlock = document.createElement("div");
+        jobCBlock.id = "jobC_results_block";
+        jobCBlock.style.cssText = "margin-top:16px;padding:20px;border:1px solid var(--border);background:var(--panel);";
+        document.getElementById("compResults").appendChild(jobCBlock);
+      }
 
-    // Update key differences
-    document.getElementById("diff_salary").textContent = values.map(v => v.name + ": " + fmt(v.value)).join(" · ");
-    document.getElementById("diff_salary").className = "diff-positive";
-    document.getElementById("diff_takehome").textContent = nameA + ": " + fmt(res1.job_a.take_home) + " · " + nameB + ": " + fmt(res1.job_b.take_home) + " · " + nameC + ": " + fmt(res2.job_b.take_home);
-    document.getElementById("diff_commute").textContent = "Cheapest commute: " + allJobs.sort((a,b) => a.data.commute_cost_yearly - b.data.commute_cost_yearly)[0].name;
-    document.getElementById("diff_real").textContent = winner.name + " wins by " + fmt(margin);
+      const fmt = n => "£" + Math.round(n).toLocaleString("en-GB");
+      jobCBlock.innerHTML = `
+        <p style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;color:var(--accent);margin-bottom:12px;">${nameC.toUpperCase()} — THIRD OPTION</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
+          <div style="text-align:center;padding:12px;border:1px solid var(--border);">
+            <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dimmer);">TAKE HOME</div>
+            <div style="font-family:var(--font-display);font-size:24px;color:var(--white);">${fmt(r2.job_b.take_home)}</div>
+          </div>
+          <div style="text-align:center;padding:12px;border:1px solid var(--border);">
+            <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dimmer);">COMMUTE COST</div>
+            <div style="font-family:var(--font-display);font-size:24px;color:var(--red,#f44);">-${fmt(r2.job_b.commute_cost_yearly)}</div>
+          </div>
+          <div style="text-align:center;padding:12px;border:1px solid var(--border);">
+            <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dimmer);">TRUE VALUE</div>
+            <div style="font-family:var(--font-display);font-size:24px;color:${values[0].name === nameC ? "var(--accent)" : "var(--white)"};">${fmt(r2.job_b.real_value)}</div>
+          </div>
+        </div>
+        <p style="font-size:13px;color:var(--text-dim);">Overall winner across all 3 options: <strong style="color:var(--accent);">${values[0].name}</strong> with ${fmt(values[0].value)} true annual value — ${fmt(values[0].value - values[1].value)} ahead of ${values[1].name}.</p>
+      `;
+    }
 
-    document.getElementById("res_insight").textContent = winner.name + " is the best offer overall, worth " + fmt(margin) + " more per year in real terms than " + second.name + " once all costs are factored in.";
-
-    lastComparison = { result: res1, nameA, nameB };
     document.getElementById("compResults").classList.remove("hidden");
     document.getElementById("compResults").scrollIntoView({ behavior: "smooth", block: "start" });
 
@@ -288,4 +288,5 @@ async function runComparisonWithC() {
     btn.disabled = false;
   }
 }
+
 
